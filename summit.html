@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YAH Youth Summit 2025 - Join 500+ young leaders for three days of inspiration, learning, and transformation. Register now!">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Youth Summit 2025 | Young Access Hub</title>
+    <style>
+        /* Summit-specific styles */
+        .summit-hero {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8c00 50%, #e67e22 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .summit-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .countdown-timer {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .countdown-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            display: block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .speaker-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .speaker-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .speaker-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffc107;
+            margin: 1rem auto;
+        }
+        
+        .speaker-social {
+            margin-top: 1rem;
+        }
+        
+        .speaker-social a {
+            color: #6c757d;
+            margin: 0 8px;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        
+        .speaker-social a:hover {
+            color: #ffc107;
+        }
+        
+        .schedule-day {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .schedule-item {
+            border-left: 4px solid #ffc107;
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .schedule-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: #ffc107;
+            border-radius: 50%;
+        }
+        
+        .schedule-time {
+            font-weight: bold;
+            color: #e67e22;
+            font-size: 1.1rem;
+        }
+        
+        .registration-form {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-card {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border: 3px solid #ffc107;
+        }
+        
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffc107, #e67e22);
+        }
+        
+        .price-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e67e22;
+        }
+        
+        .summit-stats {
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #e67e22;
+            display: block;
+        }
+        
+        .venue-map {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-users me-2"></i>YAH
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="news.html">News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="summit.html">Summit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Summit Hero Section -->
+    <section class="summit-hero py-5 text-white">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-8 mx-auto text-center position-relative">
+                    <div class="summit-badge mb-4">
+                        <span class="badge bg-light text-dark fs-6 px-4 py-2 rounded-pill">
+                            <i class="fas fa-calendar-alt me-2"></i>November 15-17, 2025
+                        </span>
+                    </div>
+                    <h1 class="display-3 fw-bold mb-4">
+                        YAH Youth Summit <span class="text-warning">2025</span>
+                    </h1>
+                    <p class="lead mb-4 fs-4">
+                        Join 500+ young leaders for three transformative days of inspiration, 
+                        skill-building, networking, and creating positive change.
+                    </p>
+                    <p class="h5 mb-4">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Grand Convention Center, Downtown | Virtual Participation Available
+                    </p>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="countdown-timer">
+                        <h3 class="mb-4">Summit Countdown</h3>
+                        <div class="row" id="countdown">
+                            <div class="col-3">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="days">00</span>
+                                    <div class="countdown-label">Days</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="hours">00</span>
+                                    <div class="countdown-label">Hours</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="minutes">00</span>
+                                    <div class="countdown-label">Minutes</div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="seconds">00</span>
+                                    <div class="countdown-label">Seconds</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-actions mt-5">
+                        <a href="#registration" class="btn btn-light btn-lg me-3 px-5 py-3">
+                            <i class="fas fa-ticket-alt me-2"></i>Register Now
+                        </a>
+                        <a href="#schedule" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="fas fa-calendar me-2"></i>View Schedule
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summit Stats -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="summit-stats">
+                        <span class="stat-number">500+</span>
+                        <div class="fw-semibold">Attendees</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summit-stats">
+                        <span class="stat-number">50+</span>
+                        <div class="fw-semibold">Speakers</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summit-stats">
+                        <span class="stat-number">25+</span>
+                        <div class="fw-semibold">Workshops</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summit-stats">
+                        <span class="stat-number">3</span>
+                        <div class="fw-semibold">Days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keynote Speakers -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Keynote Speakers</h2>
+                    <p class="lead text-muted">
+                        Learn from industry leaders, changemakers, and visionaries who are shaping the future.
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="speaker-image-placeholder bg-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-2">Dr. Sarah Johnson</h5>
+                            <p class="text-muted mb-2">CEO, Global Youth Foundation</p>
+                            <p class="card-text small">
+                                A Harvard graduate and Forbes 30 Under 30 recipient, Dr. Johnson has dedicated her career 
+                                to youth empowerment and social innovation.
+                            </p>
+                            <div class="speaker-topic mb-3">
+                                <span class="badge bg-warning text-dark">Opening Keynote</span>
+                            </div>
+                            <h6 class="text-primary">"The Future Belongs to Bold Youth"</h6>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="speaker-image-placeholder bg-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-2">Marcus Rodriguez</h5>
+                            <p class="text-muted mb-2">Tech Entrepreneur & Investor</p>
+                            <p class="card-text small">
+                                Serial entrepreneur who built three successful startups before age 30. 
+                                Now focuses on mentoring young entrepreneurs.
+                            </p>
+                            <div class="speaker-topic mb-3">
+                                <span class="badge bg-success text-white">Innovation Track</span>
+                            </div>
+                            <h6 class="text-primary">"Building Tomorrow's Solutions Today"</h6>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="speaker-image-placeholder bg-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-2">Aisha Okonkwo</h5>
+                            <p class="text-muted mb-2">Climate Activist & UN Ambassador</p>
+                            <p class="card-text small">
+                                Award-winning environmental activist working with the UN on youth climate initiatives. 
+                                Featured in TIME Magazine's Next Generation Leaders.
+                            </p>
+                            <div class="speaker-topic mb-3">
+                                <span class="badge bg-info text-white">Sustainability Track</span>
+                            </div>
+                            <h6 class="text-primary">"Youth Leading Climate Action"</h6>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="speaker-image-placeholder bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-2">David Kim</h5>
+                            <p class="text-muted mb-2">Social Impact Investor</p>
+                            <p class="card-text small">
+                                Managing Partner at NextGen Ventures, focusing on investments that create positive social impact 
+                                while generating sustainable returns.
+                            </p>
+                            <div class="speaker-topic mb-3">
+                                <span class="badge bg-warning text-dark">Finance Track</span>
+                            </div>
+                            <h6 class="text-primary">"Investing in Change"</h6>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="speaker-image-placeholder bg-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-2">Lisa Chen</h5>
+                            <p class="text-muted mb-2">Digital Marketing Expert</p>
+                            <p class="card-text small">
+                                Former Head of Social Impact at Meta, now running her own agency helping nonprofits 
+                                amplify their digital presence and reach.
+                            </p>
+                            <div class="speaker-topic mb-3">
+                                <span class="badge bg-danger text-white">Marketing Track</span>
+                            </div>
+                            <h6 class="text-primary">"Digital Storytelling for Impact"</h6>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="speaker-image-placeholder bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-3x text-white"></i>
+                            </div>
+                            <h5 class="card-title mb-2">James Williams</h5>
+                            <p class="text-muted mb-2">Leadership Development Coach</p>
+                            <p class="card-text small">
+                                Former military officer turned leadership coach, specializing in developing 
+                                young leaders for the 21st century workplace.
+                            </p>
+                            <div class="speaker-topic mb-3">
+                                <span class="badge bg-secondary text-white">Leadership Track</span>
+                            </div>
+                            <h6 class="text-primary">"Leading with Purpose"</h6>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Schedule -->
+    <section id="schedule" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Event Schedule</h2>
+                    <p class="lead text-muted">
+                        Three action-packed days of learning, networking, and transformation.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Day 1 -->
+            <div class="schedule-day">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
+                        1
+                    </div>
+                    <div>
+                        <h3 class="mb-1">Day 1: Inspiration & Vision</h3>
+                        <p class="text-muted mb-0">Friday, November 15, 2025</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="schedule-item">
+                            <div class="schedule-time">8:00 AM - 9:00 AM</div>
+                            <h6>Registration & Welcome Breakfast</h6>
+                            <p class="text-muted small mb-0">Check-in, networking, and continental breakfast</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">9:00 AM - 10:30 AM</div>
+                            <h6>Opening Ceremony & Keynote</h6>
+                            <p class="text-muted small mb-0">Dr. Sarah Johnson: "The Future Belongs to Bold Youth"</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">11:00 AM - 12:00 PM</div>
+                            <h6>Panel: Young Leaders Changing the World</h6>
+                            <p class="text-muted small mb-0">Interactive discussion with emerging leaders</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="schedule-item">
+                            <div class="schedule-time">1:00 PM - 2:00 PM</div>
+                            <h6>Networking Lunch</h6>
+                            <p class="text-muted small mb-0">Connect with fellow attendees and speakers</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">2:30 PM - 4:00 PM</div>
+                            <h6>Workshop Sessions (Track 1)</h6>
+                            <p class="text-muted small mb-0">Choose from Innovation, Leadership, or Sustainability tracks</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">6:00 PM - 8:00 PM</div>
+                            <h6>Welcome Reception</h6>
+                            <p class="text-muted small mb-0">Casual networking with refreshments and entertainment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 2 -->
+            <div class="schedule-day">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
+                        2
+                    </div>
+                    <div>
+                        <h3 class="mb-1">Day 2: Skills & Development</h3>
+                        <p class="text-muted mb-0">Saturday, November 16, 2025</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="schedule-item">
+                            <div class="schedule-time">8:30 AM - 9:30 AM</div>
+                            <h6>Morning Energizer & Breakfast</h6>
+                            <p class="text-muted small mb-0">High-energy start with motivational session</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">9:30 AM - 11:00 AM</div>
+                            <h6>Keynote: Building Tomorrow's Solutions</h6>
+                            <p class="text-muted small mb-0">Marcus Rodriguez on innovation and entrepreneurship</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">11:30 AM - 1:00 PM</div>
+                            <h6>Intensive Workshop Sessions</h6>
+                            <p class="text-muted small mb-0">Deep-dive skills workshops in chosen tracks</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="schedule-item">
+                            <div class="schedule-time">2:00 PM - 3:30 PM</div>
+                            <h6>Innovation Challenge Presentations</h6>
+                            <p class="text-muted small mb-0">Teams present solutions to real-world problems</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">4:00 PM - 5:30 PM</div>
+                            <h6>Mentorship Speed Networking</h6>
+                            <p class="text-muted small mb-0">Connect with mentors in your field of interest</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">7:00 PM - 10:00 PM</div>
+                            <h6>Gala Dinner & Awards</h6>
+                            <p class="text-muted small mb-0">Celebrate achievements with dinner and entertainment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 3 -->
+            <div class="schedule-day">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
+                        3
+                    </div>
+                    <div>
+                        <h3 class="mb-1">Day 3: Action & Commitment</h3>
+                        <p class="text-muted mb-0">Sunday, November 17, 2025</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="schedule-item">
+                            <div class="schedule-time">9:00 AM - 10:00 AM</div>
+                            <h6>Reflection & Goal Setting</h6>
+                            <p class="text-muted small mb-0">Personal action planning session</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">10:30 AM - 12:00 PM</div>
+                            <h6>Community Action Planning</h6>
+                            <p class="text-muted small mb-0">Collaborative project development</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="schedule-item">
+                            <div class="schedule-time">1:00 PM - 2:30 PM</div>
+                            <h6>Closing Keynote & Commitments</h6>
+                            <p class="text-muted small mb-0">Final inspiration and public commitments</p>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">2:30 PM - 3:00 PM</div>
+                            <h6>Farewell & Alumni Network</h6>
+                            <p class="text-muted small mb-0">Join the YAH Summit Alumni Network</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section id="registration" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Register for Summit 2025</h2>
+                    <p class="lead text-muted">
+                        Secure your spot at the most transformative youth event of the year.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Pricing Options -->
+            <div class="row g-4 mb-5">
+                <div class="col-lg-4">
+                    <div class="pricing-card card">
+                        <div class="card-body p-4 text-center">
+                            <h5 class="card-title">Student</h5>
+                            <div class="price-amount">$75</div>
+                            <p class="text-muted">Early Bird Special</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>All sessions access</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Welcome materials</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Lunch included</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Certificate</li>
+                            </ul>
+                            <button class="btn btn-outline-primary w-100" onclick="selectTicket('student', 75)">
+                                Select Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="pricing-card card featured">
+                        <div class="card-body p-4 text-center">
+                            <div class="badge bg-warning text-dark mb-2">Most Popular</div>
+                            <h5 class="card-title">Professional</h5>
+                            <div class="price-amount">$150</div>
+                            <p class="text-muted">Full Experience</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>All sessions access</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Premium materials</li>
+                                <li><i class="fas fa-check text-success me-2"></i>All meals included</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gala dinner</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Mentorship session</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Alumni network</li>
+                            </ul>
+                            <button class="btn btn-warning w-100" onclick="selectTicket('professional', 150)">
+                                Select Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="pricing-card card">
+                        <div class="card-body p-4 text-center">
+                            <h5 class="card-title">Virtual</h5>
+                            <div class="price-amount">$25</div>
+                            <p class="text-muted">Online Access</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Live streaming</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Digital materials</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Online networking</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Recordings access</li>
+                                <li><i class="fas fa-times text-muted me-2"></i>Meals not included</li>
+                            </ul>
+                            <button class="btn btn-outline-primary w-100" onclick="selectTicket('virtual', 25)">
+                                Select Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Registration Form -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="registration-form">
+                        <div class="text-center mb-4">
+                            <h4>Complete Your Registration</h4>
+                            <p class="text-muted">Fill out the form below to secure your spot</p>
+                        </div>
+                        
+                        <form id="registrationForm">
+                            <div class="row g-3">
+                                <!-- Selected Ticket Display -->
+                                <div class="col-12">
+                                    <div class="selected-ticket alert alert-info" style="display: none;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>Selected: </strong>
+                                                <span id="selectedTicketType"></span> Ticket
+                                            </div>
+                                            <div>
+                                                <strong>$<span id="selectedTicketPrice"></span></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Personal Information -->
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="age" class="form-label">Age <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="age" required>
+                                        <option value="">Select age range</option>
+                                        <option value="15-18">15-18</option>
+                                        <option value="19-24">19-24</option>
+                                        <option value="25-30">25-30</option>
+                                        <option value="31-35">31-35</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="occupation" class="form-label">Occupation/Status <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="occupation" required>
+                                        <option value="">Select status</option>
+                                        <option value="student">Student</option>
+                                        <option value="professional">Working Professional</option>
+                                        <option value="entrepreneur">Entrepreneur</option>
+                                        <option value="unemployed">Currently Unemployed</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="organization" class="form-label">School/Organization</label>
+                                    <input type="text" class="form-control" id="organization" placeholder="Your school, company, or organization">
+                                </div>
+                                
+                                <!-- Track Selection -->
+                                <div class="col-12">
+                                    <label class="form-label">Primary Track of Interest <span class="text-danger">*</span></label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="track" id="innovation" value="innovation" required>
+                                                <label class="form-check-label" for="innovation">
+                                                    Innovation & Entrepreneurship
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="track" id="leadership" value="leadership" required>
+                                                <label class="form-check-label" for="leadership">
+                                                    Leadership Development
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="track" id="sustainability" value="sustainability" required>
+                                                <label class="form-check-label" for="sustainability">
+                                                    Sustainability & Impact
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Dietary Requirements -->
+                                <div class="col-12">
+                                    <label for="dietary" class="form-label">Dietary Requirements/Allergies</label>
+                                    <input type="text" class="form-control" id="dietary" placeholder="e.g., Vegetarian, Gluten-free, None">
+                                </div>
+                                
+                                <!-- Emergency Contact -->
+                                <div class="col-md-6">
+                                    <label for="emergencyName" class="form-label">Emergency Contact Name</label>
+                                    <input type="text" class="form-control" id="emergencyName">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="emergencyPhone" class="form-label">Emergency Contact Phone</label>
+                                    <input type="tel" class="form-control" id="emergencyPhone">
+                                </div>
+                                
+                                <!-- Additional Options -->
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="newsletter">
+                                        <label class="form-check-label" for="newsletter">
+                                            Subscribe to YAH newsletter for future events and updates
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I agree to the <a href="#" target="_blank">Terms & Conditions</a> and <a href="#" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Payment Summary -->
+                                <div class="col-12">
+                                    <div class="payment-summary bg-light p-3 rounded">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Ticket Price:</span>
+                                            <span id="ticketPrice">Please select a ticket</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Processing Fee:</span>
+                                            <span id="processingFee">$0</span>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between fw-bold">
+                                            <span>Total:</span>
+                                            <span id="totalPrice">$0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-warning btn-lg w-100">
+                                        <i class="fas fa-credit-card me-2"></i>
+                                        Proceed to Payment
+                                    </button>
+                                    <p class="text-muted small text-center mt-2">
+                                        Secure payment powered by Stripe. You will be redirected to complete payment.
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Venue Information -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Venue & Location</h2>
+                    <p class="lead text-muted">
+                        Join us at the state-of-the-art Grand Convention Center in the heart of downtown.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="venue-info">
+                        <h4 class="mb-3">Grand Convention Center</h4>
+                        <div class="venue-details">
+                            <div class="d-flex mb-3">
+                                <i class="fas fa-map-marker-alt text-warning fa-lg me-3 mt-1"></i>
+                                <div>
+                                    <strong>Address:</strong><br>
+                                    123 Convention Avenue<br>
+                                    Downtown District, City 12345
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <i class="fas fa-car text-warning fa-lg me-3 mt-1"></i>
+                                <div>
+                                    <strong>Parking:</strong><br>
+                                    Free parking available in attached garage
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <i class="fas fa-train text-warning fa-lg me-3 mt-1"></i>
+                                <div>
+                                    <strong>Public Transport:</strong><br>
+                                    Metro Station: Central Square (5 min walk)<br>
+                                    Bus Routes: 15, 23, 42
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <i class="fas fa-bed text-warning fa-lg me-3 mt-1"></i>
+                                <div>
+                                    <strong>Accommodation:</strong><br>
+                                    Discounted rates at partner hotels<br>
+                                    <a href="#" class="text-primary">View hotel options</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="venue-map">
+                        <div class="bg-light rounded p-5 text-center">
+                            <i class="fas fa-map fa-5x text-warning mb-3"></i>
+                            <h5>Interactive Map</h5>
+                            <p class="text-muted">Detailed venue map and directions will be provided to registered attendees</p>
+                            <button class="btn btn-outline-warning">Get Directions</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Frequently Asked Questions</h2>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="accordion" id="summitFAQ">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    What's included in my registration?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#summitFAQ">
+                                <div class="accordion-body">
+                                    Your registration includes access to all sessions, welcome materials, lunch on all three days (for in-person tickets), networking events, and a digital certificate of participation. Professional tickets also include the gala dinner and exclusive mentorship sessions.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Can I get a refund if I can't attend?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#summitFAQ">
+                                <div class="accordion-body">
+                                    Full refunds are available up to 30 days before the event. Between 30-14 days, a 50% refund is available. No refunds within 14 days of the event, but you can transfer your ticket to another person or switch to virtual attendance.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    Is virtual participation really worth it?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#summitFAQ">
+                                <div class="accordion-body">
+                                    Absolutely! Virtual attendees get live streaming of all main sessions, access to online networking rooms, digital materials, and recordings of all sessions. While you'll miss some in-person networking, it's a great option for those who can't travel.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    What should I bring to the summit?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#summitFAQ">
+                                <div class="accordion-body">
+                                    Bring your enthusiasm, business cards, a notebook, and comfortable shoes! All materials will be provided. For professional attendees, business casual attire is recommended for the gala dinner.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Young Access Hub</h5>
+                    <p class="mb-0">Empowering young people for self-transformation.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="quick-links">
+                        <a href="index.html" class="text-white me-3">Home</a>
+                        <a href="about.html" class="text-white me-3">About</a>
+                        <a href="projects.html" class="text-white me-3">Projects</a>
+                        <a href="contact.html" class="text-white">Contact</a>
+                    </div>
+                    <p class="mt-2 mb-0">
+                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button type="button" class="btn btn-warning position-fixed bottom-0 end-0 m-3 rounded-circle back-to-top" style="display: none;">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header border-0 text-center">
+                    <div class="w-100">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h4 class="modal-title">Registration Successful!</h4>
+                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Thank you for registering for YAH Youth Summit 2025!</p>
+                    <p class="text-muted">You will receive a confirmation email shortly with your ticket and additional information.</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/bootstrap.bundle.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/summit.js"></script>
+</body>
+</html>
