@@ -170,22 +170,23 @@ function initScrollAnimations() {
     });
 }
 
-// Navbar behavior on scroll
+// Navbar behavior on scroll - Disabled to keep white background
 function initNavbarBehavior() {
-    const navbar = document.querySelector('.navbar');
-    let lastScrollY = window.scrollY;
+    // Removed scroll behavior to maintain consistent white background
+    // const navbar = document.querySelector('.navbar');
+    // let lastScrollY = window.scrollY;
     
-    window.addEventListener('scroll', function() {
-        const currentScrollY = window.scrollY;
+    // window.addEventListener('scroll', function() {
+    //     const currentScrollY = window.scrollY;
         
-        if (currentScrollY > 100) {
-            navbar.classList.add('navbar-scrolled');
-        } else {
-            navbar.classList.remove('navbar-scrolled');
-        }
+    //     if (currentScrollY > 100) {
+    //         navbar.classList.add('navbar-scrolled');
+    //     } else {
+    //         navbar.classList.remove('navbar-scrolled');
+    //     }
         
-        lastScrollY = currentScrollY;
-    });
+    //     lastScrollY = currentScrollY;
+    // });
 }
 
 // Counter animation for impact stats
@@ -257,16 +258,16 @@ function debounce(func, wait) {
     };
 }
 
-// Add CSS class for navbar scrolled state
-const style = document.createElement('style');
-style.textContent = `
-    .navbar-scrolled {
-        background-color: rgba(13, 110, 253, 0.95) !important;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-`;
-document.head.appendChild(style);
+// Removed navbar scroll CSS to maintain white background
+// const style = document.createElement('style');
+// style.textContent = `
+//     .navbar-scrolled {
+//         background-color: rgba(13, 110, 253, 0.95) !important;
+//         backdrop-filter: blur(10px);
+//         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+//     }
+// `;
+// document.head.appendChild(style);
 
 // Add loading class styles
 const loadingStyles = document.createElement('style');

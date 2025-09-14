@@ -11,10 +11,10 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="fas fa-users me-2"></i>YAH
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="40" class="d-inline-block align-text-top">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -30,9 +30,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="projects.html">Projects</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="news.html">News</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link active" href="contact.html">Contact</a>
                     </li>
@@ -68,7 +68,7 @@
                             <h5 class="card-title">Email Us</h5>
                             <p class="card-text text-muted">Send us a message and we'll respond within 24 hours</p>
                             <div class="contact-details">
-                                <a href="mailto:info@youngaccesshub.org" class="text-primary fw-semibold">info@youngaccesshub.org</a>
+                                <a href="mailto:info@youngaccesshub.org" class="text-primary fw-semibold">info@yahsl.org</a>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             <h5 class="card-title">Call Us</h5>
                             <p class="card-text text-muted">Available Monday to Friday, 9 AM - 5 PM</p>
                             <div class="contact-details">
-                                <a href="tel:+15551234567" class="text-primary fw-semibold">+1 (555) 123-4567</a>
+                                <a href="tel:+15551234567" class="text-primary fw-semibold">+232 77 971717 / +232 78 050 308</a>
                             </div>
                         </div>
                     </div>
@@ -97,8 +97,8 @@
                             <p class="card-text text-muted">Come by our office during business hours</p>
                             <div class="contact-details">
                                 <address class="text-primary fw-semibold mb-0">
-                                    123 Youth Street<br>
-                                    Empowerment City, EC 12345
+                                    36 Council Road<br>
+                                    Koidu City, Kono District<br>
                                 </address>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                     
                     <div class="card border-0 shadow">
                         <div class="card-body p-5">
-                            <form class="contact-form-page">
+                            <form name="contact" method="POST" class="contact-form-page" netlify>
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
@@ -148,13 +148,11 @@
                                         <label for="subject" class="form-label">How can we help you? <span class="text-danger">*</span></label>
                                         <select class="form-select form-select-lg" id="subject" required>
                                             <option value="">Select a topic</option>
-                                            <option value="program-interest">I'm interested in joining a program</option>
                                             <option value="volunteer">I want to volunteer</option>
-                                            <option value="mentor">I want to become a mentor</option>
                                             <option value="partnership">Partnership opportunities</option>
                                             <option value="sponsorship">Sponsorship inquiries</option>
                                             <option value="summit">Youth Summit information</option>
-                                            <option value="elearning">E-Learning platform access</option>
+                                            <option value="elearning">Khantan E-learning App</option>
                                             <option value="media">Media and press inquiries</option>
                                             <option value="general">General inquiry</option>
                                         </select>
@@ -185,189 +183,7 @@
         </div>
     </section>
 
-    <!-- Quick Actions -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h3 class="mb-4">Quick Actions</h3>
-                    <p class="text-muted">
-                        Looking for something specific? These quick links might help you get started faster.
-                    </p>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3">
-                    <div class="quick-action-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
-                            <h6 class="card-title">Join a Program</h6>
-                            <p class="card-text small text-muted">Apply for our skills development or leadership programs</p>
-                            <a href="#" class="btn btn-primary btn-sm">Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="quick-action-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-calendar-alt fa-3x text-warning mb-3"></i>
-                            <h6 class="card-title">Summit Registration</h6>
-                            <p class="card-text small text-muted">Register for our annual Youth Summit event</p>
-                            <a href="#" class="btn btn-warning btn-sm">Register</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="quick-action-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-hands-helping fa-3x text-success mb-3"></i>
-                            <h6 class="card-title">Volunteer</h6>
-                            <p class="card-text small text-muted">Join our team of volunteers and make a difference</p>
-                            <a href="#" class="btn btn-success btn-sm">Get Involved</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="quick-action-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-handshake fa-3x text-info mb-3"></i>
-                            <h6 class="card-title">Partner With Us</h6>
-                            <p class="card-text small text-muted">Explore partnership and collaboration opportunities</p>
-                            <a href="#" class="btn btn-info btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Social Media & Office Hours -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <h3 class="mb-4">Follow Us on Social Media</h3>
-                    <p class="mb-4">
-                        Stay connected with our community and get real-time updates about our programs and events.
-                    </p>
-                    <div class="social-links-large">
-                        <a href="#" class="text-white me-4 mb-3 d-inline-block">
-                            <i class="fab fa-facebook fa-2x me-2"></i>
-                            <span class="align-middle">Facebook</span>
-                        </a>
-                        <a href="#" class="text-white me-4 mb-3 d-inline-block">
-                            <i class="fab fa-twitter fa-2x me-2"></i>
-                            <span class="align-middle">Twitter</span>
-                        </a>
-                        <a href="#" class="text-white me-4 mb-3 d-inline-block">
-                            <i class="fab fa-instagram fa-2x me-2"></i>
-                            <span class="align-middle">Instagram</span>
-                        </a>
-                        <a href="#" class="text-white me-4 mb-3 d-inline-block">
-                            <i class="fab fa-linkedin fa-2x me-2"></i>
-                            <span class="align-middle">LinkedIn</span>
-                        </a>
-                        <a href="#" class="text-white me-4 mb-3 d-inline-block">
-                            <i class="fab fa-youtube fa-2x me-2"></i>
-                            <span class="align-middle">YouTube</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <h3 class="mb-4">Office Hours</h3>
-                    <div class="office-hours">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Monday - Friday:</span>
-                            <span>9:00 AM - 5:00 PM</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Saturday:</span>
-                            <span>10:00 AM - 2:00 PM</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-4">
-                            <span>Sunday:</span>
-                            <span>Closed</span>
-                        </div>
-                        <div class="alert alert-warning alert-sm">
-                            <i class="fas fa-info-circle me-2"></i>
-                            <small>Please call ahead for Saturday appointments</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="text-center mb-5">
-                        <h3 class="mb-4">Frequently Asked Questions</h3>
-                        <p class="text-muted">
-                            Find quick answers to common questions before reaching out.
-                        </p>
-                    </div>
-                    
-                    <div class="accordion" id="faqAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    How can I join YAH programs?
-                                </button>
-                            </h2>
-                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    You can apply for our programs by filling out the contact form above and selecting "I'm interested in joining a program" or by visiting our projects page to learn about specific opportunities.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                    What age range do you serve?
-                                </button>
-                            </h2>
-                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    We primarily serve young people between the ages of 15-35, though specific programs may have different age requirements. Contact us to discuss your individual situation.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                    Are your programs free?
-                                </button>
-                            </h2>
-                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    Yes! All of our core programs are provided free of charge to participants. We believe that financial barriers should never prevent young people from accessing opportunities for growth and development.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                                    How can organizations partner with YAH?
-                                </button>
-                            </h2>
-                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    We welcome partnerships with organizations that share our mission. Contact us using the form above and select "Partnership opportunities" to discuss how we can work together to serve young people in our community.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Footer -->
     <footer class="bg-primary text-white py-4">
         <div class="container">
