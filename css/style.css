@@ -6,7 +6,7 @@
  */
 :root,
 [data-bs-theme=light] {
-  --bs-blue: #0d6efd;
+  --bs-blue: #037195;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #d63384;
@@ -11860,8 +11860,8 @@ textarea.form-control-lg {
 
 /* Override Bootstrap primary color */
 :root {
-  --bs-primary: #0d6efd !important;
-  --bs-primary-rgb: 13, 110, 253 !important;
+  --bs-primary: #037195 !important;
+  --bs-primary-rgb: 3, 113, 149 !important;
 }
 
 /* General Styles */
@@ -11888,7 +11888,7 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+    background: linear-gradient(135deg, #037195 0%, #6f42c1 100%);
     min-height: 100vh;
     position: relative;
     display: flex;
@@ -12180,12 +12180,12 @@ footer a:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #0d6efd;
+    background: #037195;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #0056b3;
+    background: #025a75;
 }
 
 /* Min height utility for hero sections */
