@@ -122,31 +122,31 @@
                     
                     <div class="card border-0 shadow">
                         <div class="card-body p-5">
-                            <form name="contact" method="POST" class="contact-form-page" netlify>
+                            <form name="contact" method="POST" class="contact-form-page" data-netlify="true">
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" id="firstName" required>
+                                        <input type="text" class="form-control form-control-lg" id="firstName" name="firstName" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" id="lastName" required>
+                                        <input type="text" class="form-control form-control-lg" id="lastName" name="lastName" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control form-control-lg" id="email" required>
+                                        <input type="email" class="form-control form-control-lg" id="email" name="email" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="phone" class="form-label">Phone Number</label>
-                                        <input type="tel" class="form-control form-control-lg" id="phone">
+                                        <input type="tel" class="form-control form-control-lg" id="phone" name="phone">
                                     </div>
                                     <div class="col-12">
                                         <label for="organization" class="form-label">Organization/School (if applicable)</label>
-                                        <input type="text" class="form-control form-control-lg" id="organization">
+                                        <input type="text" class="form-control form-control-lg" id="organization" name="organization">
                                     </div>
                                     <div class="col-12">
                                         <label for="subject" class="form-label">How can we help you? <span class="text-danger">*</span></label>
-                                        <select class="form-select form-select-lg" id="subject" required>
+                                        <select class="form-select form-select-lg" id="subject" name="subject" required>
                                             <option value="">Select a topic</option>
                                             <option value="volunteer">I want to volunteer</option>
                                             <option value="partnership">Partnership opportunities</option>
@@ -159,11 +159,11 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
-                                        <textarea class="form-control" id="message" rows="6" placeholder="Tell us more about your inquiry..." required></textarea>
+                                        <textarea class="form-control" id="message" name="message" rows="6" placeholder="Tell us more about your inquiry..." required></textarea>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="newsletter">
+                                            <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter" value="yes">
                                             <label class="form-check-label" for="newsletter">
                                                 I'd like to receive updates about YAH programs and events
                                             </label>
@@ -221,9 +221,7 @@
             
             if (contactForm) {
                 contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Get form data
+                    // Get form data for validation
                     const formData = {
                         firstName: document.getElementById('firstName').value,
                         lastName: document.getElementById('lastName').value,
@@ -237,49 +235,28 @@
                     
                     // Basic validation
                     if (!formData.firstName || !formData.lastName || !formData.email || !formData.subject || !formData.message) {
+                        e.preventDefault();
                         showAlert('Please fill in all required fields.', 'error');
                         return;
                     }
                     
                     if (!isValidEmail(formData.email)) {
+                        e.preventDefault();
                         showAlert('Please enter a valid email address.', 'error');
                         return;
                     }
                     
-                    // Submit form
-                    submitContactForm(formData);
+                    // Show loading state
+                    const submitBtn = document.querySelector('.contact-form-page button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending Message...';
+                    submitBtn.disabled = true;
+                    
+                    // Let Netlify handle the form submission
+                    // The form will now submit naturally to Netlify
                 });
             }
         });
-        
-        function submitContactForm(formData) {
-            const submitBtn = document.querySelector('.contact-form-page button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Show loading state
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending Message...';
-            submitBtn.disabled = true;
-            
-            // Simulate form submission
-            setTimeout(() => {
-                // Reset form
-                document.querySelector('.contact-form-page').reset();
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                
-                // Show success message
-                showAlert('Thank you for your message! We\'ll get back to you within 24 hours.', 'success');
-                
-                // In a real implementation, you would send the data to your backend:
-                // fetch('/api/contact', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(formData)
-                // });
-            }, 2000);
-        }
         
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

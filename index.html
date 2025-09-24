@@ -449,15 +449,15 @@
                     <form name="enquiries" method="POST" class="contact-form" data-netlify="true">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" required>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="subject" class="form-label">Subject</label>
-                            <select class="form-control" id="subject" required>
+                            <select class="form-control" id="subject" name="subject" required>
                                 <option value="">Select a topic</option>
                                 <option value="partnership">Partnership Opportunities</option>
                                 <option value="volunteer">Volunteer with Us</option>
@@ -468,7 +468,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-warning btn-lg">
                             <i class="fas fa-paper-plane me-2"></i>Send Message
