@@ -1,4 +1,7 @@
 // Main JavaScript for Young Access Hub Website
+// Version: 2025-09-26-v2 - Fixed all null reference errors
+
+console.log('Loading main.js v2025-09-26-v2');
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components
@@ -8,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initNavbarBehavior();
     initSummitCountdown();
+    initImpactCounters(); // Add this new function
 });
 
 // Smooth scrolling for navigation links
@@ -33,6 +37,9 @@ function initSmoothScrolling() {
 // Back to top button functionality
 function initBackToTop() {
     const backToTopBtn = document.querySelector('.back-to-top');
+    
+    // Only initialize if back-to-top button exists
+    if (!backToTopBtn) return;
     
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 300) {
@@ -60,12 +67,21 @@ function initContactForm() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form data
-            const formData = new FormData(this);
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+            // Get form data - check if elements exist
+            const nameField = document.getElementById('name');
+            const emailField = document.getElementById('email');
+            const subjectField = document.getElementById('subject');
+            const messageField = document.getElementById('message');
+            
+            if (!nameField || !emailField || !subjectField || !messageField) {
+                showAlert('Form elements not found. Please refresh the page.', 'error');
+                return;
+            }
+            
+            const name = nameField.value;
+            const email = emailField.value;
+            const subject = subjectField.value;
+            const message = messageField.value;
             
             // Basic validation
             if (!name || !email || !subject || !message) {
@@ -88,14 +104,24 @@ function initContactForm() {
 function submitForm(name, email, subject, message) {
     // Show loading state
     const submitBtn = document.querySelector('.contact-form button[type="submit"]');
+    
+    if (!submitBtn) {
+        showAlert('Submit button not found. Please refresh the page.', 'error');
+        return;
+    }
+    
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
     submitBtn.disabled = true;
     
     // Simulate API call
     setTimeout(() => {
-        // Reset form
-        document.querySelector('.contact-form').reset();
+        const contactForm = document.querySelector('.contact-form');
+        
+        // Reset form if it exists
+        if (contactForm) {
+            contactForm.reset();
+        }
         
         // Reset button
         submitBtn.innerHTML = originalText;
@@ -193,6 +219,8 @@ function initNavbarBehavior() {
 function animateCounters() {
     const counters = document.querySelectorAll('.impact-stat h3');
     
+    if (counters.length === 0) return;
+    
     counters.forEach(counter => {
         const target = parseInt(counter.textContent.replace('+', ''));
         const duration = 2000; // 2 seconds
@@ -211,19 +239,37 @@ function animateCounters() {
     });
 }
 
-// Initialize counter animation when section is visible
-const impactSection = document.querySelector('.impact-stat').closest('section');
-const impactObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            animateCounters();
-            impactObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
+// Initialize impact counters with intersection observer
+function initImpactCounters() {
+    const impactSection = document.querySelector('.impact-stat');
+    
+    // Only initialize if impact stat elements exist
+    if (!impactSection) {
+        console.log('No impact stat elements found, skipping counter initialization');
+        return;
+    }
+    
+    const impactObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                impactObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
 
-if (impactSection) {
-    impactObserver.observe(impactSection);
+    // Double check impactSection still exists and has closest method
+    if (impactSection && typeof impactSection.closest === 'function') {
+        const section = impactSection.closest('section');
+        if (section) {
+            impactObserver.observe(section);
+        } else {
+            // If no parent section, observe the element itself
+            impactObserver.observe(impactSection);
+        }
+    } else {
+        console.warn('Impact section element is invalid or missing closest method');
+    }
 }
 
 // Add Google Analytics (placeholder)

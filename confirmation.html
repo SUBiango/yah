@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Confirmed - Young Access Hub</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <style>
+        .confirmation-hero {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 50%, #3498db 100%);
+            color: white;
+            padding: 6rem 0 4rem;
+        }
+        
+        .confirmation-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+        }
+        
+        .qr-code-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #e67e22;
+            margin: 2rem 0;
+        }
+        
+        .qr-code-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .qr-code-image {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+        }
+        
+        .participant-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .info-row {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .info-value {
+            color: #6c757d;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .btn-download {
+            background: #e67e22;
+            border-color: #e67e22;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .btn-download:hover {
+            background: #d35400;
+            border-color: #d35400;
+            color: white;
+        }
+        
+        .btn-email {
+            background: #3498db;
+            border-color: #3498db;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .btn-email:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+            color: white;
+        }
+        
+        .btn-home {
+            background: transparent;
+            border: 2px solid #6c757d;
+            color: #6c757d;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .btn-home:hover {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .important-notes {
+            background: #fff3cd;
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #e67e22;
+            animation: confetti 3s linear infinite;
+        }
+        
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .confirmation-card {
+                margin: -2rem 1rem 0;
+                padding: 2rem 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/logo.png" alt="YAH Logo" height="40" class="me-2">
+                Young Access Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="summit.html">Summit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="confirmation-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-clipboard-check me-3"></i>
+                        Registration Status
+                    </h1>
+                    <p class="lead mb-0">
+                        Please wait while we load your registration details...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Content -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="confirmation-card animate-fade-in">
+                        
+                        <!-- Loading State -->
+                        <div id="loadingState" class="text-center py-4">
+                            <div class="loading-spinner">
+                                <i class="fas fa-spinner fa-spin fa-2x text-primary mb-3"></i>
+                            </div>
+                            <p class="text-muted">Loading your registration details...</p>
+                        </div>
+
+                        <!-- Registration Details (Hidden initially) -->
+                        <div id="registrationDetails" style="display: none;">
+                            <!-- Success Icon -->
+                            <div class="success-icon">
+                                <i class="fas fa-check fa-2x text-white"></i>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <div class="text-center mb-4">
+                                <h3 class="text-success mb-3">Registration Confirmed!</h3>
+                                <p class="lead text-muted">
+                                    You're all set for an amazing experience with Young Access Hub.
+                                </p>
+                            </div>
+                            
+                            <!-- QR Code Section -->
+                            <div class="qr-code-container">
+                                <div class="qr-code-placeholder" id="qrCodeContainer">
+                                    <i class="fas fa-qrcode fa-4x text-muted"></i>
+                                </div>
+                                <h5 class="text-center mb-2">Your Event QR Code</h5>
+                                <p class="text-muted small text-center">
+                                    Present this QR code at the event for quick check-in
+                                </p>
+                            </div>
+
+                            <!-- Participant Information -->
+                            <div class="participant-info">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-user me-2 text-primary"></i>
+                                    Registration Details
+                                </h5>
+                                <div id="participantDetails">
+                                    <!-- Details will be populated by JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons">
+                                <button class="btn btn-download" id="downloadQR">
+                                    <i class="fas fa-download me-2"></i>Download QR Code
+                                </button>
+                                <button class="btn btn-email" id="emailConfirmation">
+                                    <i class="fas fa-envelope me-2"></i>Email Confirmation
+                                </button>
+                                <a href="index.html" class="btn btn-home">
+                                    <i class="fas fa-home me-2"></i>Return Home
+                                </a>
+                            </div>
+
+                            <!-- Important Notes -->
+                            <div class="important-notes">
+                                <h6 class="text-warning mb-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Important Notes
+                                </h6>
+                                <ul class="mb-0 text-warning">
+                                    <li class="mb-2">Save this QR code - you'll need it for event check-in</li>
+                                    <li class="mb-2">A confirmation email has been sent to your registered email address</li>
+                                    <li class="mb-2">Please arrive 15 minutes early for smooth check-in</li>
+                                    <li class="mb-0">Contact us if you need to make any changes to your registration</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Error State (Hidden initially) -->
+                        <div id="errorState" class="text-center py-4" style="display: none;">
+                            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                            <h5 class="text-warning mb-3">Registration Not Found</h5>
+                            <p class="text-muted mb-4">
+                                We couldn't find a registration with this ID. Please check the link or contact support if you believe this is an error.
+                            </p>
+                            <div class="d-flex justify-content-center gap-3">
+                                <button class="btn btn-primary" id="retryLoad">
+                                    <i class="fas fa-redo me-2"></i>Try Again
+                                </button>
+                                <a href="registration.html" class="btn btn-outline-primary">
+                                    <i class="fas fa-plus me-2"></i>New Registration
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Support Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto text-center">
+                    <h4 class="mb-3">Need Help?</h4>
+                    <p class="text-muted mb-4">
+                        If you have any questions about your registration or the event, 
+                        we're here to help!
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="mailto:info@yahsl.org" class="btn btn-outline-primary">
+                            <i class="fas fa-envelope me-2"></i>Email Support
+                        </a>
+                        <a href="contact.html" class="btn btn-outline-primary">
+                            <i class="fas fa-phone me-2"></i>Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Young Access Hub</h5>
+                    <p class="mb-0">Empowering young people for self-transformation.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="quick-links">
+                        <a href="index.html" class="text-white me-3">Home</a>
+                        <a href="about.html" class="text-white me-3">About</a>
+                        <a href="projects.html" class="text-white me-3">Projects</a>
+                        <a href="contact.html" class="text-white">Contact</a>
+                    </div>
+                    <p class="mt-2 mb-0">
+                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    <!-- Confirmation JS -->
+    <script>
+        // Confirmation page logic
+        class ConfirmationPage {
+            constructor() {
+                this.registrationData = null;
+                this.init();
+            }
+
+            init() {
+                this.loadRegistrationData();
+                this.bindEvents();
+                this.createConfettiEffect();
+            }
+
+            async loadRegistrationData() {
+                try {
+                    // Get registration ID from URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const registrationId = urlParams.get('id');
+                    
+                    if (!registrationId) {
+                        this.showError('No registration ID provided in the URL.');
+                        return;
+                    }
+
+                    // Validate ID format (MongoDB ObjectId format)
+                    if (!/^[0-9a-fA-F]{24}$/.test(registrationId)) {
+                        this.showError('Invalid registration ID format. Please check the link.');
+                        return;
+                    }
+
+                    // Fetch real registration data from backend API
+                    const response = await fetch(`http://localhost:3000/api/registration/${registrationId}`);
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        
+                        if (response.status === 404) {
+                            this.showError('Registration not found. This registration ID does not exist.');
+                            return;
+                        } else if (response.status === 400) {
+                            this.showError('Invalid registration ID. Please check the link.');
+                            return;
+                        } else {
+                            this.showError('Unable to load registration details. Please try again later.');
+                            return;
+                        }
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!data.success) {
+                        this.showError(data.error || 'Invalid response from server.');
+                        return;
+                    }
+                    
+                    // Debug: Log the received data to help diagnose missing fields
+                    console.log('Registration data received:', data.data);
+                    
+                    // Transform data for display
+                    this.registrationData = {
+                        id: data.data.registration.id,
+                        firstName: data.data.participant.firstName,
+                        lastName: data.data.participant.lastName,
+                        email: data.data.participant.email,
+                        phone: data.data.participant.phone,
+                        age: data.data.participant.age,
+                        gender: data.data.participant.gender,
+                        district: data.data.participant.district,
+                        occupation: data.data.participant.occupation || 'Not specified',
+                        interest: data.data.participant.interest || 'Not specified',
+                        churchAffiliation: data.data.participant.churchAffiliation || '',
+                        registrationDate: new Date(data.data.registration.createdAt).toLocaleDateString(),
+                        accessCode: data.data.registration.accessCode,
+                        qrCodeUrl: data.data.registration.qrCode,
+                        status: data.data.registration.status
+                    };
+
+                    this.displayRegistrationDetails();
+                    
+                } catch (error) {
+                    console.error('Error loading registration data:', error);
+                    if (error.message.includes('Failed to fetch')) {
+                        this.showError('Unable to connect to the server. Please check your connection and try again.');
+                    } else {
+                        this.showError('An unexpected error occurred. Please try again later.');
+                    }
+                }
+            }
+
+            showError(message) {
+                // Update error message
+                const errorState = document.getElementById('errorState');
+                const errorMessage = errorState.querySelector('p');
+                if (errorMessage) {
+                    errorMessage.textContent = message;
+                }
+                
+                this.showErrorState();
+            }
+
+            displayRegistrationDetails() {
+                // Hide loading state
+                document.getElementById('loadingState').style.display = 'none';
+                
+                // Show registration details
+                document.getElementById('registrationDetails').style.display = 'block';
+                
+                // Display QR code
+                this.displayQRCode();
+                
+                // Display participant details
+                this.displayParticipantDetails();
+            }
+
+            displayQRCode() {
+                const qrContainer = document.getElementById('qrCodeContainer');
+                if (this.registrationData.qrCodeUrl) {
+                    qrContainer.innerHTML = `
+                        <img src="${this.registrationData.qrCodeUrl}" 
+                             alt="Registration QR Code" 
+                             class="qr-code-image">
+                    `;
+                }
+            }
+
+            displayParticipantDetails() {
+                const detailsContainer = document.getElementById('participantDetails');
+                const data = this.registrationData;
+                
+                detailsContainer.innerHTML = `
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Full Name:</span>
+                        <span class="info-value">${data.firstName} ${data.lastName}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">${data.email}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Phone:</span>
+                        <span class="info-value">${data.phone}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Age:</span>
+                        <span class="info-value">${data.age} years</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Gender:</span>
+                        <span class="info-value">${data.gender}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">District:</span>
+                        <span class="info-value">${data.district || 'Not specified'}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Occupation:</span>
+                        <span class="info-value">${data.occupation || 'Not specified'}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Interest Area:</span>
+                        <span class="info-value">${data.interest || 'Not specified'}</span>
+                    </div>
+                    ${data.churchAffiliation ? `
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Church Affiliation:</span>
+                        <span class="info-value">${data.churchAffiliation}</span>
+                    </div>
+                    ` : ''}
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Registration Date:</span>
+                        <span class="info-value">${data.registrationDate}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Registration ID:</span>
+                        <span class="info-value">${data.id}</span>
+                    </div>
+                    <div class="info-row d-flex justify-content-between">
+                        <span class="info-label">Access Code:</span>
+                        <span class="info-value">${data.accessCode}</span>
+                    </div>
+                `;
+            }
+
+            showErrorState() {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('errorState').style.display = 'block';
+            }
+
+            bindEvents() {
+                // Download QR Code
+                document.getElementById('downloadQR')?.addEventListener('click', () => {
+                    this.downloadQRCode();
+                });
+
+                // Email Confirmation
+                document.getElementById('emailConfirmation')?.addEventListener('click', () => {
+                    this.sendEmailConfirmation();
+                });
+
+                // Retry Load
+                document.getElementById('retryLoad')?.addEventListener('click', () => {
+                    this.retryLoadRegistration();
+                });
+            }
+
+            downloadQRCode() {
+                if (this.registrationData?.qrCodeUrl) {
+                    try {
+                        const link = document.createElement('a');
+                        link.href = this.registrationData.qrCodeUrl;
+                        link.download = `YAH-Registration-${this.registrationData.firstName}-${this.registrationData.lastName}-${this.registrationData.id}.png`;
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Show success message
+                        this.showAlert('QR Code downloaded successfully!', 'success');
+                    } catch (error) {
+                        console.error('Error downloading QR code:', error);
+                        this.showAlert('Failed to download QR code. Please try again.', 'error');
+                    }
+                } else {
+                    this.showAlert('QR code not available for download.', 'error');
+                }
+            }
+
+            async sendEmailConfirmation() {
+                const button = document.getElementById('emailConfirmation');
+                const originalText = button.innerHTML;
+                
+                button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+                button.disabled = true;
+
+                try {
+                    await this.simulateDelay(2000);
+                    this.showAlert('Confirmation email sent successfully!', 'success');
+                } catch (error) {
+                    this.showAlert('Failed to send confirmation email. Please try again.', 'error');
+                } finally {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+
+            retryLoadRegistration() {
+                document.getElementById('errorState').style.display = 'none';
+                document.getElementById('loadingState').style.display = 'block';
+                this.loadRegistrationData();
+            }
+
+            createConfettiEffect() {
+                const colors = ['#e67e22', '#3498db', '#27ae60', '#f39c12', '#9b59b6'];
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.animationDelay = Math.random() * 3 + 's';
+                        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                        document.body.appendChild(confetti);
+                        
+                        setTimeout(() => confetti.remove(), 5000);
+                    }, i * 100);
+                }
+            }
+
+            simulateDelay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            showAlert(message, type = 'info') {
+                const alertClass = type === 'success' ? 'alert-success' : 
+                                 type === 'error' ? 'alert-danger' : 'alert-info';
+                
+                const alert = document.createElement('div');
+                alert.className = `alert ${alertClass} alert-dismissible fade show`;
+                alert.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                document.body.insertBefore(alert, document.body.firstChild);
+                setTimeout(() => alert.remove(), 5000);
+            }
+        }
+
+        // Initialize confirmation page
+        document.addEventListener('DOMContentLoaded', () => {
+            new ConfirmationPage();
+        });
+    </script>
+</body>
+</html>

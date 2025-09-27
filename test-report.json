@@ -1,0 +1,133 @@
+{
+  "timestamp": "2025-09-26T15:39:53.407Z",
+  "totalTime": "7.77",
+  "results": {
+    "backend": {
+      "status": "passed",
+      "tests": 129,
+      "passed": 129,
+      "failed": 0,
+      "time": 7.401
+    },
+    "frontend": {
+      "status": "passed",
+      "files": [
+        {
+          "file": "registration.html",
+          "exists": true,
+          "size": 21117,
+          "hasContent": true,
+          "errors": []
+        },
+        {
+          "file": "confirmation.html",
+          "exists": true,
+          "size": 24782,
+          "hasContent": true,
+          "errors": []
+        },
+        {
+          "file": "admin.html",
+          "exists": true,
+          "size": 20866,
+          "hasContent": true,
+          "errors": []
+        },
+        {
+          "file": "js/registration.js",
+          "exists": true,
+          "size": 16070,
+          "hasContent": true,
+          "errors": []
+        },
+        {
+          "file": "js/admin.js",
+          "exists": true,
+          "size": 29371,
+          "hasContent": true,
+          "errors": []
+        }
+      ],
+      "errors": []
+    },
+    "api": {
+      "status": "passed",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/api/verify/ABC12345",
+          "expected": 200,
+          "status": "tested",
+          "responseTime": 87.4630474975731,
+          "success": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/register",
+          "expected": 201,
+          "status": "tested",
+          "responseTime": 166.8917469835746,
+          "success": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/admin/stats",
+          "expected": 200,
+          "status": "tested",
+          "responseTime": 140.711636696069,
+          "success": true
+        },
+        {
+          "method": "POST",
+          "path": "/api/admin/access-codes",
+          "expected": 201,
+          "status": "tested",
+          "responseTime": 213.9913604055285,
+          "success": true
+        },
+        {
+          "method": "GET",
+          "path": "/api/admin/registrations",
+          "expected": 200,
+          "status": "tested",
+          "responseTime": 191.60349524614028,
+          "success": true
+        }
+      ],
+      "errors": []
+    },
+    "integration": {
+      "status": "passed",
+      "flows": [
+        {
+          "name": "Participant Registration Flow",
+          "steps": 5,
+          "completed": 5,
+          "duration": 1788.1827357161374,
+          "success": true
+        },
+        {
+          "name": "Admin Dashboard Flow",
+          "steps": 5,
+          "completed": 5,
+          "duration": 2672.205693703985,
+          "success": true
+        },
+        {
+          "name": "Error Handling Flow",
+          "steps": 4,
+          "completed": 4,
+          "duration": 2568.2705587995215,
+          "success": true
+        }
+      ],
+      "errors": []
+    }
+  },
+  "summary": {
+    "backend": "129/129 tests passed",
+    "frontend": "5 files validated",
+    "api": "5 endpoints tested",
+    "integration": "3 user flows tested"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "yah-youth-registration-backend",
+  "version": "1.0.0",
+  "description": "Backend API for YAH Youth Event Registration System",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src tests",
+    "lint:fix": "eslint src tests --fix",
+    "format": "prettier --write 'src/**/*.js' 'tests/**/*.js'"
+  },
+  "keywords": [
+    "youth",
+    "event",
+    "registration",
+    "sierra-leone",
+    "access-codes",
+    "qr-codes"
+  ],
+  "author": "YAH (Youth Alive in Him)",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.8.0",
+    "helmet": "^7.0.0",
+    "joi": "^17.9.0",
+    "mongodb": "^6.20.0",
+    "nodemailer": "^6.10.1",
+    "qrcode": "^1.5.0",
+    "sanitize-html": "^2.17.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "eslint": "^8.45.0",
+    "jest": "^29.0.0",
+    "mongodb-memory-server": "^10.2.1",
+    "nodemon": "^3.0.0",
+    "prettier": "^3.0.0",
+    "supertest": "^6.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

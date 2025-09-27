@@ -1,0 +1,494 @@
+openapi: 3.0.3
+info:
+  title: Youth Event Registration API
+  description: API for offline-to-online event registration system with secure access codes and QR code generation
+  version: 1.0.0
+  contact:
+    name: Young Access Hub
+    email: info@youngaccesshub.org
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://yah-events.org/api
+    description: Production server
+
+paths:
+  /access-codes/validate:
+    post:
+      summary: Validate access code
+      description: Verify if access code is valid and unused
+      tags:
+        - Access Codes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accessCode
+              properties:
+                accessCode:
+                  type: string
+                  minLength: 8
+                  maxLength: 12
+                  pattern: '^[A-Z0-9-]+$'
+                  example: 'X9F4-AB72-QJ3L'
+      responses:
+        '200':
+          description: Access code validation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                    description: Whether access code is valid and unused
+                  message:
+                    type: string
+                    description: User-friendly validation message
+                examples:
+                  valid:
+                    value:
+                      valid: true
+                      message: 'Access code is valid'
+                  invalid:
+                    value:
+                      valid: false
+                      message: 'Invalid access code'
+                  used:
+                    value:
+                      valid: false
+                      message: 'This access code has already been used'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too many validation attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /registrations:
+    post:
+      summary: Submit registration
+      description: Complete event registration with participant details and access code
+      tags:
+        - Registrations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullName
+                - phoneNumber
+                - emailAddress
+                - age
+                - occupation
+                - trackOfInterest
+                - accessCode
+                - termsAccepted
+              properties:
+                fullName:
+                  type: string
+                  minLength: 2
+                  maxLength: 100
+                  example: 'Aminata Kamara'
+                phoneNumber:
+                  type: string
+                  pattern: '^\+?[\d\s\-\(\)]+$'
+                  example: '+232 76 123 456'
+                emailAddress:
+                  type: string
+                  format: email
+                  example: 'aminata.kamara@example.com'
+                age:
+                  type: integer
+                  minimum: 13
+                  maximum: 100
+                  example: 22
+                occupation:
+                  type: string
+                  minLength: 2
+                  maxLength: 100
+                  example: 'University Student'
+                trackOfInterest:
+                  type: string
+                  enum:
+                    - 'Innovation & Entrepreneurship'
+                    - 'Leadership Development'
+                    - 'Networking'
+                  example: 'Innovation & Entrepreneurship'
+                accessCode:
+                  type: string
+                  minLength: 8
+                  maxLength: 12
+                  pattern: '^[A-Z0-9-]+$'
+                  example: 'X9F4-AB72-QJ3L'
+                termsAccepted:
+                  type: boolean
+                  enum: [true]
+                  example: true
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  registrationId:
+                    type: string
+                    pattern: '^REG-\d{6}$'
+                    example: 'REG-001234'
+                  qrCode:
+                    type: string
+                    format: uri
+                    description: Base64 encoded QR code or download URL
+                    example: 'data:image/png;base64,iVBORw0KGgoAAAANS...'
+                  message:
+                    type: string
+                    example: 'Registration successful! Check your email for confirmation.'
+                  participant:
+                    type: object
+                    properties:
+                      fullName:
+                        type: string
+                        example: 'Aminata Kamara'
+                      emailAddress:
+                        type: string
+                        example: 'aminata.kamara@example.com'
+                      trackOfInterest:
+                        type: string
+                        example: 'Innovation & Entrepreneurship'
+        '400':
+          description: Invalid registration data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Registration failed'
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field:
+                          type: string
+                          example: 'emailAddress'
+                        message:
+                          type: string
+                          example: 'Please enter a valid email address'
+        '409':
+          description: Access code already used
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'This access code has already been used'
+        '429':
+          description: Too many registration attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/authenticate:
+    post:
+      summary: Admin authentication
+      description: Validate admin passcode for dashboard access
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - passcode
+              properties:
+                passcode:
+                  type: string
+                  example: 'admin-secure-passcode'
+      responses:
+        '200':
+          description: Authentication result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authenticated:
+                    type: boolean
+                  message:
+                    type: string
+                examples:
+                  success:
+                    value:
+                      authenticated: true
+                      message: 'Access granted'
+                  failure:
+                    value:
+                      authenticated: false
+                      message: 'Access denied'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too many authentication attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/participants:
+    get:
+      summary: Get registered participants
+      description: Retrieve list of registered participants (admin only)
+      tags:
+        - Admin
+      security:
+        - passcodeAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number for pagination
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: Number of participants per page
+        - name: track
+          in: query
+          schema:
+            type: string
+            enum:
+              - 'Innovation & Entrepreneurship'
+              - 'Leadership Development'
+              - 'Networking'
+          description: Filter by track of interest
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by name or email
+      responses:
+        '200':
+          description: List of registered participants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participants:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        registrationId:
+                          type: string
+                          example: 'REG-001234'
+                        fullName:
+                          type: string
+                          example: 'Aminata Kamara'
+                        phoneNumber:
+                          type: string
+                          example: '+232 76 123 456'
+                        emailAddress:
+                          type: string
+                          example: 'aminata.kamara@example.com'
+                        age:
+                          type: integer
+                          example: 22
+                        occupation:
+                          type: string
+                          example: 'University Student'
+                        trackOfInterest:
+                          type: string
+                          example: 'Innovation & Entrepreneurship'
+                        accessCode:
+                          type: string
+                          example: 'X9F4-AB72-QJ3L'
+                        registeredAt:
+                          type: string
+                          format: date-time
+                          example: '2025-09-26T14:30:00Z'
+                        emailSent:
+                          type: boolean
+                          example: true
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 50
+                      total:
+                        type: integer
+                        example: 247
+                      pages:
+                        type: integer
+                        example: 5
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/participants/{registrationId}/qr:
+    get:
+      summary: Download participant QR code
+      description: Download QR code for specific participant (admin only)
+      tags:
+        - Admin
+      security:
+        - passcodeAuth: []
+      parameters:
+        - name: registrationId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^REG-\d{6}$'
+          description: Participant registration ID
+          example: 'REG-001234'
+      responses:
+        '200':
+          description: QR code file
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: object
+                properties:
+                  qrCode:
+                    type: string
+                    format: uri
+                    description: Base64 encoded QR code
+                  participant:
+                    type: object
+                    properties:
+                      fullName:
+                        type: string
+                      emailAddress:
+                        type: string
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Registration not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: 'An error occurred'
+        error:
+          type: string
+          example: 'INTERNAL_SERVER_ERROR'
+        timestamp:
+          type: string
+          format: date-time
+          example: '2025-09-26T14:30:00Z'
+      required:
+        - success
+        - message
+
+  securitySchemes:
+    passcodeAuth:
+      type: http
+      scheme: bearer
+      description: Admin passcode authentication
+
+security: []
+
+tags:
+  - name: Access Codes
+    description: Access code validation endpoints
+  - name: Registrations
+    description: Event registration endpoints
+  - name: Admin
+    description: Administrative endpoints (passcode protected)

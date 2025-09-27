@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Tools - YAH Summit 2025</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #d4951a;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), #1e3d6f);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .tools-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .logo-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .logo-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .tool-header {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .tool-header.admin {
+            background: linear-gradient(135deg, var(--primary-color), #1e3d6f);
+            color: white;
+        }
+
+        .tool-header.scanner {
+            background: linear-gradient(135deg, var(--secondary-color), #b8780f);
+            color: white;
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .tool-body {
+            padding: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+
+        .feature-list li i {
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .tool-button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background: #1e3d6f;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-scanner {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-scanner:hover {
+            background: #b8780f;
+            color: white;
+            text-decoration: none;
+        }
+
+        .stats-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .tools-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tools-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <h1><i class="fas fa-users me-3"></i>YAH Summit 2025</h1>
+            <p>Event Management Tools</p>
+        </div>
+
+        <!-- Tools Grid -->
+        <div class="tools-grid">
+            <!-- Admin Dashboard -->
+            <div class="tool-card">
+                <div class="tool-header admin">
+                    <div class="stats-badge">Admin</div>
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="tool-title">Admin Dashboard</div>
+                    <div class="tool-description">Manage registrations, participants, and event data</div>
+                </div>
+                <div class="tool-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-users"></i> Participant Management</li>
+                        <li><i class="fas fa-chart-bar"></i> Registration Statistics</li>
+                        <li><i class="fas fa-key"></i> Access Code Generation</li>
+                        <li><i class="fas fa-download"></i> Data Export</li>
+                        <li><i class="fas fa-envelope"></i> Email Management</li>
+                    </ul>
+                    <a href="admin.html" class="tool-button btn-admin">
+                        <i class="fas fa-cog me-2"></i>Open Admin Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- QR Scanner -->
+            <div class="tool-card">
+                <div class="tool-header scanner">
+                    <div class="stats-badge">Live</div>
+                    <div class="tool-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="tool-title">QR Code Scanner</div>
+                    <div class="tool-description">Event day check-in system for participants</div>
+                </div>
+                <div class="tool-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-camera"></i> Real-time QR Scanning</li>
+                        <li><i class="fas fa-check-circle"></i> Instant Check-in</li>
+                        <li><i class="fas fa-chart-pie"></i> Live Attendance Stats</li>
+                        <li><i class="fas fa-history"></i> Recent Check-ins</li>
+                        <li><i class="fas fa-keyboard"></i> Manual Entry Backup</li>
+                    </ul>
+                    <a href="scanner.html" class="tool-button btn-scanner">
+                        <i class="fas fa-qrcode me-2"></i>Open QR Scanner
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Info -->
+        <div class="text-center mt-4">
+            <div class="card" style="background: rgba(255,255,255,0.1); border: none; color: white;">
+                <div class="card-body">
+                    <h6 class="card-title">Quick Access</h6>
+                    <p class="card-text mb-0">
+                        <strong>Admin Access:</strong> YAH2024Admin | 
+                        <strong>Scanner Access:</strong> STAFF2024
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.js"></script>
+</body>
+</html>

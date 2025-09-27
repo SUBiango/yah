@@ -4,7 +4,7 @@
 Build a lightweight and secure event registration system for youth in Sierra Leone.  
 Participants purchase access codes offline and use them to unlock the online registration form.  
 After registration, a unique QR code is generated for event entry and sent by email.  
-An admin page tracks code usage and participant details.
+An admin page tracks **only registered codes and participants** (unused codes are never exposed).
 
 ---
 
@@ -45,8 +45,13 @@ An admin page tracks code usage and participant details.
 ---
 
 ### 2. Admin Flow
-- **Admin Page (No Authentication)**
-  - Displays a table of all access codes.
+- **Security**
+  - Admin page is protected by a **static passcode gate** (checked on the server; passcode stored as ENV variable).  
+  - Only people who know the passcode can view the page.  
+  - This avoids full authentication systems while keeping unauthorized users out.  
+
+- **Admin Page**
+  - Displays a table of **only registered participants** (unused codes are hidden).  
   - Columns:
     - Name
     - Phone
@@ -54,10 +59,11 @@ An admin page tracks code usage and participant details.
     - Age
     - Occupation
     - Track of Interest
-    - Access Code
-    - Status: `Not Registered` / `Registered`
-    - Download QR (only visible when registered)
-  - Ability to download participant’s QR code in case they lose it.
+    - Access Code (used)
+    - Status: `Registered`
+    - Download QR button
+  - Ability to download participant’s QR code in case they lose it.  
+  - No visibility into unused codes → minimizes security risks.
 
 ---
 
@@ -67,6 +73,7 @@ An admin page tracks code usage and participant details.
   - Example: `8-12 character alphanumeric string (e.g., X9F4-AB72-QJ3L)`
 - Codes can only be used once (marked as used after registration).
 - QR codes are one-time and tied to participant records.
+- Admin page is passcode-gated + excludes unused codes.
 
 ---
 
@@ -86,7 +93,7 @@ An admin page tracks code usage and participant details.
 - **Backend:** Node.js + Express
 - **Database:** MongoDB (stores codes and participant data)
 - **QR Code Generation:** `qrcode` npm package
-- **Email Sending:** mailgun 
+- **Email Sending:** Nodemailer + zoho SMTP setup
 
 ---
 
@@ -97,8 +104,8 @@ An admin page tracks code usage and participant details.
    - Email confirmation with QR code
 
 2. **Admin Page**
-   - Real-time list of code usage and participant info
-   - Status updates after registration
+   - Passcode-protected access
+   - Real-time list of registered participants only
    - Download button for QR codes
 
 3. **Access Code Management**
@@ -111,6 +118,7 @@ An admin page tracks code usage and participant details.
 - Online payment integration
 - Authentication system for admin
 - SMS notifications
+- Visibility of unused codes in admin
 
 ---
 
@@ -118,8 +126,5 @@ An admin page tracks code usage and participant details.
 - Participants can only register with a valid, unused code.
 - Registration form captures all required participant details.
 - QR codes are unique, delivered by email, and scannable at the event gate.
-- Admin can view and export participant details + QR codes easily.
-- System remains simple, fast, and secure.
-```
-
-Do you want me to also draft a **sample confirmation email template** in Cole Schafer’s style (short, warm, and human) so it feels less robotic?
+- Admin page is simple, secure, and never exposes unused codes.
+- System remains lightweight, fast, and easy to use.

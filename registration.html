@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration - Young Access Hub</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <style>
+        .registration-hero {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #e67e22 100%);
+            color: white;
+            padding: 6rem 0 4rem;
+        }
+        
+        .registration-form {
+            background: #fff;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .access-code-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 60%;
+            width: 40%;
+            height: 2px;
+            background: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step:last-child::after {
+            display: none;
+        }
+        
+        .step.active .step-circle {
+            background: #e67e22;
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            background: #28a745;
+            color: white;
+        }
+        
+        .step.active::after,
+        .step.completed::after {
+            background: #e67e22;
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #dee2e6;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .field-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .is-valid {
+            border-color: #28a745 !important;
+        }
+        
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+        
+        .access-code-input {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .btn-next {
+            background: #e67e22;
+            border-color: #e67e22;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+        }
+        
+        .btn-next:hover {
+            background: #d35400;
+            border-color: #d35400;
+            color: white;
+        }
+        
+        .btn-back {
+            background: transparent;
+            border: 2px solid #6c757d;
+            color: #6c757d;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+        }
+        
+        .btn-back:hover {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .loading-spinner {
+            display: none;
+        }
+        
+        .alert-custom {
+            border-radius: 8px;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/logo.png" alt="YAH Logo" height="40" class="me-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="summit.html">Summit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="registration.html">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="registration-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-calendar-plus me-3"></i>
+                        Event Registration
+                    </h1>
+                    <p class="lead mb-0">
+                        Complete your registration for exclusive YAH events and workshops
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="registration-form">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator">
+                            <div class="step active" id="step1">
+                                <div class="step-circle">1</div>
+                                <div class="step-label">Access Code</div>
+                            </div>
+                            <div class="step" id="step2">
+                                <div class="step-circle">2</div>
+                                <div class="step-label">Personal Info</div>
+                            </div>
+                            <div class="step" id="step3">
+                                <div class="step-circle">3</div>
+                                <div class="step-label">Confirmation</div>
+                            </div>
+                        </div>
+
+                        <!-- Alert Area -->
+                        <div id="alertArea"></div>
+
+                        <!-- Registration Form -->
+                        <form id="registrationForm" novalidate>
+                            <!-- Step 1: Access Code Verification -->
+                            <div class="form-section active" id="section1">
+                                <div class="access-code-section">
+                                    <div class="text-center mb-4">
+                                        <i class="fas fa-key fa-3x text-warning mb-3"></i>
+                                        <h4>Enter Your Access Code</h4>
+                                        <p class="text-muted">
+                                            You should have received a unique 8-character access code to register for this event.
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6">
+                                            <label for="accessCode" class="form-label">Access Code <span class="text-danger">*</span></label>
+                                            <input 
+                                                type="text" 
+                                                class="form-control access-code-input" 
+                                                id="accessCode" 
+                                                name="accessCode"
+                                                placeholder="ABC12345"
+                                                maxlength="8"
+                                                required
+                                                autocomplete="off"
+                                            >
+                                            <div class="field-error" id="accessCodeError"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-next" id="verifyAccessCode">
+                                        <span class="btn-text">Verify Access Code</span>
+                                        <span class="loading-spinner">
+                                            <i class="fas fa-spinner fa-spin me-2"></i>Verifying...
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Personal Information -->
+                            <div class="form-section" id="section2">
+                                <div class="mb-4">
+                                    <h4 class="text-center mb-3">Personal Information</h4>
+                                    <p class="text-muted text-center">
+                                        Please provide your details to complete the registration.
+                                    </p>
+                                </div>
+
+                                <div class="row g-3">
+                                    <!-- Personal Details -->
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                        <div class="field-error" id="firstNameError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                        <div class="field-error" id="lastNameError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        <div class="field-error" id="emailError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="e.g., 078988491" required>
+                                        <div class="field-error" id="phoneError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="dateOfBirth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+                                        <div class="field-error" id="dateOfBirthError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="occupation" class="form-label">Occupation <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="occupation" name="occupation" placeholder="e.g., Student, Teacher, Entrepreneur" required>
+                                        <div class="field-error" id="occupationError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="gender" name="gender" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                        <div class="field-error" id="genderError"></div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="district" class="form-label">Which district are you from? <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="district" name="district" required>
+                                            <option value="">Select District</option>
+                                            <option value="Kono">Kono</option>
+                                            <option value="Kenema">Kenema</option>
+                                            <option value="Kailahun">Kailahun</option>
+                                            <option value="Bo">Bo</option>
+                                            <option value="Bombali">Bombali</option>
+                                            <option value="Bonthe">Bonthe</option>
+                                            <option value="Kambia">Kambia</option>
+                                            <option value="Koinadugu">Koinadugu</option>
+                                            <option value="Moyamba">Moyamba</option>
+                                            <option value="Port Loko">Port Loko</option>
+                                            <option value="Pujehun">Pujehun</option>
+                                            <option value="Tonkolili">Tonkolili</option>
+                                            <option value="Western Area Rural">Western Area Rural</option>
+                                            <option value="Western Area Urban">Western Area Urban</option>
+                                        </select>
+                                        <div class="field-error" id="districtError"></div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="interest" class="form-label">What are you most interested in? <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="interest" name="interest" required>
+                                            <option value="">Select Interest</option>
+                                            <option value="Innovation & Entrepreneurship">Innovation & Entrepreneurship</option>
+                                            <option value="Leadership Development">Leadership Development</option>
+                                            <option value="Networking">Networking</option>
+                                        </select>
+                                        <div class="field-error" id="interestError"></div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="termsAgreement" name="termsAgreement" required>
+                                            <label class="form-check-label" for="termsAgreement">
+                                                I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="field-error" id="termsAgreementError"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-back" id="backToStep1">
+                                        <i class="fas fa-arrow-left me-2"></i>Back
+                                    </button>
+                                    <button type="submit" class="btn btn-next" id="submitRegistration">
+                                        <span class="btn-text">Complete Registration</span>
+                                        <span class="loading-spinner">
+                                            <i class="fas fa-spinner fa-spin me-2"></i>Processing...
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Confirmation (handled by redirect to confirmation.html) -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Young Access Hub</h5>
+                    <p class="mb-0">Empowering young people for self-transformation.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="quick-links">
+                        <a href="index.html" class="text-white me-3">Home</a>
+                        <a href="about.html" class="text-white me-3">About</a>
+                        <a href="projects.html" class="text-white me-3">Projects</a>
+                        <a href="contact.html" class="text-white">Contact</a>
+                    </div>
+                    <p class="mt-2 mb-0">
+                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js?v=20250926-3"></script>
+    <!-- Registration JS -->
+    <script src="js/registration.js?v=20250927-4"></script>
+</body>
+</html>
