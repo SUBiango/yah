@@ -174,7 +174,7 @@ Update `backend/src/app.js` to handle production CORS:
 // CORS configuration for production
 const corsOptions = {
   origin: [
-    'https://your-frontend-domain.com',  // Your frontend domain
+    'https://www.yahsl.org/',  // Your frontend domain
     'http://localhost:8080',             // Local development
     'http://127.0.0.1:8080'              // Local development
   ],

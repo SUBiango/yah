@@ -48,9 +48,8 @@ const corsOptions = {
     
     // In production, configure specific allowed origins
     const allowedOrigins = [
-      process.env.FRONTEND_URL || 'https://yourdomain.com',
-      'https://subiaango.github.io', // GitHub Pages if using
-      'https://yah-frontend.onrender.com', // Render frontend if used
+      process.env.FRONTEND_URL || 'https://www.yahsl.org/',
+      'http://localhost:8080', // Render frontend if used
       'https://www.yourdomain.com',
       // Add your production domain here
     ];

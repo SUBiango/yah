@@ -9,7 +9,7 @@ class AdminDashboard {
         this.totalParticipants = 0;
         this.participants = [];
         this.filteredParticipants = [];
-        this.apiBaseUrl = 'http://localhost:3000/api'; // Backend API URL
+        this.apiBaseUrl = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://yah-backend.onrender.com/api'; // Backend API URL
         this.adminPasscode = 'YAH@Admin2025'; // Default admin passcode
         
         this.init();
