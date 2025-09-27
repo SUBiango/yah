@@ -1,0 +1,43 @@
+# Render.com Configuration for YAH Backend
+# This file configures the backend deployment on Render.com
+
+services:
+  - type: web
+    name: yah-backend
+    env: node
+    region: oregon  # Change to your preferred region
+    plan: free  # Change to 'starter' for production
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    healthCheckPath: /health
+    
+    # Auto-deploy from GitHub
+    repo: https://github.com/SUBiango/yah
+    branch: 002-youth-event-registration
+    rootDir: backend
+    
+    # Environment variables (set these in Render dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: true  # Render assigns this automatically
+      - key: MONGODB_URI
+        sync: false  # Set manually in dashboard
+      - key: ADMIN_PASSCODE
+        sync: false  # Set manually in dashboard
+      - key: ZOHO_EMAIL_USER
+        sync: false  # Set manually in dashboard
+      - key: ZOHO_EMAIL_PASS
+        sync: false  # Set manually in dashboard
+      - key: JWT_SECRET
+        generateValue: true  # Generate automatically
+        
+    # Custom headers for security
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
