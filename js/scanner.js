@@ -12,7 +12,9 @@ class EventScanner {
             totalRegistered: 0,
             attendanceRate: 0
         };
-        this.apiBaseUrl = 'http://localhost:3000/api';
+        this.apiBaseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+            ? 'http://localhost:3000/api'  // Development
+            : 'https://yah-backend.onrender.com/api'; // Production (yahsl.org)
         this.staffAccessCode = 'STAFF2024'; // Default staff access code
         
         this.init();

@@ -48,12 +48,13 @@ const corsOptions = {
     
     // In production, configure specific allowed origins
     const allowedOrigins = [
-      process.env.FRONTEND_URL || 'https://www.yahsl.org/',
-      'http://localhost:8080', // Render frontend if used
-      'https://www.yourdomain.com',
-      // Add your production domain here
+      process.env.FRONTEND_URL || 'https://www.yahsl.org',
+      'https://www.yahsl.org', // Production frontend
+      'https://yahsl.org', // Alternative without www
+      'https://subiaango.github.io', // GitHub Pages if using
+      'https://yah-frontend.onrender.com', // Render frontend if used
     ];
-    
+
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
