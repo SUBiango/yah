@@ -211,6 +211,31 @@ router.post('/register', registrationLimiter, async (req, res) => {
       // Don't fail the registration if email fails - this is by design
     }
 
+    // Send admin notification asynchronously (don't block response)
+    try {
+      console.log('Attempting to send admin notification for new registration:', registration._id);
+      await emailService.sendAdminNotification({
+        eventName: 'Kono District Youth Empowerment Summit 2025',
+        participant: registration.participantData,
+        registration: {
+          _id: registration._id,
+          participantId: registration.participantId,
+          status: registration.status,
+          createdAt: registration.createdAt,
+          accessCode: registration.accessCode
+        },
+        totalRegistrations: await Registration.getRegistrationCount()
+      });
+      console.log('✅ Admin notification sent successfully for registration:', registration._id);
+    } catch (adminEmailError) {
+      console.error('❌ Failed to send admin notification:', {
+        error: adminEmailError.message,
+        registrationId: registration._id,
+        stack: adminEmailError.stack
+      });
+      // Don't fail the registration if admin notification fails
+    }
+
     res.status(201).json(response);
 
   } catch (error) {

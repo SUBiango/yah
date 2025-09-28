@@ -159,6 +159,12 @@ class EmailService {
       await this.initialize();
     }
 
+    // Check if admin email is configured
+    if (!config.email.adminEmail) {
+      console.error('Admin email not configured. Please set ADMIN_EMAIL environment variable.');
+      throw new Error('Admin email not configured');
+    }
+
     try {
       const emailHtml = this.generateAdminNotificationHTML(data);
       const emailText = this.generateAdminNotificationText(data);
@@ -174,11 +180,15 @@ class EmailService {
         html: emailHtml,
       };
 
+      console.log('Sending admin notification to:', config.email.adminEmail);
+      
       const result = await this.transporter.sendMail(mailOptions);
       
       console.log('Admin notification sent successfully:', {
         messageId: result.messageId,
         eventData: data.eventName,
+        adminEmail: config.email.adminEmail,
+        participantName: `${data.participant.firstName} ${data.participant.lastName}`,
       });
 
       return {
@@ -215,6 +225,31 @@ class EmailService {
         .details { background-color: white; padding: 20px; margin: 20px 0; border-radius: 8px; }
         .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
         .highlight { color: #2c5aa0; font-weight: bold; }
+        
+        /* Responsive styles for mobile devices */
+        @media only screen and (max-width: 600px) {
+            body { padding: 10px !important; max-width: 100% !important; }
+            .header { padding: 15px !important; }
+            .content { padding: 20px !important; }
+            .qr-section { margin: 20px 0 !important; padding: 15px !important; }
+            .details { padding: 15px !important; margin: 15px 0 !important; }
+            .qr-code { max-width: 150px !important; }
+            h1 { font-size: 24px !important; }
+            h3 { font-size: 18px !important; }
+            p, li { font-size: 14px !important; }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            body { padding: 5px !important; }
+            .header { padding: 10px !important; }
+            .content { padding: 15px !important; }
+            .qr-section { padding: 10px !important; margin: 15px 0 !important; }
+            .details { padding: 10px !important; margin: 10px 0 !important; }
+            .qr-code { max-width: 120px !important; }
+            h1 { font-size: 20px !important; }
+            h3 { font-size: 16px !important; }
+            p, li { font-size: 13px !important; }
+        }
     </style>
 </head>
 <body>
@@ -343,6 +378,29 @@ Building Sierra Leone's Future, One Youth at a Time 🇸🇱
         .content { background-color: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
         .alert { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0; }
         .details { background-color: white; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        
+        /* Responsive styles for mobile devices */
+        @media only screen and (max-width: 600px) {
+            body { padding: 10px !important; max-width: 100% !important; }
+            .header { padding: 15px !important; }
+            .content { padding: 20px !important; }
+            .alert { padding: 10px !important; margin: 15px 0 !important; }
+            .details { padding: 15px !important; margin: 15px 0 !important; }
+            h1 { font-size: 24px !important; }
+            h3 { font-size: 18px !important; }
+            p { font-size: 14px !important; }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            body { padding: 5px !important; }
+            .header { padding: 10px !important; }
+            .content { padding: 15px !important; }
+            .alert { padding: 8px !important; margin: 10px 0 !important; }
+            .details { padding: 10px !important; margin: 10px 0 !important; }
+            h1 { font-size: 20px !important; }
+            h3 { font-size: 16px !important; }
+            p { font-size: 13px !important; }
+        }
     </style>
 </head>
 <body>
