@@ -55,17 +55,36 @@ const corsOptions = {
       'https://yah-frontend.onrender.com', // Render frontend if used
     ];
 
+    console.log(`[CORS] Request from origin: ${origin}`);
+    console.log(`[CORS] Allowed origins:`, allowedOrigins);
+
     if (allowedOrigins.includes(origin)) {
+      console.log(`[CORS] Origin ${origin} allowed`);
       return callback(null, true);
     }
     
+    console.error(`[CORS] Origin ${origin} blocked`);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With', 
+    'Content-Type', 
+    'Accept',
+    'Authorization',
+    'Cache-Control',
+    'X-HTTP-Method-Override'
+  ],
+  preflightContinue: false,
 };
 
 app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
 
 // Body parsing middleware
 app.use(express.json({ 
