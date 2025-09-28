@@ -249,24 +249,42 @@ class AdminDashboard {
     async loadParticipants() {
         console.log('Loading participants...');
         try {
-            const response = await fetch(`${this.apiBaseUrl}/admin/registrations?skip=${(this.currentPage - 1) * this.itemsPerPage}&limit=${this.itemsPerPage}`);
+            const url = `${this.apiBaseUrl}/admin/registrations?skip=${(this.currentPage - 1) * this.itemsPerPage}&limit=${this.itemsPerPage}`;
+            console.log('[Admin] API URL:', url);
+            
+            const response = await fetch(url);
+            console.log('[Admin] Response status:', response.status, response.statusText);
+            
             const data = await response.json();
+            console.log('[Admin] Full API Response:', data);
 
             if (response.ok && data.success) {
+                console.log('[Admin] Raw registrations data:', data.data);
                 this.participants = data.data.registrations || [];
                 this.totalParticipants = data.data.total || 0;
                 this.filteredParticipants = [...this.participants];
                 
                 console.log('Loaded participants from API:', this.participants);
+                console.log('[Admin] Total participants count:', this.totalParticipants);
                 this.renderParticipantsTable();
                 this.updateParticipantCount();
                 // Update statistics with correct counts after loading participants
                 this.updateParticipantStatistics();
             } else {
+                console.error('[Admin] API call failed:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    responseData: data
+                });
                 throw new Error(data.error || 'Failed to load participants');
             }
         } catch (error) {
             console.error('Participants loading error:', error);
+            console.error('[Admin] Error details:', {
+                message: error.message,
+                stack: error.stack,
+                apiUrl: `${this.apiBaseUrl}/admin/registrations`
+            });
             // Show empty state instead of mock data
             this.participants = [];
             this.filteredParticipants = [];

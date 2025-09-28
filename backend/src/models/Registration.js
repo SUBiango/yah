@@ -223,39 +223,64 @@ class Registration {
     
     const db = dbConnection.getDatabase();
     
-    // Get registrations with embedded participant data (new architecture)
+    console.log(`[Registration] Getting registrations with skip=${skip}, limit=${limit}`);
+    
+    // Get registrations with embedded participant data (new architecture)  
+    // Temporarily get ALL registrations for debugging
     const registrations = await db.collection('registrations')
-      .find({ 
-        status: 'confirmed',  // Only confirmed registrations
-        qrCode: { $exists: true, $ne: null }  // Only completed registrations with QR codes
-      })
+      .find({})  // Get all registrations temporarily for debugging
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .toArray();
 
+    console.log(`[Registration] Found ${registrations.length} raw registrations (ALL STATUSES)`);
+    console.log(`[Registration] Registration statuses:`, registrations.map(r => ({ id: r._id, status: r.status, hasQR: !!r.qrCode, hasParticipant: !!r.participant, hasParticipantData: !!r.participantData })));
+
+    console.log(`[Registration] Found ${registrations.length} raw registrations`);
+    console.log(`[Registration] Sample registration structure:`, registrations[0] ? {
+      _id: registrations[0]._id,
+      hasParticipant: !!registrations[0].participant,
+      hasParticipantData: !!registrations[0].participantData,
+      participantKeys: registrations[0].participant ? Object.keys(registrations[0].participant) : [],
+      participantDataKeys: registrations[0].participantData ? Object.keys(registrations[0].participantData) : []
+    } : 'No registrations found');
+
     // Transform the data to match the expected format for admin dashboard
-    return registrations.map(registration => ({
-      _id: registration._id,
-      accessCode: registration.accessCode,
-      status: registration.status,
-      createdAt: registration.createdAt,
-      qrCode: registration.qrCode,
-      participantId: registration.participantId,  // KDYES25{number}
-      participant: {
-        _id: registration.participantId,  // Use participant ID as the identifier
-        firstName: registration.participantData.firstName,
-        lastName: registration.participantData.lastName,
-        email: registration.participantData.email,
-        phone: registration.participantData.phone,
-        age: registration.participantData.age,
-        gender: registration.participantData.gender,
-        district: registration.participantData.district,
-        occupation: registration.participantData.occupation,
-        interest: registration.participantData.interest,
-        churchAffiliation: registration.participantData.churchAffiliation || ''
+    const result = registrations.map(registration => {
+      // Handle both new (participant) and legacy (participantData) field structures
+      const participantData = registration.participant || registration.participantData;
+      
+      if (!participantData) {
+        console.warn(`Registration ${registration._id} missing participant data`);
+        return null;
       }
-    }));
+      
+      return {
+        _id: registration._id,
+        accessCode: registration.accessCode,
+        status: registration.status,
+        createdAt: registration.createdAt,
+        qrCode: registration.qrCode,
+        participantId: registration.participantId,  // KDYES25{number}
+        participant: {
+          _id: registration.participantId,  // Use participant ID as the identifier
+          firstName: participantData.firstName,
+          lastName: participantData.lastName,
+          email: participantData.email,
+          phone: participantData.phone,
+          age: participantData.age,
+          gender: participantData.gender,
+          district: participantData.district,
+          occupation: participantData.occupation,
+          interest: participantData.interest,
+          churchAffiliation: participantData.churchAffiliation || ''
+        }
+      };
+    }).filter(Boolean);  // Remove any null entries
+    
+    console.log(`[Registration] Returning ${result.length} transformed registrations`);
+    return result;
   }
 
   /**
@@ -264,10 +289,10 @@ class Registration {
    */
   static async getRegistrationCount() {
     const db = dbConnection.getDatabase();
-    return await db.collection('registrations').countDocuments({
-      status: 'confirmed',
-      qrCode: { $exists: true, $ne: null }
-    });
+    // Temporarily count ALL registrations for debugging
+    const count = await db.collection('registrations').countDocuments({});
+    console.log(`[Registration] Total registration count: ${count}`);
+    return count;
   }
 
   /**
