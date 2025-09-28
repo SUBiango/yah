@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Test</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Test</h1>
+    
+    <div>
+        <h2>Test QR Data Parsing</h2>
+        <textarea id="qrInput" rows="5" cols="50" placeholder="Paste QR code text here..."></textarea>
+        <br><br>
+        <button onclick="testQRParsing()">Test QR Parsing</button>
+        <div id="parseResult"></div>
+    </div>
+    
+    <div>
+        <h2>Test API Call</h2>
+        <input type="text" id="regIdInput" placeholder="Enter registration ID" value="68d8ef2841a67890c8b2a3e3">
+        <br><br>
+        <button onclick="testAPICall()">Test API Call</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <div>
+        <h2>Generate Test QR Data</h2>
+        <button onclick="generateTestQR()">Generate Test QR JSON</button>
+        <div id="qrGenResult"></div>
+    </div>
+
+    <script>
+        // API configuration - auto-detect environment
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api'
+            : 'https://yah-backend.onrender.com/api';
+
+        function parseQRCode(qrText) {
+            console.log('Parsing QR code:', qrText);
+            
+            try {
+                // Try to parse as JSON first (structured QR codes)
+                const qrData = JSON.parse(qrText);
+                console.log('Parsed QR JSON:', qrData);
+                
+                // Extract registration ID from different possible structures
+                if (qrData.registrationId) {
+                    return qrData.registrationId;
+                } else if (qrData.id) {
+                    return qrData.id;
+                } else if (qrData._id) {
+                    return qrData._id;
+                }
+                
+                console.warn('No registration ID found in QR JSON structure');
+                return null;
+            } catch (e) {
+                console.log('QR is not JSON, trying direct ID parsing...');
+                
+                // Try to extract ID from plain text patterns
+                // Pattern 1: Just the ID
+                if (/^[a-f0-9]{24}$/i.test(qrText.trim())) {
+                    return qrText.trim();
+                }
+                
+                // Pattern 2: URL with ID parameter
+                const urlMatch = qrText.match(/[?&](?:id|registrationId)=([a-f0-9]{24})/i);
+                if (urlMatch) {
+                    return urlMatch[1];
+                }
+                
+                // Pattern 3: Key-value format
+                const kvMatch = qrText.match(/(?:registrationId|id):\s*([a-f0-9]{24})/i);
+                if (kvMatch) {
+                    return kvMatch[1];
+                }
+                
+                console.warn('Could not extract registration ID from QR code:', qrText);
+                return null;
+            }
+        }
+
+        async function checkInParticipant(registrationId) {
+            try {
+                console.log('Checking in participant with ID:', registrationId);
+                
+                const response = await fetch(`${API_BASE_URL}/scanner/checkin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ registrationId })
+                });
+
+                const data = await response.json();
+                console.log('API Response:', data);
+                
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Check-in error:', error);
+                throw error;
+            }
+        }
+
+        function testQRParsing() {
+            const qrText = document.getElementById('qrInput').value;
+            const result = parseQRCode(qrText);
+            document.getElementById('parseResult').innerHTML = `
+                <h3>Parse Result:</h3>
+                <p><strong>Registration ID:</strong> ${result || 'Not found'}</p>
+                <p><strong>Input:</strong> ${qrText}</p>
+            `;
+        }
+
+        async function testAPICall() {
+            const regId = document.getElementById('regIdInput').value;
+            const resultDiv = document.getElementById('apiResult');
+            
+            resultDiv.innerHTML = '<p>Testing API call...</p>';
+            
+            try {
+                const data = await checkInParticipant(regId);
+                resultDiv.innerHTML = `
+                    <h3>API Success:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>API Error:</h3>
+                    <p style="color: red;">${error.message}</p>
+                `;
+            }
+        }
+
+        function generateTestQR() {
+            const testQRData = {
+                registrationId: "68d8ef2841a67890c8b2a3e3",
+                type: "YAH_REGISTRATION",
+                participant: {
+                    firstName: "Mariama",
+                    lastName: "Ndamisa"
+                },
+                event: "Young African Hub Summit 2024"
+            };
+            
+            const qrJson = JSON.stringify(testQRData);
+            document.getElementById('qrGenResult').innerHTML = `
+                <h3>Generated QR JSON:</h3>
+                <textarea rows="8" cols="60" readonly>${qrJson}</textarea>
+                <br><br>
+                <button onclick="document.getElementById('qrInput').value = '${qrJson.replace(/'/g, '\\\'')}'">Copy to Test Input</button>
+            `;
+        }
+
+        // Auto-generate test QR on page load
+        window.onload = generateTestQR;
+    </script>
+</body>
+</html>
