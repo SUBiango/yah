@@ -232,6 +232,21 @@
             background: #fff3cd;
             color: #856404;
         }
+        
+        /* Placeholder text styling - darker grey for better readability */
+        .form-control::placeholder,
+        .form-select::placeholder,
+        .access-code-input::placeholder {
+            color: #6c757d !important;
+            opacity: 0.8;
+        }
+        
+        /* Specific styling for access code input placeholder */
+        .access-code-input::placeholder {
+            font-family: 'Courier New', monospace;
+            font-weight: normal;
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 
