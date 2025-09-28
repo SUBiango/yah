@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Secure Access Code Generation - YAH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #cce7ff; color: #004085; border: 1px solid #b8daff; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        
+        button {
+            background-color: #2c5aa0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #1e4080; }
+        
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .code-display {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .stat-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 Test Secure Access Code Generation</h1>
+    
+    <div class="container">
+        <h2>Generate Single Access Code</h2>
+        <p>Test the new secure 8-character format using [A-Z0-9]:</p>
+        <button onclick="generateSingleCode()">Generate Secure Access Code</button>
+        <div id="singleResult"></div>
+    </div>
+
+    <div class="container">
+        <h2>Generate Multiple Access Codes</h2>
+        <p>Generate a batch of codes to test uniqueness and security:</p>
+        <input type="number" id="batchCount" value="10" min="1" max="50">
+        <label for="batchCount">Number of codes</label>
+        <button onclick="generateBatchCodes()">Generate Batch</button>
+        <div id="batchResult"></div>
+    </div>
+
+    <div class="container">
+        <h2>Code Quality Analysis</h2>
+        <p>Analyze the generated codes for security patterns:</p>
+        <div id="analysisResult"></div>
+    </div>
+
+    <div class="container">
+        <h2>Test Code Validation</h2>
+        <p>Test a specific code to see if it can be used for registration:</p>
+        <input type="text" id="testCode" placeholder="Enter 8-character code" maxlength="8" style="width: 200px;">
+        <button onclick="testCodeValidation()">Test Validation</button>
+        <div id="validationResult"></div>
+    </div>
+
+    <script>
+        // API configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api'
+            : 'https://yah-backend.onrender.com/api';
+
+        let generatedCodes = [];
+
+        async function generateSingleCode() {
+            const resultDiv = document.getElementById('singleResult');
+            resultDiv.innerHTML = `<div class="result info">Generating secure access code...</div>`;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/generate-codes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        count: 1,
+                        expiryHours: 72,
+                        eventName: 'Secure Code Generation Test'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    const code = data.data.codes[0];
+                    generatedCodes = [code.code];
+
+                    // Analyze the code
+                    const analysis = analyzeCode(code.code);
+
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h4>✅ Secure Access Code Generated</h4>
+                            <div class="code-display">${code.code}</div>
+                            <div class="stats">
+                                <div class="stat-card">
+                                    <div class="stat-value">${code.code.length}</div>
+                                    <div class="stat-label">Characters</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${analysis.letterCount}</div>
+                                    <div class="stat-label">Letters</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${analysis.numberCount}</div>
+                                    <div class="stat-label">Numbers</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${analysis.isSecure ? '✅' : '❌'}</div>
+                                    <div class="stat-label">Security</div>
+                                </div>
+                            </div>
+                            <p><strong>Expires:</strong> ${new Date(code.expiresAt).toLocaleString()}</p>
+                            <p><strong>Format:</strong> ${analysis.format}</p>
+                            ${analysis.warnings.length > 0 ? `<div class="result warning"><strong>Warnings:</strong><ul>${analysis.warnings.map(w => '<li>' + w + '</li>').join('')}</ul></div>` : ''}
+                        </div>
+                    `;
+
+                    // Auto-fill test input
+                    document.getElementById('testCode').value = code.code;
+                    
+                    // Update analysis
+                    updateAnalysis();
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h4>❌ Failed to Generate Code</h4>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>❌ Error</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function generateBatchCodes() {
+            const count = parseInt(document.getElementById('batchCount').value);
+            const resultDiv = document.getElementById('batchResult');
+
+            if (count < 1 || count > 50) {
+                resultDiv.innerHTML = `<div class="result error">Please enter a number between 1 and 50</div>`;
+                return;
+            }
+
+            resultDiv.innerHTML = `<div class="result info">Generating ${count} secure access codes...</div>`;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/generate-codes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        count: count,
+                        expiryHours: 72,
+                        eventName: 'Batch Code Generation Test'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    generatedCodes = data.data.codes.map(c => c.code);
+                    
+                    // Check for duplicates
+                    const uniqueCodes = new Set(generatedCodes);
+                    const hasDuplicates = uniqueCodes.size !== generatedCodes.length;
+
+                    resultDiv.innerHTML = `
+                        <div class="result ${hasDuplicates ? 'error' : 'success'}">
+                            <h4>${hasDuplicates ? '⚠️' : '✅'} Generated ${count} Access Codes</h4>
+                            <div class="stats">
+                                <div class="stat-card">
+                                    <div class="stat-value">${data.data.codes.length}</div>
+                                    <div class="stat-label">Generated</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${uniqueCodes.size}</div>
+                                    <div class="stat-label">Unique</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">${hasDuplicates ? 'FAIL' : 'PASS'}</div>
+                                    <div class="stat-label">Uniqueness</div>
+                                </div>
+                            </div>
+                            ${hasDuplicates ? '<div class="result error"><strong>❌ Duplicate codes detected!</strong></div>' : ''}
+                            <details>
+                                <summary>View All Generated Codes</summary>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 5px; margin-top: 10px;">
+                                    ${generatedCodes.map(code => `<div class="code-display" style="font-size: 14px; padding: 5px;">${code}</div>`).join('')}
+                                </div>
+                            </details>
+                        </div>
+                    `;
+
+                    updateAnalysis();
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h4>❌ Failed to Generate Codes</h4>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>❌ Error</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function analyzeCode(code) {
+            const letterCount = (code.match(/[A-Z]/g) || []).length;
+            const numberCount = (code.match(/[0-9]/g) || []).length;
+            const warnings = [];
+
+            // Check format
+            if (!/^[A-Z0-9]{8}$/.test(code)) {
+                warnings.push('Invalid format - should be 8 characters of A-Z and 0-9 only');
+            }
+
+            // Check for patterns
+            if (/^(.)\1{7}$/.test(code)) {
+                warnings.push('All same character detected');
+            }
+
+            // Check sequential
+            let sequential = true;
+            for (let i = 1; i < code.length; i++) {
+                if (code.charCodeAt(i) !== code.charCodeAt(i-1) + 1) {
+                    sequential = false;
+                    break;
+                }
+            }
+            if (sequential) warnings.push('Sequential pattern detected');
+
+            // Check diversity
+            if (letterCount === 0) warnings.push('No letters present');
+            if (numberCount === 0) warnings.push('No numbers present');
+
+            return {
+                letterCount,
+                numberCount,
+                format: `${letterCount} letters, ${numberCount} numbers`,
+                isSecure: warnings.length === 0 && letterCount > 0 && numberCount > 0,
+                warnings
+            };
+        }
+
+        function updateAnalysis() {
+            const resultDiv = document.getElementById('analysisResult');
+            
+            if (generatedCodes.length === 0) {
+                resultDiv.innerHTML = `<div class="result info">Generate some codes first to see analysis</div>`;
+                return;
+            }
+
+            const analysis = {
+                totalCodes: generatedCodes.length,
+                averageLetters: 0,
+                averageNumbers: 0,
+                secureCount: 0,
+                patternIssues: 0,
+                uniqueness: new Set(generatedCodes).size === generatedCodes.length
+            };
+
+            generatedCodes.forEach(code => {
+                const codeAnalysis = analyzeCode(code);
+                analysis.averageLetters += codeAnalysis.letterCount;
+                analysis.averageNumbers += codeAnalysis.numberCount;
+                if (codeAnalysis.isSecure) analysis.secureCount++;
+                if (codeAnalysis.warnings.length > 0) analysis.patternIssues++;
+            });
+
+            analysis.averageLetters = (analysis.averageLetters / generatedCodes.length).toFixed(1);
+            analysis.averageNumbers = (analysis.averageNumbers / generatedCodes.length).toFixed(1);
+
+            resultDiv.innerHTML = `
+                <div class="result info">
+                    <h4>📊 Code Quality Analysis</h4>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value">${analysis.totalCodes}</div>
+                            <div class="stat-label">Total Codes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${analysis.secureCount}</div>
+                            <div class="stat-label">Secure Codes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${analysis.averageLetters}</div>
+                            <div class="stat-label">Avg Letters</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${analysis.averageNumbers}</div>
+                            <div class="stat-label">Avg Numbers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${analysis.uniqueness ? '✅' : '❌'}</div>
+                            <div class="stat-label">Uniqueness</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${analysis.patternIssues}</div>
+                            <div class="stat-label">Pattern Issues</div>
+                        </div>
+                    </div>
+                    <p><strong>Security Score:</strong> ${Math.round((analysis.secureCount / analysis.totalCodes) * 100)}%</p>
+                </div>
+            `;
+        }
+
+        async function testCodeValidation() {
+            const code = document.getElementById('testCode').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('validationResult');
+
+            if (!code) {
+                resultDiv.innerHTML = `<div class="result error">Please enter a code</div>`;
+                return;
+            }
+
+            resultDiv.innerHTML = `<div class="result info">Testing code validation...</div>`;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/validate-access-code`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ accessCode: code })
+                });
+
+                const data = await response.json();
+                const codeAnalysis = analyzeCode(code);
+
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h4>✅ Code Valid for Registration!</h4>
+                            <div class="code-display">${code}</div>
+                            <p><strong>Format Analysis:</strong> ${codeAnalysis.format}</p>
+                            <p><strong>Security:</strong> ${codeAnalysis.isSecure ? '✅ Secure' : '⚠️ Has issues'}</p>
+                            ${codeAnalysis.warnings.length > 0 ? `<div class="result warning"><strong>Issues:</strong><ul>${codeAnalysis.warnings.map(w => '<li>' + w + '</li>').join('')}</ul></div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h4>❌ Code Invalid</h4>
+                            <div class="code-display">${code}</div>
+                            <p><strong>Error:</strong> ${data.error}</p>
+                            <p><strong>Type:</strong> ${data.errorType}</p>
+                            <p><strong>Format Analysis:</strong> ${codeAnalysis.format}</p>
+                            ${codeAnalysis.warnings.length > 0 ? `<div class="result warning"><strong>Format Issues:</strong><ul>${codeAnalysis.warnings.map(w => '<li>' + w + '</li>').join('')}</ul></div>` : ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h4>❌ Network Error</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-generate a code on page load
+        window.onload = () => {
+            generateSingleCode();
+        };
+    </script>
+</body>
+</html>

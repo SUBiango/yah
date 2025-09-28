@@ -158,19 +158,25 @@
                 console.log('QR is not JSON, trying direct ID parsing...');
                 
                 // Try to extract ID from plain text patterns
-                // Pattern 1: Just the ID
+                // Pattern 1: KDYES25X format (new participant IDs without dash)
+            if (/^KDYES25\d+$/i.test(trimmed)) {
+                return { success: true, registrationId: trimmed };
+            }
+            
+            // Pattern 2: Just the old ObjectId format
                 if (/^[a-f0-9]{24}$/i.test(qrText.trim())) {
                     return { success: true, registrationId: qrText.trim() };
                 }
                 
                 // Pattern 2: URL with ID parameter
-                const urlMatch = qrText.match(/[?&](?:id|registrationId)=([a-f0-9]{24})/i);
-                if (urlMatch) {
-                    return { success: true, registrationId: urlMatch[1] };
-                }
-                
-                // Pattern 3: Key-value format
-                const kvMatch = qrText.match(/(?:registrationId|id):\s*([a-f0-9]{24})/i);
+                // Pattern 3: URL with ID parameter
+            const urlMatch = trimmed.match(/[?&](?:id|registrationId)=([a-f0-9]{24}|KDYES25\d+)/i);
+            if (urlMatch) {
+                return { success: true, registrationId: urlMatch[1] };
+            }
+            
+            // Pattern 4: Key-value format
+            const kvMatch = trimmed.match(/(?:registrationId|id):\s*([a-f0-9]{24}|KDYES25\d+)/i);
                 if (kvMatch) {
                     return { success: true, registrationId: kvMatch[1] };
                 }

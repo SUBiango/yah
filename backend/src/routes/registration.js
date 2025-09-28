@@ -156,11 +156,8 @@ router.post('/register', registrationLimiter, async (req, res) => {
 
     const { accessCode, ...participantData } = value;
 
-    // Create participant
-    const participant = await Participant.create(participantData);
-
-    // Create registration with QR code
-    const registration = await Registration.create(accessCode, participant._id);
+    // Create registration (this will also create the participant with new ID system)
+    const registration = await Registration.create(accessCode, participantData);
 
     // Calculate response time for performance monitoring
     const responseTime = Date.now() - startTime;
@@ -171,19 +168,22 @@ router.post('/register', registrationLimiter, async (req, res) => {
       data: {
         registration: {
           id: registration._id,
+          participantId: registration.participantId, // Include the new KDYES25{number} ID
           status: registration.status,
           qrCode: registration.qrCode,
           createdAt: registration.createdAt,
         },
         participant: {
-          firstName: participant.firstName,
-          lastName: participant.lastName,
-          email: participant.email,
-          phone: participant.phone,
-          age: participant.age,
-          gender: participant.gender,
-          location: participant.location,
-          churchAffiliation: participant.churchAffiliation,
+          participantId: registration.participantId,
+          firstName: registration.participantData.firstName,
+          lastName: registration.participantData.lastName,
+          email: registration.participantData.email,
+          phone: registration.participantData.phone,
+          age: registration.participantData.age,
+          gender: registration.participantData.gender,
+          district: registration.participantData.district,
+          occupation: registration.participantData.occupation,
+          interest: registration.participantData.interest,
         },
       },
       meta: {
@@ -198,13 +198,13 @@ router.post('/register', registrationLimiter, async (req, res) => {
 
     // Send QR code email asynchronously (don't block response)
     try {
-      console.log('Attempting to send QR code email to:', participant.email);
-      await emailService.sendQRCode(participant, registration);
-      console.log('✅ QR code email sent successfully to:', participant.email);
+      console.log('Attempting to send QR code email to:', registration.participantData.email);
+      await emailService.sendQRCode(registration.participantData, registration);
+      console.log('✅ QR code email sent successfully to:', registration.participantData.email);
     } catch (emailError) {
       console.error('❌ Failed to send QR code email:', {
         error: emailError.message,
-        participantEmail: participant.email,
+        participantEmail: registration.participantData.email,
         registrationId: registration._id,
         stack: emailError.stack
       });
@@ -245,6 +245,189 @@ router.post('/register', registrationLimiter, async (req, res) => {
       meta: {
         responseTime: `${responseTime}ms`,
       },
+    });
+  }
+});
+
+/**
+ * @route POST /api/validate-access-code
+ * @desc Validate if an access code is valid and unused (for testing)
+ * @access Public
+ */
+router.post('/validate-access-code', verificationLimiter, async (req, res) => {
+  const startTime = Date.now();
+  
+  try {
+    const { accessCode } = req.body;
+
+    if (!accessCode) {
+      return res.status(400).json({
+        success: false,
+        error: 'Access code is required',
+        errorType: 'MISSING_CODE'
+      });
+    }
+
+    // Validate access code format
+    const { error } = accessCodeSchema.validate(accessCode);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid access code format',
+        errorType: 'INVALID_FORMAT'
+      });
+    }
+
+    // Validate access code format first
+    if (!AccessCode.validateCodeFormat(accessCode)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Access code does not meet security requirements',
+        errorType: 'INVALID_FORMAT'
+      });
+    }
+
+    // Check if access code exists and get its status
+    const accessCodeData = await AccessCode.findByCode(accessCode);
+    const responseTime = Date.now() - startTime;
+    
+    if (!accessCodeData) {
+      return res.status(400).json({
+        success: false,
+        error: 'Access code not found',
+        errorType: 'NOT_FOUND',
+        meta: { responseTime: `${responseTime}ms` }
+      });
+    }
+    
+    if (accessCodeData.expiresAt < new Date()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Access code has expired',
+        errorType: 'EXPIRED',
+        meta: { responseTime: `${responseTime}ms` }
+      });
+    }
+
+    // Check if access code has been used for a completed registration
+    const existingRegistration = await Registration.findByAccessCode(accessCode);
+    if (existingRegistration) {
+      return res.status(400).json({
+        success: false,
+        error: 'This access code has already been used for a completed registration',
+        errorType: 'ALREADY_USED',
+        meta: { responseTime: `${responseTime}ms` }
+      });
+    }
+
+    // Access code is valid and available
+    res.status(200).json({
+      success: true,
+      data: {
+        valid: true,
+        accessCode: accessCode,
+        expiresAt: accessCodeData.expiresAt,
+        createdAt: accessCodeData.createdAt
+      },
+      meta: {
+        responseTime: `${responseTime}ms`,
+      },
+    });
+
+  } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    console.error('Access code validation error:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      errorType: 'SERVER_ERROR',
+      meta: {
+        responseTime: `${responseTime}ms`,
+      },
+    });
+  }
+});
+
+/**
+ * @route GET /api/registration/:id
+ * @desc Get registration details by ID for confirmation page
+ * @access Public
+ */
+router.get('/registration/:id', async (req, res) => {
+  const startTime = Date.now();
+  
+  try {
+    const { id } = req.params;
+    
+    // Validate ObjectId format
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid registration ID format'
+      });
+    }
+
+    const db = require('../utils/database').getDatabase();
+    const { ObjectId } = require('mongodb');
+    
+    // Find the registration by ID
+    const registration = await db.collection('registrations').findOne({
+      _id: new ObjectId(id)
+    });
+
+    if (!registration) {
+      return res.status(404).json({
+        success: false,
+        error: 'Registration not found'
+      });
+    }
+
+    const responseTime = Date.now() - startTime;
+
+    // Return registration data in the format expected by confirmation page
+    res.status(200).json({
+      success: true,
+      data: {
+        registration: {
+          id: registration._id,
+          participantId: registration.participantId,
+          status: registration.status,
+          qrCode: registration.qrCode,
+          createdAt: registration.createdAt,
+          accessCode: registration.accessCode
+        },
+        participant: {
+          participantId: registration.participantId,
+          firstName: registration.participantData.firstName,
+          lastName: registration.participantData.lastName,
+          email: registration.participantData.email,
+          phone: registration.participantData.phone,
+          age: registration.participantData.age,
+          gender: registration.participantData.gender,
+          district: registration.participantData.district,
+          occupation: registration.participantData.occupation,
+          interest: registration.participantData.interest,
+          churchAffiliation: registration.participantData.churchAffiliation || ''
+        }
+      },
+      meta: {
+        responseTime: `${responseTime}ms`
+      }
+    });
+
+  } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    console.error('Registration fetch error:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      meta: {
+        responseTime: `${responseTime}ms`
+      }
     });
   }
 });
@@ -295,6 +478,7 @@ router.get('/verify/:accessCode', verificationLimiter, async (req, res) => {
     // Check if access code has been used for a completed registration
     const existingRegistration = await Registration.findByAccessCode(accessCode);
     if (existingRegistration) {
+      console.log(`[Registration] Access code ${accessCode} already used for completed registration: ${existingRegistration._id}`);
       return res.status(400).json({
         success: false,
         error: 'This access code has already been used for a completed registration',
@@ -302,6 +486,8 @@ router.get('/verify/:accessCode', verificationLimiter, async (req, res) => {
         meta: { responseTime: `${responseTime}ms` }
       });
     }
+
+    console.log(`[Registration] Access code ${accessCode} is valid and available for use`);
     
     // Access code is valid and unused
     res.status(200).json({

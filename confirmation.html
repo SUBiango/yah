@@ -354,7 +354,7 @@
                         we're here to help!
                     </p>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="mailto:info@yahsl.org" class="btn btn-outline-primary">
+                        <a href="mailto:summit@yahsl.org" class="btn btn-outline-primary">
                             <i class="fas fa-envelope me-2"></i>Email Support
                         </a>
                         <a href="contact.html" class="btn btn-outline-primary">
@@ -426,7 +426,11 @@
                     }
 
                     // Fetch real registration data from backend API
-                    const response = await fetch(`http://localhost:3000/api/registration/${registrationId}`);
+                    const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000/api'
+                        : 'https://yah-backend.onrender.com/api';
+                    
+                    const response = await fetch(`${apiBaseUrl}/registration/${registrationId}`);
                     
                     if (!response.ok) {
                         const errorData = await response.json();
@@ -456,6 +460,7 @@
                     // Transform data for display
                     this.registrationData = {
                         id: data.data.registration.id,
+                        participantId: data.data.participant.participantId, // This is the KDYES25{number} format
                         firstName: data.data.participant.firstName,
                         lastName: data.data.participant.lastName,
                         email: data.data.participant.email,
@@ -568,8 +573,8 @@
                         <span class="info-value">${data.registrationDate}</span>
                     </div>
                     <div class="info-row d-flex justify-content-between">
-                        <span class="info-label">Registration ID:</span>
-                        <span class="info-value">${data.id}</span>
+                        <span class="info-label">Participant ID:</span>
+                        <span class="info-value">${data.participantId}</span>
                     </div>
                     <div class="info-row d-flex justify-content-between">
                         <span class="info-label">Access Code:</span>
@@ -605,7 +610,7 @@
                     try {
                         const link = document.createElement('a');
                         link.href = this.registrationData.qrCodeUrl;
-                        link.download = `YAH-Registration-${this.registrationData.firstName}-${this.registrationData.lastName}-${this.registrationData.id}.png`;
+                        link.download = `YAH-Registration-${this.registrationData.firstName}-${this.registrationData.lastName}-${this.registrationData.participantId}.png`;
                         link.style.display = 'none';
                         document.body.appendChild(link);
                         link.click();

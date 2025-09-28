@@ -3,16 +3,17 @@ const dbConnection = require('../utils/database');
 const AccessCode = require('./AccessCode');
 const Participant = require('./Participant');
 const { QRService } = require('../utils/qr');
+const { ParticipantIdService } = require('../utils/participantId');
 const { config } = require('../utils/config');
 
 class Registration {
   /**
    * Create a new registration
    * @param {string} accessCode - The access code to use
-   * @param {string|ObjectId} participantId - The participant ID
+   * @param {Object} participantData - The participant data
    * @returns {Object} The created registration
    */
-  static async create(accessCode, participantId) {
+  static async create(accessCode, participantData) {
     const db = dbConnection.getDatabase();
     
     // First, validate access code exists and is not expired (but don't mark as used yet)
@@ -29,80 +30,127 @@ class Registration {
       throw error;
     }
 
-    // Check if access code has already been used for a completed registration
-    const existingRegistrationWithCode = await db.collection('registrations')
-      .findOne({ accessCode });
+    // Check if access code has already been used for a SUCCESSFUL/COMPLETED registration
+    const existingSuccessfulRegistration = await db.collection('registrations')
+      .findOne({ 
+        accessCode,
+        status: 'confirmed',  // Only block if registration was successfully completed
+        qrCode: { $exists: true, $ne: null }  // And QR code was generated (indicates completion)
+      });
     
-    if (existingRegistrationWithCode) {
+    if (existingSuccessfulRegistration) {
+      console.log(`[Registration] Access code ${accessCode} already used for successful registration: ${existingSuccessfulRegistration._id}`);
       const error = new Error('This access code has already been used for a completed registration');
       error.errorType = 'ALREADY_USED';
       throw error;
     }
 
-    // Validate participant exists
-    let objectId;
-    try {
-      objectId = typeof participantId === 'string' ? new ObjectId(participantId) : participantId;
-    } catch (error) {
-      throw new Error('Invalid participant ID format');
-    }
-
-    const participant = await Participant.findById(objectId);
-    if (!participant) {
-      throw new Error('Participant not found');
-    }
-
-    // Check if participant already has a registration
-    const existingRegistration = await db.collection('registrations')
-      .findOne({ participantId: objectId });
-    
-    if (existingRegistration) {
-      throw new Error('Participant already registered');
-    }
-
-    // Generate QR code using QR service
-    const qrCodeDataUrl = await QRService.generateRegistrationQR(participant, {
-      id: new ObjectId().toString(), // Temporary ID for QR generation
+    // Clean up any incomplete registration attempts with this access code
+    // (registrations that started but didn't complete successfully)
+    const cleanupResult = await db.collection('registrations').deleteMany({
       accessCode,
-      createdAt: new Date(),
+      $or: [
+        { status: { $ne: 'confirmed' } },  // Not confirmed
+        { qrCode: { $exists: false } },    // No QR code generated
+        { qrCode: null }                   // QR code is null
+      ]
     });
+    
+    if (cleanupResult.deletedCount > 0) {
+      console.log(`[Registration] Cleaned up ${cleanupResult.deletedCount} incomplete registration attempts for access code: ${accessCode}`);
+    }
 
-    // Create registration object
+    // Generate unique participant ID
+    const participantId = await ParticipantIdService.generateUniqueId();
+    console.log(`[Registration] Generated participant ID: ${participantId}`);
+
+    // Check if this email already has a registration (prevent duplicate registrations)
+    const existingRegistrationByEmail = await db.collection('registrations')
+      .findOne({ 'participantData.email': participantData.email });
+    
+    if (existingRegistrationByEmail) {
+      throw new Error('Participant already registered with this email');
+    }
+
+    // Create registration object first (without QR code)
     const registration = {
       accessCode,
-      participantId: objectId,
-      status: 'confirmed',
-      qrCode: qrCodeDataUrl,
+      participantId: participantId,  // Use the generated participant ID (KDYES25{number})
+      participantData: participantData, // Store participant data in registration
+      status: 'pending', // Start with pending status until everything is complete
       createdAt: new Date(),
     };
 
-    // Insert registration first
-    const result = await db.collection('registrations').insertOne(registration);
-
-    // Only NOW mark the access code as used (after successful registration creation)
+    let insertedId = null;
+    
     try {
-      const codeResult = await AccessCode.markAsUsedDetailed(accessCode);
-      if (!codeResult.success) {
-        // If marking as used fails, we should still return the registration since it was created
-        console.warn('Failed to mark access code as used after successful registration:', {
+      // Insert registration first to get the real database ID
+      const result = await db.collection('registrations').insertOne(registration);
+      insertedId = result.insertedId;
+      const actualRegistrationId = result.insertedId.toString();
+
+      // Now generate QR code with the participant ID (not the database ObjectId)
+      const qrCodeDataUrl = await QRService.generateRegistrationQR(participantData, {
+        _id: actualRegistrationId,       // Database ObjectId for internal use
+        registrationId: participantId,   // Participant ID for QR scanning (KDYES25{number})
+        accessCode,
+        createdAt: registration.createdAt,
+      });
+
+      // Update the registration with the QR code and confirm status
+      await db.collection('registrations').updateOne(
+        { _id: result.insertedId },
+        { 
+          $set: { 
+            qrCode: qrCodeDataUrl,
+            status: 'confirmed' // Only mark as confirmed when everything is complete
+          }
+        }
+      );
+
+      // Only NOW mark the access code as used (after successful registration creation)
+      try {
+        const codeResult = await AccessCode.markAsUsedDetailed(accessCode);
+        if (!codeResult.success) {
+          console.warn('Failed to mark access code as used after successful registration:', {
+            accessCode,
+            registrationId: result.insertedId,
+            error: codeResult.error
+          });
+          // Continue anyway - registration was successful
+        }
+      } catch (markError) {
+        console.error('Error marking access code as used after successful registration:', {
           accessCode,
           registrationId: result.insertedId,
-          error: codeResult.error
+          error: markError.message
         });
+        // Continue anyway - registration was successful
       }
-    } catch (markError) {
-      // Log the error but don't fail the registration
-      console.error('Error marking access code as used after successful registration:', {
-        accessCode,
-        registrationId: result.insertedId,
-        error: markError.message
-      });
-    }
 
-    return {
-      _id: result.insertedId,
-      ...registration,
-    };
+      // Return the complete registration
+      return {
+        _id: result.insertedId,
+        ...registration,
+        status: 'confirmed',
+        qrCode: qrCodeDataUrl,
+      };
+
+    } catch (error) {
+      // If anything fails after the registration was inserted, clean it up
+      if (insertedId) {
+        try {
+          console.log(`[Registration] Cleaning up failed registration ${insertedId} due to error:`, error.message);
+          await db.collection('registrations').deleteOne({ _id: insertedId });
+          console.log(`[Registration] Successfully cleaned up failed registration ${insertedId}`);
+        } catch (cleanupError) {
+          console.error(`[Registration] Failed to clean up registration ${insertedId}:`, cleanupError.message);
+        }
+      }
+      
+      // Re-throw the original error
+      throw error;
+    }
   }
 
   /**
@@ -110,7 +158,32 @@ class Registration {
    * @param {string} accessCode - The access code
    * @returns {Object|null} The registration or null if not found
    */
+  /**
+   * Find COMPLETED registration by access code (only successful registrations)
+   * @param {string} accessCode - The access code to search for
+   * @returns {Object|null} The completed registration or null if not found
+   */
   static async findByAccessCode(accessCode) {
+    if (!accessCode || typeof accessCode !== 'string') {
+      return null;
+    }
+
+    const db = dbConnection.getDatabase();
+    
+    // Only return registrations that were successfully completed
+    return await db.collection('registrations').findOne({ 
+      accessCode,
+      status: 'confirmed',  // Must be confirmed
+      qrCode: { $exists: true, $ne: null }  // Must have QR code (indicates completion)
+    });
+  }
+
+  /**
+   * Find ANY registration by access code (including incomplete attempts)
+   * @param {string} accessCode - The access code to search for
+   * @returns {Object|null} Any registration or null if not found
+   */
+  static async findAnyByAccessCode(accessCode) {
     if (!accessCode || typeof accessCode !== 'string') {
       return null;
     }
@@ -150,50 +223,39 @@ class Registration {
     
     const db = dbConnection.getDatabase();
     
-    const registrations = await db.collection('registrations').aggregate([
-      {
-        $lookup: {
-          from: 'participants',
-          localField: 'participantId',
-          foreignField: '_id',
-          as: 'participant'
-        }
-      },
-      {
-        $unwind: '$participant'
-      },
-      {
-        $sort: { createdAt: -1 }
-      },
-      {
-        $skip: skip
-      },
-      {
-        $limit: limit
-      },
-      {
-        $project: {
-          _id: 1,
-          accessCode: 1,
-          status: 1,
-          createdAt: 1,
-          qrCode: 1,
-          'participant._id': 1,
-          'participant.firstName': 1,
-          'participant.lastName': 1,
-          'participant.email': 1,
-          'participant.phone': 1,
-          'participant.age': 1,
-          'participant.gender': 1,
-          'participant.district': 1,
-          'participant.occupation': 1,
-          'participant.interest': 1,
-          'participant.churchAffiliation': 1
-        }
-      }
-    ]).toArray();
+    // Get registrations with embedded participant data (new architecture)
+    const registrations = await db.collection('registrations')
+      .find({ 
+        status: 'confirmed',  // Only confirmed registrations
+        qrCode: { $exists: true, $ne: null }  // Only completed registrations with QR codes
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
 
-    return registrations;
+    // Transform the data to match the expected format for admin dashboard
+    return registrations.map(registration => ({
+      _id: registration._id,
+      accessCode: registration.accessCode,
+      status: registration.status,
+      createdAt: registration.createdAt,
+      qrCode: registration.qrCode,
+      participantId: registration.participantId,  // KDYES25{number}
+      participant: {
+        _id: registration.participantId,  // Use participant ID as the identifier
+        firstName: registration.participantData.firstName,
+        lastName: registration.participantData.lastName,
+        email: registration.participantData.email,
+        phone: registration.participantData.phone,
+        age: registration.participantData.age,
+        gender: registration.participantData.gender,
+        district: registration.participantData.district,
+        occupation: registration.participantData.occupation,
+        interest: registration.participantData.interest,
+        churchAffiliation: registration.participantData.churchAffiliation || ''
+      }
+    }));
   }
 
   /**
@@ -202,7 +264,10 @@ class Registration {
    */
   static async getRegistrationCount() {
     const db = dbConnection.getDatabase();
-    return await db.collection('registrations').countDocuments({});
+    return await db.collection('registrations').countDocuments({
+      status: 'confirmed',
+      qrCode: { $exists: true, $ne: null }
+    });
   }
 
   /**
@@ -217,15 +282,23 @@ class Registration {
     const thisWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
     const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
+    const baseFilter = { 
+      status: 'confirmed', 
+      qrCode: { $exists: true, $ne: null } 
+    };
+
     const [total, registrationsToday, registrationsThisWeek, registrationsThisMonth] = await Promise.all([
-      db.collection('registrations').countDocuments({}),
+      db.collection('registrations').countDocuments(baseFilter),
       db.collection('registrations').countDocuments({
+        ...baseFilter,
         createdAt: { $gte: today }
       }),
       db.collection('registrations').countDocuments({
+        ...baseFilter,
         createdAt: { $gte: thisWeek }
       }),
       db.collection('registrations').countDocuments({
+        ...baseFilter,
         createdAt: { $gte: thisMonth }
       })
     ]);
@@ -318,25 +391,25 @@ class Registration {
    * @returns {Object|null} Full registration details or null if not found
    */
   static async getFullDetails(id) {
-    let objectId;
-    try {
-      objectId = typeof id === 'string' ? new ObjectId(id) : id;
-    } catch (error) {
-      return null;
-    }
-
     const db = dbConnection.getDatabase();
     
+    // Check if this is a participant ID (KDYES25 format) or MongoDB ObjectId
+    let matchCriteria;
+    if (typeof id === 'string' && id.startsWith('KDYES25')) {
+      // Search by participant ID
+      matchCriteria = { participantId: id };
+    } else {
+      // Try to search by MongoDB ObjectId
+      try {
+        const objectId = typeof id === 'string' ? new ObjectId(id) : id;
+        matchCriteria = { _id: objectId };
+      } catch (error) {
+        return null;
+      }
+    }
+
     const registrations = await db.collection('registrations').aggregate([
-      { $match: { _id: objectId } },
-      {
-        $lookup: {
-          from: 'participants',
-          localField: 'participantId',
-          foreignField: '_id',
-          as: 'participant'
-        }
-      },
+      { $match: matchCriteria },
       {
         $lookup: {
           from: 'access_codes',
@@ -346,7 +419,12 @@ class Registration {
         }
       },
       {
-        $unwind: '$participant'
+        $addFields: {
+          // Ensure participant data is properly formatted (it's already embedded)
+          participant: {
+            $ifNull: ['$participant', {}]
+          }
+        }
       },
       {
         $unwind: '$accessCodeDetails'

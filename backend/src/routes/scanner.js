@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const Registration = require('../models/Registration');
 const Participant = require('../models/Participant');
 const dbConnection = require('../utils/database');
+const { ParticipantIdService } = require('../utils/participantId');
 
 const router = express.Router();
 
@@ -120,12 +121,25 @@ router.post('/checkin', scannerLimiter, async (req, res) => {
 
     const { registrationId } = value;
     
-    // Find registration by ID
+    // Find registration by participant ID (KDYES25-X format) or fallback to ObjectId
     let registration;
+    const db = await dbConnection.getDatabase();
+    
     try {
-      // Try as ObjectId first
-      if (registrationId.match(/^[0-9a-fA-F]{24}$/)) {
+      // First try to find by participant ID (new KDYES25X format)
+      if (registrationId.startsWith('KDYES25')) {
+        registration = await db.collection('registrations').findOne({
+          participantId: registrationId
+        });
+        console.log(`[Scanner] Looking up registration by participant ID: ${registrationId}`);
+      }
+      // Fallback: try as ObjectId (legacy format)
+      else if (registrationId.match(/^[0-9a-fA-F]{24}$/)) {
         registration = await Registration.findById(registrationId);
+        console.log(`[Scanner] Looking up registration by ObjectId: ${registrationId}`);
+      }
+      else {
+        console.log(`[Scanner] Invalid registration ID format: ${registrationId}`);
       }
     } catch (error) {
       // If ObjectId fails, try as string
@@ -160,15 +174,18 @@ router.post('/checkin', scannerLimiter, async (req, res) => {
       });
     }
     
-    // Get participant details
-    const participant = await Participant.findById(registration.participantId);
+    // Get participant details from registration (new system stores participant data in registration)
+    const participant = registration.participant || registration.participantData;
     if (!participant) {
       return res.status(404).json({
         success: false,
-        error: 'Participant details not found.',
+        error: 'Participant details not found in registration.',
         errorType: 'PARTICIPANT_NOT_FOUND'
       });
     }
+    
+    // Add the participant ID to the participant data
+    participant.participantId = registration.participantId;
     
     // Check if already checked in
     const alreadyCheckedIn = !!registration.checkedInAt;
@@ -203,6 +220,7 @@ router.post('/checkin', scannerLimiter, async (req, res) => {
       data: {
         alreadyCheckedIn,
         participant: {
+          participantId: registration.participantId, // Include KDYES25-X ID
           firstName: participant.firstName,
           lastName: participant.lastName,
           email: participant.email,
@@ -216,6 +234,7 @@ router.post('/checkin', scannerLimiter, async (req, res) => {
         },
         registration: {
           id: registration._id,
+          participantId: registration.participantId, // Include KDYES25-X ID
           accessCode: registration.accessCode,
           status: registration.status,
           createdAt: registration.createdAt,

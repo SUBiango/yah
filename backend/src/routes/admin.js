@@ -28,6 +28,16 @@ const generateAccessCodesSchema = Joi.object({
       'number.min': 'Count must be between 1 and 100',
       'number.max': 'Count must be between 1 and 100',
     }),
+  expiryHours: Joi.number().integer().min(1).max(168).default(72)
+    .messages({
+      'number.base': 'Expiry hours must be between 1 and 168 (1 week)',
+      'number.min': 'Expiry hours must be between 1 and 168 (1 week)',
+      'number.max': 'Expiry hours must be between 1 and 168 (1 week)',
+    }),
+  eventName: Joi.string().max(100).optional()
+    .messages({
+      'string.max': 'Event name cannot exceed 100 characters',
+    }),
 });
 
 const paginationSchema = Joi.object({
@@ -42,6 +52,89 @@ const paginationSchema = Joi.object({
       'number.min': 'Limit must be between 1 and 1000',
       'number.max': 'Limit must be between 1 and 1000',
     }),
+});
+
+/**
+ * @route POST /api/admin/generate-codes
+ * @desc Generate new access codes with full details for testing
+ * @access Admin
+ */
+router.post('/generate-codes', adminLimiter, async (req, res) => {
+  const startTime = Date.now();
+  
+  try {
+    // Validate input
+    const { error, value } = generateAccessCodesSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message,
+      });
+    }
+
+    const { count, expiryHours, eventName } = value;
+
+    // Generate access codes with full details
+    const codes = [];
+    const maxRetries = 3;
+    
+    for (let i = 0; i < count; i++) {
+      let retries = 0;
+      while (retries < maxRetries) {
+        try {
+          const accessCode = await AccessCode.generate({
+            expiryHours,
+            eventName: eventName || 'Test Event'
+          });
+          
+          codes.push({
+            code: accessCode.code,
+            expiresAt: accessCode.expiresAt,
+            eventName: accessCode.eventName || 'Test Event',
+            createdAt: accessCode.createdAt
+          });
+          break;
+        } catch (generateError) {
+          if (generateError.message.includes('E11000') && retries < maxRetries - 1) {
+            retries++;
+            // Small delay to reduce collision probability
+            await new Promise(resolve => setTimeout(resolve, Math.random() * 10));
+            continue;
+          }
+          throw generateError;
+        }
+      }
+    }
+
+    const responseTime = Date.now() - startTime;
+
+    res.status(201).json({
+      success: true,
+      data: {
+        codes,
+        generated: codes.length,
+        expiryHours,
+        eventName: eventName || 'Test Event'
+      },
+      meta: {
+        responseTime: `${responseTime}ms`,
+      },
+    });
+
+  } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    console.error('Access code generation error:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      meta: {
+        responseTime: `${responseTime}ms`,
+      },
+    });
+  }
 });
 
 /**
@@ -62,7 +155,7 @@ router.post('/access-codes', adminLimiter, async (req, res) => {
       });
     }
 
-    const { count } = value;
+    const { count, expiryHours, eventName } = value;
 
     // Generate access codes with retry logic for duplicates
     const codes = [];
@@ -220,16 +313,14 @@ router.get('/stats', adminLimiter, async (req, res) => {
     const [
       registrationStats,
       accessCodeStats,
-      participantDemographics,
     ] = await Promise.all([
       Registration.getStats(),
       AccessCode.getStats(),
-      Participant.getDemographics(),
     ]);
 
-    // Calculate additional metrics
+    // Calculate additional metrics - participants are now embedded in registrations
     const totalRegistrations = registrationStats.total;
-    const totalParticipants = await Participant.getCount();
+    const totalParticipants = totalRegistrations; // Same as registrations in new architecture
 
     const responseTime = Date.now() - startTime;
 
@@ -239,7 +330,10 @@ router.get('/stats', adminLimiter, async (req, res) => {
         totalRegistrations,
         totalParticipants,
         accessCodes: accessCodeStats,
-        demographics: participantDemographics,
+        demographics: {
+          // We could calculate demographics from embedded participant data if needed
+          totalParticipants: totalParticipants
+        },
         recentActivity: {
           registrationsToday: registrationStats.today,
           registrationsThisWeek: registrationStats.thisWeek,
@@ -259,6 +353,88 @@ router.get('/stats', adminLimiter, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Internal server error',
+      meta: {
+        responseTime: `${responseTime}ms`,
+      },
+    });
+  }
+});
+
+/**
+ * @route POST /api/admin/cleanup-failed-registration
+ * @desc Clean up failed/incomplete registration by access code
+ * @access Admin
+ */
+router.post('/cleanup-failed-registration', adminLimiter, async (req, res) => {
+  const startTime = Date.now();
+  
+  try {
+    const { accessCode } = req.body;
+
+    if (!accessCode) {
+      return res.status(400).json({
+        success: false,
+        error: 'Access code is required'
+      });
+    }
+
+    // Clean up incomplete registrations for this access code
+    const db = require('../utils/database').getDatabase();
+    
+    // Find registrations to be deleted
+    const registrationsToDelete = await db.collection('registrations').find({
+      accessCode,
+      $or: [
+        { status: { $ne: 'confirmed' } },  // Not confirmed
+        { qrCode: { $exists: false } },    // No QR code generated
+        { qrCode: null }                   // QR code is null
+      ]
+    }).toArray();
+
+    // Delete the incomplete registrations
+    const deleteResult = await db.collection('registrations').deleteMany({
+      accessCode,
+      $or: [
+        { status: { $ne: 'confirmed' } },
+        { qrCode: { $exists: false } },
+        { qrCode: null }
+      ]
+    });
+
+    // Also reset the access code to unused status
+    const AccessCode = require('../models/AccessCode');
+    await db.collection('access_codes').updateOne(
+      { code: accessCode },
+      { 
+        $set: { isUsed: false },
+        $unset: { usedAt: 1 }
+      }
+    );
+
+    const responseTime = Date.now() - startTime;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        accessCode,
+        deletedRegistrations: deleteResult.deletedCount,
+        registrationsFound: registrationsToDelete,
+        message: `Cleaned up ${deleteResult.deletedCount} incomplete registration(s) and reset access code ${accessCode}`
+      },
+      meta: {
+        responseTime: `${responseTime}ms`,
+      },
+    });
+
+  } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    console.error('Failed registration cleanup error:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       meta: {
         responseTime: `${responseTime}ms`,
       },

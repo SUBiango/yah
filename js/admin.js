@@ -236,9 +236,13 @@ class AdminDashboard {
     }
 
     updateStatistics(stats) {
+        // Calculate confirmed and pending counts from loaded participants data
+        const confirmedCount = this.participants.filter(p => p.status === 'confirmed').length;
+        const pendingCount = this.participants.filter(p => p.status === 'pending').length;
+        
         document.getElementById('totalParticipants').textContent = stats.totalParticipants || 0;
-        document.getElementById('confirmedRegistrations').textContent = stats.totalRegistrations || 0;
-        document.getElementById('pendingRegistrations').textContent = stats.recentActivity?.registrationsToday || 0;
+        document.getElementById('confirmedRegistrations').textContent = confirmedCount;
+        document.getElementById('pendingRegistrations').textContent = pendingCount;
         document.getElementById('totalAccessCodes').textContent = stats.accessCodes?.total || 0;
     }
 
@@ -256,57 +260,21 @@ class AdminDashboard {
                 console.log('Loaded participants from API:', this.participants);
                 this.renderParticipantsTable();
                 this.updateParticipantCount();
+                // Update statistics with correct counts after loading participants
+                this.updateParticipantStatistics();
             } else {
                 throw new Error(data.error || 'Failed to load participants');
             }
         } catch (error) {
             console.error('Participants loading error:', error);
-            console.log('Falling back to mock data...');
-            // Use mock data for demo
-            this.participants = this.generateMockParticipants();
-            this.filteredParticipants = [...this.participants];
-            console.log('Generated mock participants:', this.participants);
-            console.log('Filtered participants:', this.filteredParticipants);
+            // Show empty state instead of mock data
+            this.participants = [];
+            this.filteredParticipants = [];
+            this.totalParticipants = 0;
             this.renderParticipantsTable();
             this.updateParticipantCount();
+            this.showAlert('Failed to load participants. Please check your connection and try again.', 'error');
         }
-    }
-
-    generateMockParticipants() {
-        console.log('Generating mock participants...');
-        const mockParticipants = [];
-        const firstNames = ['Ahmed', 'Fatima', 'Ibrahim', 'Aminata', 'Mohamed', 'Isata', 'Abdul', 'Khadija'];
-        const lastNames = ['Kargbo', 'Sesay', 'Kamara', 'Bangura', 'Turay', 'Conteh', 'Jalloh', 'Fofana'];
-        const statuses = ['confirmed', 'pending', 'cancelled'];
-
-        for (let i = 1; i <= 25; i++) {
-            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-            
-            const mockParticipant = {
-                id: `reg_${i.toString().padStart(3, '0')}`,
-                participant: {
-                    id: `part_${i.toString().padStart(3, '0')}`,
-                    firstName,
-                    lastName,
-                    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,
-                    phone: `+232 ${Math.floor(Math.random() * 90000) + 10000}`,
-                    dateOfBirth: new Date(1995 + Math.floor(Math.random() * 15), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0],
-                    gender: Math.random() > 0.5 ? 'male' : 'female',
-                    address: 'Freetown, Sierra Leone'
-                },
-                status: statuses[Math.floor(Math.random() * statuses.length)],
-                registrationDate: new Date(2024, 11, Math.floor(Math.random() * 30) + 1).toISOString(),
-                createdAt: new Date(2024, 11, Math.floor(Math.random() * 30) + 1).toISOString(),
-                accessCode: `CODE${i.toString().padStart(4, '0')}`
-            };
-            
-            mockParticipants.push(mockParticipant);
-            console.log(`Generated participant ${i}:`, mockParticipant);
-        }
-        
-        console.log(`Generated ${mockParticipants.length} mock participants`);
-        return mockParticipants;
     }
 
     renderParticipantsTable() {
@@ -335,26 +303,28 @@ class AdminDashboard {
             const statusBadge = this.getStatusBadge(registration.status);
             const registrationDate = new Date(registration.registrationDate || registration.createdAt).toLocaleDateString();
             
-            // Handle both 'id' and '_id' fields (MongoDB uses _id by default)
-            const registrationId = registration.id || registration._id;
+            // Get the proper participant ID (KDYES25{number}) and database ID
+            const participantId = registration.participantId || registration.participant?.participantId || 'N/A';
+            const registrationId = registration.id || registration._id; // Keep database ID for internal operations
             
             // Debug logging for each registration
             console.log(`Processing registration ${index + 1}:`, {
                 id: registration.id,
                 _id: registration._id,
+                participantId: participantId,
                 resolvedId: registrationId,
                 participant: participant,
                 fullName: fullName
             });
             
             const rowHTML = `
-                <tr data-participant-id="${registrationId}">
+                <tr data-participant-id="${participantId}">
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="participant-avatar me-3">${initials}</div>
                             <div>
                                 <div class="fw-semibold">${fullName}</div>
-                                <small class="text-muted">ID: ${registrationId}</small>
+                                <small class="text-muted">ID: ${participantId}</small>
                             </div>
                         </div>
                     </td>
@@ -370,13 +340,13 @@ class AdminDashboard {
                     <td>${statusBadge}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-action btn-view" title="View Details" data-participant-id="${registrationId}">
+                            <button class="btn btn-action btn-view" title="View Details" data-participant-id="${participantId}" data-registration-id="${registrationId}">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="btn btn-action btn-qr" title="Download QR" data-participant-id="${registrationId}">
+                            <button class="btn btn-action btn-qr" title="Download QR" data-participant-id="${participantId}" data-registration-id="${registrationId}">
                                 <i class="fas fa-qrcode"></i>
                             </button>
-                            <button class="btn btn-action btn-email" title="Send Email" data-participant-id="${registrationId}">
+                            <button class="btn btn-action btn-email" title="Send Email" data-participant-id="${participantId}" data-registration-id="${registrationId}">
                                 <i class="fas fa-envelope"></i>
                             </button>
                         </div>
@@ -417,6 +387,19 @@ class AdminDashboard {
         if (countElement) {
             countElement.textContent = `${this.filteredParticipants.length} participants`;
         }
+    }
+
+    updateParticipantStatistics() {
+        // Calculate confirmed and pending counts from loaded participants data
+        const confirmedCount = this.participants.filter(p => p.status === 'confirmed').length;
+        const pendingCount = this.participants.filter(p => p.status === 'pending').length;
+        
+        console.log('Status counts:', { confirmed: confirmedCount, pending: pendingCount });
+        console.log('Participant statuses:', this.participants.map(p => ({ id: p.participantId, status: p.status })));
+        
+        document.getElementById('confirmedRegistrations').textContent = confirmedCount;
+        document.getElementById('pendingRegistrations').textContent = pendingCount;
+        document.getElementById('totalParticipants').textContent = this.participants.length;
     }
 
     // Search and Filter Methods
@@ -491,14 +474,13 @@ class AdminDashboard {
     viewParticipant(participantId) {
         console.log('Viewing participant with ID:', participantId);
         console.log('Available participants:', this.participants.map(p => ({ 
-            id: p.id, 
+            participantId: p.participantId,
             _id: p._id, 
-            resolvedId: p.id || p._id,
             name: `${p.participant?.firstName} ${p.participant?.lastName}` 
         })));
         
-        // Search for participant by both 'id' and '_id' fields
-        const registration = this.participants.find(p => (p.id === participantId) || (p._id === participantId));
+        // Search for participant by participantId field
+        const registration = this.participants.find(p => p.participantId === participantId);
         if (!registration) {
             console.error('Participant not found with ID:', participantId);
             console.log('Searching in participants array:', this.participants);
@@ -522,8 +504,8 @@ class AdminDashboard {
         
         const modalBody = document.getElementById('participantModalBody');
         
-        // Use the resolved ID for consistency
-        const resolvedId = registration.id || registration._id;
+        // Use the participant ID for display
+        const displayId = registration.participantId || 'N/A';
         
         // Use the actual QR code from registration if available, otherwise generate one
         let qrCodeUrl;
@@ -532,7 +514,7 @@ class AdminDashboard {
             console.log('Using existing QR code from registration');
         } else {
             // Generate QR code with the same format as email confirmations
-            const qrData = resolvedId;
+            const qrData = displayId;
             qrCodeUrl = this.generateQRCodeDataURL(qrData);
             console.log('Generated new QR code for registration');
         }
@@ -569,8 +551,8 @@ class AdminDashboard {
                     
                     <h6 class="text-muted mb-3 mt-4">Registration Details</h6>
                     <div class="row g-2">
-                        <div class="col-6"><strong>Registration ID:</strong></div>
-                        <div class="col-6"><code>${resolvedId}</code></div>
+                        <div class="col-6"><strong>Participant ID:</strong></div>
+                        <div class="col-6"><code>${displayId}</code></div>
                         
                         <div class="col-6"><strong>Access Code:</strong></div>
                         <div class="col-6"><code>${registration.accessCode}</code></div>
@@ -591,15 +573,15 @@ class AdminDashboard {
                             <small class="text-muted">Scan for event check-in</small>
                         </div>
                         <div class="mt-2">
-                            <small class="text-muted d-block">Registration: ${resolvedId}</small>
+                            <small class="text-muted d-block">Participant: ${displayId}</small>
                         </div>
                     </div>
                 </div>
             </div>
         `;
         
-        // Store participant ID for QR download - use the resolved ID
-        document.getElementById('downloadParticipantQR').dataset.participantId = resolvedId;
+        // Store participant ID for QR download - use the display ID
+        document.getElementById('downloadParticipantQR').dataset.participantId = displayId;
         
         // Show modal
         const modal = new bootstrap.Modal(document.getElementById('participantModal'));
@@ -608,8 +590,8 @@ class AdminDashboard {
 
     async downloadParticipantQR(participantId) {
         try {
-            // Search for participant by both 'id' and '_id' fields
-            const registration = this.participants.find(p => (p.id === participantId) || (p._id === participantId));
+            // Search for participant by participantId field
+            const registration = this.participants.find(p => p.participantId === participantId);
             if (!registration) {
                 this.showAlert('Participant not found', 'error');
                 return;
@@ -618,7 +600,7 @@ class AdminDashboard {
             const participant = registration.participant || registration;
             this.showAlert('Preparing QR code download...', 'info', 2000);
 
-            const resolvedId = registration.id || registration._id;
+            const displayId = registration.participantId || 'N/A';
             
             // Use the actual QR code from registration if available
             let qrCodeUrl;
@@ -627,7 +609,7 @@ class AdminDashboard {
                 console.log('Using existing QR code from registration for download');
             } else {
                 // Generate QR code data - match the format used in email confirmations
-                const qrData = resolvedId;
+                const qrData = displayId;
                 qrCodeUrl = this.generateQRCodeDataURL(qrData);
                 console.log('Generated new QR code for download');
             }
@@ -635,7 +617,7 @@ class AdminDashboard {
             // Download the QR code
             const link = document.createElement('a');
             link.href = qrCodeUrl;
-            link.download = `QR-${participant.firstName}-${participant.lastName}-${resolvedId}.png`;
+            link.download = `QR-${participant.firstName}-${participant.lastName}-${displayId}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -754,15 +736,16 @@ class AdminDashboard {
 
     async sendConfirmationEmail(participantId) {
         try {
-            // Search for participant by both 'id' and '_id' fields
-            const registration = this.participants.find(p => (p.id === participantId) || (p._id === participantId));
+            // Search for participant by participantId field
+            const registration = this.participants.find(p => p.participantId === participantId);
             if (!registration) {
                 this.showAlert('Participant not found', 'error');
                 return;
             }
 
             const participant = registration.participant || registration;
-            const resolvedId = registration.id || registration._id;
+            // Use the MongoDB _id for backend API calls
+            const registrationId = registration._id;
             
             this.showAlert(`Sending confirmation email to ${participant.firstName} ${participant.lastName}...`, 'info', 3000);
             
@@ -774,7 +757,7 @@ class AdminDashboard {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ 
-                        registrationId: resolvedId
+                        registrationId: registrationId
                     })
                 });
                 

@@ -231,7 +231,7 @@ class EmailService {
         <div class="qr-section">
             <h3>Your Digital Ticket</h3>
             <img src="cid:qrcode" alt="QR Code" class="qr-code" />
-            <p><strong>Registration ID:</strong> <span class="highlight">${registration._id || registration.id}</span></p>
+            <p><strong>Participant ID:</strong> <span class="highlight">${registration.participantId}</span></p>
             <p>Please present this QR code at the event entrance</p>
         </div>
         
@@ -300,7 +300,7 @@ REGISTRATION DETAILS:
 - Occupation: ${participant.occupation}
 - Interest Area: ${participant.interest}
 ${participant.churchAffiliation ? `- Church: ${participant.churchAffiliation}` : ''}
-- Registration ID: ${registration._id || registration.id}
+- Participant ID: ${registration.participantId}
 - Registration Date: ${new Date(registration.createdAt).toLocaleDateString()}
 
 Your digital ticket (QR code) is attached to this email. Please present it at the event entrance.
@@ -368,7 +368,7 @@ Building Sierra Leone's Future, One Youth at a Time 🇸🇱
             <p><strong>Occupation:</strong> ${data.participant.occupation}</p>
             <p><strong>Interest Area:</strong> ${data.participant.interest}</p>
             ${data.participant.churchAffiliation ? `<p><strong>Church:</strong> ${data.participant.churchAffiliation}</p>` : ''}
-            <p><strong>Registration ID:</strong> ${data.registration._id || data.registration.id}</p>
+            <p><strong>Participant ID:</strong> ${data.registration.participantId}</p>
         </div>
         
         <p>Total registrations: <strong>${data.totalRegistrations || 'N/A'}</strong></p>
@@ -401,7 +401,7 @@ PARTICIPANT INFORMATION:
 - Occupation: ${data.participant.occupation}
 - Interest Area: ${data.participant.interest}
 ${data.participant.churchAffiliation ? `- Church: ${data.participant.churchAffiliation}` : ''}
-- Registration ID: ${data.registration._id || data.registration.id}
+- Participant ID: ${data.registration.participantId}
 
 Total registrations: ${data.totalRegistrations || 'N/A'}
 

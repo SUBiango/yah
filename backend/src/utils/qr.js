@@ -16,10 +16,10 @@ class QRService {
     const startTime = Date.now();
     
     try {
-      // Create QR data payload with registration ID for scanning
+      // Create QR data payload with participant ID for scanning (KDYES25{number} format)
       // Use simple format that scanner can easily parse
       const qrData = {
-        registrationId: registration._id || registration.id,
+        registrationId: registration.participantId || registration.registrationId || registration._id || registration.id,
         type: 'YAH_REGISTRATION',
         participant: {
           name: `${participant.firstName} ${participant.lastName}`,
@@ -29,8 +29,15 @@ class QRService {
         issued: new Date().toISOString()
       };
 
-      // Generate QR code as base64 data URL
-      const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData), {
+      console.log(`[QR] Generating QR code for participant ID: ${qrData.registrationId}`);
+
+      // For better scanner compatibility, use simple participant ID format first
+      // Scanner can parse both JSON and simple ID formats
+      const simpleQrData = registration.participantId || registration._id.toString();
+      console.log(`[QR] Using simple QR data: ${simpleQrData}`);
+
+      // Generate QR code as base64 data URL with simple format
+      const qrCodeDataUrl = await QRCode.toDataURL(simpleQrData, {
         errorCorrectionLevel: 'M', // Medium error correction for reliability
         type: 'image/png',
         quality: 0.92,
@@ -262,8 +269,18 @@ class QRService {
         }
       }
       
-      // Try as simple registration ID (24-character hex string)
+      // Try as simple registration ID (24-character hex string or KDYES25X format)
       if (qrData.match(/^[0-9a-fA-F]{24}$/)) {
+        return {
+          valid: true,
+          type: 'registration',
+          data: { registrationId: qrData },
+          registrationId: qrData
+        };
+      }
+      
+      // Try as KDYES25X format (new participant IDs)
+      if (qrData.match(/^KDYES25\d+$/)) {
         return {
           valid: true,
           type: 'registration',

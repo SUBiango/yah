@@ -17,12 +17,26 @@ class EventScanner {
         this.apiBaseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
             ? 'http://localhost:3000/api'  // Development
             : 'https://yah-backend.onrender.com/api'; // Production (yahsl.org)
+        
+        console.log('[YAH Scanner] Current hostname:', window.location.hostname);
+        console.log('[YAH Scanner] API Base URL:', this.apiBaseUrl);
+        
         this.staffAccessCode = 'STAFF2024'; // Default staff access code
         
         this.init();
     }
 
     init() {
+        console.log('[YAH Scanner] Initializing scanner...');
+        
+        // Check if HTML5-QRCode library is available
+        if (typeof Html5Qrcode === 'undefined') {
+            console.error('[YAH Scanner] HTML5-QRCode library not loaded');
+            this.showError('Scanner library not available. Please refresh the page.');
+            return;
+        }
+        
+        console.log('[YAH Scanner] HTML5-QRCode library loaded successfully');
         this.checkAuthState();
         this.bindEvents();
         this.startAutoRefresh();
@@ -168,54 +182,90 @@ class EventScanner {
                 this.scanner = null;
             }
 
-            // Initialize QR scanner with error handling
+            // Initialize QR scanner with Html5Qrcode direct API (like ScanApp.org)
             try {
-                this.scanner = new Html5QrcodeScanner('qr-reader', {
-                    qrbox: {
-                        width: 250,
-                        height: 250,
-                    },
-                    fps: 20,
-                    aspectRatio: 1.0,
-                    showTorchButtonIfSupported: true,
-                    showZoomSliderIfSupported: true,
-                    defaultZoomValueIfSupported: 2,
-                });
-
-                // Wrap the callbacks to handle errors
-                const successCallback = (qrCodeMessage) => {
-                    try {
-                        // Add additional validation here to prevent library errors
-                        if (qrCodeMessage === null || qrCodeMessage === undefined) {
-                            console.warn('HTML5-QRCode returned null/undefined data');
-                            return;
+                console.log('[YAH Scanner] Starting scanner initialization...');
+                
+                // Get available cameras first
+                const cameras = await Html5Qrcode.getCameras();
+                if (cameras && cameras.length > 0) {
+                    console.log('[YAH Scanner] Found cameras:', cameras.length);
+                    
+                    // Use the first camera (or back camera if available)
+                    const cameraId = cameras.find(camera => 
+                        camera.label.toLowerCase().includes('back') || 
+                        camera.label.toLowerCase().includes('rear')
+                    )?.id || cameras[0].id;
+                    
+                    console.log('[YAH Scanner] Using camera:', cameraId);
+                    
+                    this.scanner = new Html5Qrcode('qr-reader');
+                    
+                    // Configure scanning options with better sensitivity
+                    const config = {
+                        fps: 10,
+                        qrbox: { width: 300, height: 300 }, // Larger scan box
+                        aspectRatio: 1.0,
+                        disableFlip: false, // Allow flipped QR codes
+                        rememberLastUsedCamera: true,
+                        // Add more scan formats for better detection
+                        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+                    };
+                    
+                    // Success callback with extensive debugging
+                    const successCallback = (decodedText, decodedResult) => {
+                        console.log('[YAH Scanner] QR Code detected:', decodedText);
+                        try {
+                            // Add additional validation here to prevent library errors
+                            if (decodedText === null || decodedText === undefined || decodedText === '') {
+                                console.warn('[YAH Scanner] HTML5-QRCode returned null/undefined/empty data:', decodedText);
+                                return;
+                            }
+                            
+                            // Ensure we have a valid string
+                            if (typeof decodedText !== 'string' && typeof decodedText !== 'number') {
+                                console.warn('[YAH Scanner] HTML5-QRCode returned unexpected data type:', typeof decodedText, decodedText);
+                                return;
+                            }
+                            
+                            const qrString = String(decodedText).trim();
+                            console.log('[YAH Scanner] Processing QR:', qrString.substring(0, 50) + '...');
+                            this.handleScanSuccess(qrString);
+                        } catch (error) {
+                            console.error('[YAH Scanner] Error in scan success handler:', error);
+                            this.showScanResult('error', 'Processing Error', 'Failed to process QR code. Please try again.');
                         }
-                        
-                        // Ensure we have a valid string
-                        if (typeof qrCodeMessage !== 'string' && typeof qrCodeMessage !== 'number') {
-                            console.warn('HTML5-QRCode returned unexpected data type:', typeof qrCodeMessage);
-                            return;
+                    };
+
+                    // Error callback - log more details for debugging
+                    const errorCallback = (errorMessage) => {
+                        // Log all errors for debugging QR detection issues
+                        if (errorMessage) {
+                            // Only warn for frequent "not found" errors to reduce noise
+                            if (errorMessage.includes('NotFoundException') || 
+                                errorMessage.includes('No QR code found') ||
+                                errorMessage.includes('No barcode or QR code detected')) {
+                                // Only log every 10th occurrence to reduce console spam
+                                if (!this.errorCount) this.errorCount = 0;
+                                this.errorCount++;
+                                if (this.errorCount % 10 === 0) {
+                                    console.log(`[YAH Scanner] QR detection attempts: ${this.errorCount} (${errorMessage})`);
+                                }
+                            } else {
+                                console.warn('[YAH Scanner] Scan error:', errorMessage);
+                            }
                         }
-                        
-                        this.handleScanSuccess(qrCodeMessage);
-                    } catch (error) {
-                        console.error('Error in scan success handler:', error);
-                        this.showScanResult('error', 'Processing Error', 'Failed to process QR code. Please try again.');
-                    }
-                };
-
-                const errorCallback = (errorMessage) => {
-                    try {
-                        this.handleScanError(errorMessage);
-                    } catch (error) {
-                        console.error('Error in scan error handler:', error);
-                    }
-                };
-
-                this.scanner.render(successCallback, errorCallback);
-
-                this.isScanning = true;
-                this.showAlert('Scanner started. Point camera at QR codes to check in participants.', 'info');
+                    };
+                    
+                    // Start scanning with the selected camera
+                    await this.scanner.start(cameraId, config, successCallback, errorCallback);
+                    
+                    this.isScanning = true;
+                    console.log('[YAH Scanner] Scanner started successfully');
+                    this.showAlert('Scanner started. Point camera at QR codes to check in participants.', 'info');
+                } else {
+                    throw new Error('No cameras found');
+                }
                 
             } catch (scannerError) {
                 console.error('Scanner initialization error:', scannerError);
@@ -234,16 +284,18 @@ class EventScanner {
 
         try {
             if (this.scanner) {
-                await this.scanner.clear();
+                console.log('[YAH Scanner] Stopping scanner...');
+                await this.scanner.stop();
                 this.scanner = null;
             }
             
             this.isScanning = false;
             this.resetScannerButtons();
+            console.log('[YAH Scanner] Scanner stopped successfully');
             this.showAlert('Scanner stopped.', 'info');
             
         } catch (error) {
-            console.error('Scanner stop error:', error);
+            console.error('[YAH Scanner] Scanner stop error:', error);
         }
     }
 
@@ -384,8 +436,15 @@ class EventScanner {
             console.log('QR code is not JSON, trying other formats...');
         }
 
-        // Try parsing as simple registration ID (24-character MongoDB ObjectId)
+        // Try parsing as simple registration ID (24-character MongoDB ObjectId or KDYES25-X format)
         if (qrString.match(/^[a-f0-9]{24}$/i)) {
+            console.log('[YAH Scanner] Found ObjectId format:', qrString);
+            return { registrationId: qrString };
+        }
+        
+        // Try parsing KDYES25X format (new participant IDs without dash)
+        if (qrString.match(/^KDYES25\d+$/i)) {
+            console.log('[YAH Scanner] Found KDYES25 participant ID format:', qrString);
             return { registrationId: qrString };
         }
         
@@ -404,14 +463,14 @@ class EventScanner {
                 const url = new URL(qrString);
                 const pathParts = url.pathname.split('/');
                 const id = pathParts[pathParts.length - 1];
-                if (id && (id.length === 24 || id.length === 8)) {
+                if (id && (id.length === 24 || id.length === 8 || id.match(/^KDYES25\d+$/i))) {
                     return { registrationId: id };
                 }
             } catch (urlError) {
                 // Simple extraction fallback
                 const parts = qrString.split('/');
                 const id = parts[parts.length - 1];
-                if (id && (id.length === 24 || id.length === 8)) {
+                if (id && (id.length === 24 || id.length === 8 || id.match(/^KDYES25\d+$/i))) {
                     return { registrationId: id };
                 }
             }
@@ -428,7 +487,11 @@ class EventScanner {
 
     async checkInParticipant(registrationId) {
         try {
-            const response = await fetch(`${this.apiBaseUrl}/scanner/checkin`, {
+            const url = `${this.apiBaseUrl}/scanner/checkin`;
+            console.log('[YAH Scanner] Making API call to:', url);
+            console.log('[YAH Scanner] Registration ID:', registrationId);
+            
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -436,12 +499,21 @@ class EventScanner {
                 body: JSON.stringify({ registrationId })
             });
 
+            console.log('[YAH Scanner] API Response status:', response.status);
             const data = await response.json();
+            console.log('[YAH Scanner] API Response data:', data);
             
             if (response.ok && data.success) {
-                return data.data;
+                // Return the data with success flag preserved
+                return {
+                    success: true,
+                    ...data.data
+                };
             } else {
-                return { success: false, error: data.error || 'Check-in failed' };
+                return { 
+                    success: false, 
+                    error: data.error || data.message || 'Check-in failed - unknown error' 
+                };
             }
             
         } catch (error) {
