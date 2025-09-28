@@ -163,7 +163,14 @@ class RegistrationForm {
                 }
             });
 
-            const data = await response.json();
+            // Check if we can parse the response
+            let data;
+            try {
+                data = await response.json();
+            } catch (parseError) {
+                // If we can't parse JSON, it's likely a network/server error
+                throw new Error('Server response error');
+            }
 
             if (response.ok && data.success) {
                 // Access code is valid
@@ -202,7 +209,7 @@ class RegistrationForm {
                         break;
                     default:
                         errorMessage = data.error || 'Invalid access code';
-                        alertMessage = data.error || 'Invalid or expired access code';
+                        alertMessage = data.error || 'This access code is invalid. Please check the code and try again.';
                 }
                 
                 this.showAlert(alertMessage, 'danger');
@@ -216,8 +223,17 @@ class RegistrationForm {
 
         } catch (error) {
             console.error('Access code verification error:', error);
-            this.showAlert('Unable to verify access code. Please check your connection and try again.', 'danger');
-            this.showFieldError('accessCode', 'Verification failed');
+            
+            // Check if it's a network error vs server error
+            if (error.name === 'TypeError' || error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                // Network connectivity issue
+                this.showAlert('Unable to verify access code. Please check your internet connection and try again.', 'danger');
+                this.showFieldError('accessCode', 'Connection failed');
+            } else {
+                // Server error or other issue
+                this.showAlert('Unable to verify access code. Please try again or contact support if the problem persists.', 'danger');
+                this.showFieldError('accessCode', 'Verification failed');
+            }
             
             // Reset access code verification status
             this.accessCodeVerified = false;
