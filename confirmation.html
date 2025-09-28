@@ -29,6 +29,23 @@
             z-index: 10;
         }
         
+        /* Responsive padding for mobile devices */
+        @media (max-width: 768px) {
+            .confirmation-card {
+                padding: 2rem;
+                border-radius: 15px;
+                margin: -2rem 1rem 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .confirmation-card {
+                padding: 1.5rem;
+                border-radius: 10px;
+                margin: -1.5rem 0.5rem 0;
+            }
+        }
+        
         .success-icon {
             width: 80px;
             height: 80px;
@@ -50,6 +67,22 @@
             margin: 2rem 0;
         }
         
+        /* Responsive QR code container */
+        @media (max-width: 768px) {
+            .qr-code-container {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .qr-code-container {
+                padding: 1rem;
+                margin: 1rem 0;
+                border-radius: 10px;
+            }
+        }
+        
         .qr-code-placeholder {
             width: 200px;
             height: 200px;
@@ -68,11 +101,52 @@
             border-radius: 10px;
         }
         
+        /* Responsive QR code sizing and centering */
+        @media (max-width: 768px) {
+            .qr-code-placeholder {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .qr-code-image {
+                max-width: 150px;
+                max-height: 150px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .qr-code-placeholder {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .qr-code-image {
+                max-width: 120px;
+                max-height: 120px;
+            }
+        }
+        
         .participant-info {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 15px;
             padding: 2rem;
             margin: 2rem 0;
+        }
+        
+        /* Responsive participant info */
+        @media (max-width: 768px) {
+            .participant-info {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .participant-info {
+                padding: 1rem;
+                margin: 1rem 0;
+                border-radius: 10px;
+            }
         }
         
         .info-row {
@@ -91,6 +165,28 @@
         
         .info-value {
             color: #6c757d;
+        }
+        
+        /* Responsive font sizes for mobile readability */
+        @media (max-width: 768px) {
+            .info-label {
+                font-size: 14px;
+            }
+            
+            .info-value {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .info-label {
+                font-size: 13px;
+            }
+            
+            .info-value {
+                font-size: 13px;
+                word-break: break-word;
+            }
         }
         
         .action-buttons {
@@ -152,6 +248,37 @@
             border-left: 4px solid #ffc107;
         }
         
+        .important-notes h6 {
+            color: #856404 !important;
+        }
+        
+        .important-notes ul,
+        .important-notes li {
+            color: #856404 !important;
+        }
+        
+        /* Responsive important notes */
+        @media (max-width: 768px) {
+            .important-notes {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .important-notes {
+                padding: 1rem;
+                border-radius: 10px;
+            }
+            
+            .important-notes h6 {
+                font-size: 14px;
+            }
+            
+            .important-notes li {
+                font-size: 13px;
+            }
+        }
+        
         .loading-spinner {
             display: inline-block;
         }
@@ -178,18 +305,44 @@
             100% { transform: translateY(100vh) rotate(720deg); }
         }
         
+        /* Mobile responsive styles */
         @media (max-width: 768px) {
-            .confirmation-card {
-                margin: -2rem 1rem 0;
-                padding: 2rem 1.5rem;
-            }
-            
             .action-buttons {
                 flex-direction: column;
             }
             
             .action-buttons .btn {
                 width: 100%;
+            }
+            
+            h3 {
+                font-size: 1.5rem;
+            }
+            
+            h5 {
+                font-size: 1.2rem;
+            }
+            
+            .lead {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h3 {
+                font-size: 1.3rem;
+            }
+            
+            h5 {
+                font-size: 1.1rem;
+            }
+            
+            .lead {
+                font-size: 0.95rem;
+            }
+            
+            p {
+                font-size: 14px;
             }
         }
     </style>
