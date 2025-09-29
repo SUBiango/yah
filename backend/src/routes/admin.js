@@ -7,7 +7,7 @@ const { emailService } = require('../utils/email');
 
 const router = express.Router();
 
-// Health check endpoint specifically for admin routes
+// Health check endpoint specifically for admin routes (no rate limiting)
 router.get('/health', (req, res) => {
   console.log(`[ADMIN] Health check from origin: ${req.headers.origin}`);
   
@@ -17,13 +17,23 @@ router.get('/health', (req, res) => {
     res.header('Access-Control-Allow-Credentials', 'true');
   }
   
-  res.status(200).json({
-    success: true,
-    service: 'admin',
-    timestamp: new Date().toISOString(),
-    memory: process.memoryUsage(),
-    status: 'healthy'
-  });
+  try {
+    res.status(200).json({
+      success: true,
+      service: 'admin',
+      timestamp: new Date().toISOString(),
+      memory: process.memoryUsage(),
+      status: 'healthy',
+      uptime: process.uptime()
+    });
+  } catch (error) {
+    console.error('[ADMIN] Health check error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Health check failed',
+      details: error.message
+    });
+  }
 });
 
 // Debug middleware for admin routes

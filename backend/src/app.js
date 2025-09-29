@@ -299,6 +299,26 @@ app.get('/ping', (req, res) => {
   res.status(200).text('pong');
 });
 
+// Simple admin health check without middleware interference  
+app.get('/api/admin/health-simple', (req, res) => {
+  console.log('[ADMIN-HEALTH] Simple health check requested');
+  
+  const origin = req.headers.origin;
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  res.status(200).json({
+    success: true,
+    service: 'admin-simple',
+    timestamp: new Date().toISOString(),
+    status: 'healthy',
+    message: 'Admin service is running',
+    memory: process.memoryUsage()
+  });
+});
+
 // API routes
 app.use('/api', registrationRoutes);
 app.use('/api/admin', adminRoutes);
