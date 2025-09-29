@@ -107,7 +107,7 @@ app.use(cors(corsOptions));
 // Explicit preflight handler for all routes with enhanced debugging
 app.options('*', (req, res) => {
   const origin = req.headers.origin;
-  console.log(`[PREFLIGHT] OPTIONS request from origin: ${origin}`);
+  console.log(`[PREFLIGHT] OPTIONS request from origin: ${origin} for path: ${req.path}`);
   console.log(`[PREFLIGHT] Request headers:`, JSON.stringify(req.headers, null, 2));
   
   // Set CORS headers explicitly for preflight requests
@@ -130,15 +130,22 @@ app.options('*', (req, res) => {
   res.status(200).end();
 });
 
-// Additional CORS middleware for all requests
+// Additional CORS middleware for all requests with enhanced admin handling
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   
   if (origin) {
-    console.log(`[MIDDLEWARE] Setting CORS headers for ${req.method} request from origin: ${origin}`);
+    console.log(`[MIDDLEWARE] Setting CORS headers for ${req.method} request to ${req.path} from origin: ${origin}`);
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Vary', 'Origin');
+    
+    // Special handling for admin routes
+    if (req.path.startsWith('/api/admin')) {
+      console.log(`[ADMIN-CORS] Enhanced CORS for admin route: ${req.path}`);
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override');
+    }
   }
   
   next();

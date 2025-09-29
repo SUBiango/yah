@@ -1,7 +1,6 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const Joi = require('joi');
-const cors = require('cors');
 const AccessCode = require('../models/AccessCode');
 const Registration = require('../models/Registration');
 const Participant = require('../models/Participant');
@@ -9,77 +8,20 @@ const { emailService } = require('../utils/email');
 
 const router = express.Router();
 
-// CORS configuration specifically for admin routes
-const adminCorsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) {
-      console.log('[ADMIN CORS] Request with no origin - allowing');
-      return callback(null, true);
-    }
-    
-    const allowedOrigins = [
-      'https://www.yahsl.org',
-      'https://yahsl.org',
-      'https://subiaango.github.io',
-      'https://yah-frontend.onrender.com',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-    ];
-
-    console.log(`[ADMIN CORS] Request from origin: ${origin}`);
-
-    if (allowedOrigins.includes(origin) || (origin && origin.includes('yahsl.org'))) {
-      console.log(`[ADMIN CORS] ✅ Origin ${origin} allowed for admin routes`);
-      return callback(null, true);
-    }
-    
-    console.error(`[ADMIN CORS] ❌ Origin ${origin} blocked for admin routes`);
-    return callback(null, true); // Be permissive for admin routes to avoid blocking
-  },
-  credentials: true,
-  optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
-  allowedHeaders: [
-    'Origin',
-    'X-Requested-With', 
-    'Content-Type', 
-    'Accept',
-    'Authorization',
-    'Cache-Control',
-    'X-HTTP-Method-Override'
-  ],
-  preflightContinue: false,
-};
-
-// Apply CORS to all admin routes
-router.use(cors(adminCorsOptions));
-
-// Explicit preflight handler for admin routes
-router.options('*', (req, res) => {
-  const origin = req.headers.origin;
-  console.log(`[ADMIN PREFLIGHT] OPTIONS request from origin: ${origin}`);
-  
-  if (origin) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Max-Age', '86400');
-  
-  console.log(`[ADMIN PREFLIGHT] Responding with CORS headers for origin: ${origin}`);
-  res.status(200).end();
-});
-
-// Middleware to ensure CORS headers on all admin responses
+// Debug middleware for admin routes
 router.use((req, res, next) => {
-  const origin = req.headers.origin;
+  console.log(`[ADMIN DEBUG] ${req.method} ${req.originalUrl}`);
+  console.log(`[ADMIN DEBUG] Origin: ${req.headers.origin}`);
+  console.log(`[ADMIN DEBUG] Headers:`, JSON.stringify(req.headers, null, 2));
   
+  // Ensure CORS headers are always set for admin routes
+  const origin = req.headers.origin;
   if (origin) {
-    console.log(`[ADMIN MIDDLEWARE] Setting CORS headers for ${req.method} ${req.originalUrl} from origin: ${origin}`);
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override');
+    console.log(`[ADMIN DEBUG] Set CORS headers for origin: ${origin}`);
   }
   
   next();
