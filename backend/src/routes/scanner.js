@@ -3,7 +3,6 @@ const rateLimit = require('express-rate-limit');
 const Joi = require('joi');
 const { ObjectId } = require('mongodb');
 const Registration = require('../models/Registration');
-const Participant = require('../models/Participant');
 const dbConnection = require('../utils/database');
 const { ParticipantIdService } = require('../utils/participantId');
 
@@ -406,8 +405,16 @@ router.post('/verify', scannerLimiter, async (req, res) => {
       });
     }
     
-    // Get participant details
-    const participant = await Participant.findById(registration.participantId);
+    // Get participant details from embedded data
+    const participant = registration.participant || registration.participantData;
+    
+    if (!participant) {
+      return res.status(404).json({
+        success: false,
+        error: 'Participant data not found',
+        errorType: 'NOT_FOUND'
+      });
+    }
     
     const responseTime = Date.now() - startTime;
     
