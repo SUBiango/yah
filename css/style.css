@@ -11871,6 +11871,20 @@ body {
     overflow-x: hidden;
 }
 
+/* Prevent forced color schemes from affecting images and icons */
+img, .speaker-image, .fas, .fab, .fa {
+    forced-color-adjust: none;
+    -webkit-forced-color-adjust: none;
+    filter: none !important;
+}
+
+/* Ensure icons maintain their color */
+.fas, .fab, .fa, [class^="fa-"], [class*=" fa-"] {
+    color: inherit !important;
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+}
+
 /* Navigation */
 .navbar-brand {
     font-size: 1.5rem;
