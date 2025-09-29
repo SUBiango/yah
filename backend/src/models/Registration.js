@@ -1,7 +1,6 @@
 const { ObjectId } = require('mongodb');
 const dbConnection = require('../utils/database');
 const AccessCode = require('./AccessCode');
-const Participant = require('./Participant');
 const { QRService } = require('../utils/qr');
 const { ParticipantIdService } = require('../utils/participantId');
 const { config } = require('../utils/config');
@@ -223,28 +222,16 @@ class Registration {
     
     const db = dbConnection.getDatabase();
     
-    console.log(`[Registration] Getting registrations with skip=${skip}, limit=${limit}`);
-    
-    // Get registrations with embedded participant data (new architecture)  
-    // Temporarily get ALL registrations for debugging
+    // Get confirmed registrations with embedded participant data
     const registrations = await db.collection('registrations')
-      .find({})  // Get all registrations temporarily for debugging
+      .find({ 
+        status: 'confirmed',
+        qrCode: { $exists: true, $ne: null }
+      })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .toArray();
-
-    console.log(`[Registration] Found ${registrations.length} raw registrations (ALL STATUSES)`);
-    console.log(`[Registration] Registration statuses:`, registrations.map(r => ({ id: r._id, status: r.status, hasQR: !!r.qrCode, hasParticipant: !!r.participant, hasParticipantData: !!r.participantData })));
-
-    console.log(`[Registration] Found ${registrations.length} raw registrations`);
-    console.log(`[Registration] Sample registration structure:`, registrations[0] ? {
-      _id: registrations[0]._id,
-      hasParticipant: !!registrations[0].participant,
-      hasParticipantData: !!registrations[0].participantData,
-      participantKeys: registrations[0].participant ? Object.keys(registrations[0].participant) : [],
-      participantDataKeys: registrations[0].participantData ? Object.keys(registrations[0].participantData) : []
-    } : 'No registrations found');
 
     // Transform the data to match the expected format for admin dashboard
     const result = registrations.map(registration => {
@@ -252,7 +239,6 @@ class Registration {
       const participantData = registration.participant || registration.participantData;
       
       if (!participantData) {
-        console.warn(`Registration ${registration._id} missing participant data`);
         return null;
       }
       
@@ -279,7 +265,6 @@ class Registration {
       };
     }).filter(Boolean);  // Remove any null entries
     
-    console.log(`[Registration] Returning ${result.length} transformed registrations`);
     return result;
   }
 
@@ -289,10 +274,10 @@ class Registration {
    */
   static async getRegistrationCount() {
     const db = dbConnection.getDatabase();
-    // Temporarily count ALL registrations for debugging
-    const count = await db.collection('registrations').countDocuments({});
-    console.log(`[Registration] Total registration count: ${count}`);
-    return count;
+    return await db.collection('registrations').countDocuments({
+      status: 'confirmed',
+      qrCode: { $exists: true, $ne: null }
+    });
   }
 
   /**

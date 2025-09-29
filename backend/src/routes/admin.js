@@ -3,10 +3,28 @@ const rateLimit = require('express-rate-limit');
 const Joi = require('joi');
 const AccessCode = require('../models/AccessCode');
 const Registration = require('../models/Registration');
-const Participant = require('../models/Participant');
 const { emailService } = require('../utils/email');
 
 const router = express.Router();
+
+// Health check endpoint specifically for admin routes
+router.get('/health', (req, res) => {
+  console.log(`[ADMIN] Health check from origin: ${req.headers.origin}`);
+  
+  const origin = req.headers.origin;
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  res.status(200).json({
+    success: true,
+    service: 'admin',
+    timestamp: new Date().toISOString(),
+    memory: process.memoryUsage(),
+    status: 'healthy'
+  });
+});
 
 // Debug middleware for admin routes
 router.use((req, res, next) => {
@@ -264,9 +282,12 @@ router.get('/registrations', adminLimiter, async (req, res) => {
   const startTime = Date.now();
   
   try {
+    console.log(`[ADMIN] GET /registrations - Query params:`, req.query);
+    
     // Validate query parameters
     const { error, value } = paginationSchema.validate(req.query);
     if (error) {
+      console.error(`[ADMIN] Validation error for /registrations:`, error.details[0].message);
       return res.status(400).json({
         success: false,
         error: error.details[0].message,
@@ -274,12 +295,20 @@ router.get('/registrations', adminLimiter, async (req, res) => {
     }
 
     const { skip, limit } = value;
+    console.log(`[ADMIN] Getting registrations with skip=${skip}, limit=${limit}`);
 
     // Get registrations with participant details
-    const [registrations, total] = await Promise.all([
-      Registration.getAllRegistrations({ skip, limit }),
-      Registration.getRegistrationCount(),
-    ]);
+    let registrations, total;
+    try {
+      [registrations, total] = await Promise.all([
+        Registration.getAllRegistrations({ skip, limit }),
+        Registration.getRegistrationCount(),
+      ]);
+      console.log(`[ADMIN] Successfully fetched ${registrations.length} registrations, total: ${total}`);
+    } catch (dbError) {
+      console.error(`[ADMIN] Database error in /registrations:`, dbError);
+      throw new Error(`Database query failed: ${dbError.message}`);
+    }
 
     const responseTime = Date.now() - startTime;
 
@@ -307,11 +336,20 @@ router.get('/registrations', adminLimiter, async (req, res) => {
   } catch (error) {
     const responseTime = Date.now() - startTime;
     
-    console.error('Admin registrations fetch error:', error);
+    console.error('[ADMIN] Admin registrations fetch error:', error);
+    console.error('[ADMIN] Error stack:', error.stack);
+    
+    // Send CORS headers even in error response
+    const origin = req.headers.origin;
+    if (origin) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
+    }
     
     res.status(500).json({
       success: false,
       error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       meta: {
         responseTime: `${responseTime}ms`,
       },
@@ -328,14 +366,20 @@ router.get('/stats', adminLimiter, async (req, res) => {
   const startTime = Date.now();
   
   try {
+    console.log(`[ADMIN] GET /stats - Starting stats calculation`);
+    
     // Fetch all statistics in parallel for performance
-    const [
-      registrationStats,
-      accessCodeStats,
-    ] = await Promise.all([
-      Registration.getStats(),
-      AccessCode.getStats(),
-    ]);
+    let registrationStats, accessCodeStats;
+    try {
+      [registrationStats, accessCodeStats] = await Promise.all([
+        Registration.getStats(),
+        AccessCode.getStats(),
+      ]);
+      console.log(`[ADMIN] Stats fetched - Registration stats:`, registrationStats, `Access code stats:`, accessCodeStats);
+    } catch (dbError) {
+      console.error(`[ADMIN] Database error in /stats:`, dbError);
+      throw new Error(`Statistics query failed: ${dbError.message}`);
+    }
 
     // Calculate additional metrics - participants are now embedded in registrations
     const totalRegistrations = registrationStats.total;
@@ -367,11 +411,20 @@ router.get('/stats', adminLimiter, async (req, res) => {
   } catch (error) {
     const responseTime = Date.now() - startTime;
     
-    console.error('Admin stats fetch error:', error);
+    console.error('[ADMIN] Admin stats fetch error:', error);
+    console.error('[ADMIN] Error stack:', error.stack);
+    
+    // Send CORS headers even in error response
+    const origin = req.headers.origin;
+    if (origin) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
+    }
     
     res.status(500).json({
       success: false,
       error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       meta: {
         responseTime: `${responseTime}ms`,
       },

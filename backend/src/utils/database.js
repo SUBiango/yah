@@ -67,12 +67,6 @@ class DatabaseConnection {
         { isUsed: 1, expiresAt: 1 }
       );
 
-      // Create indexes for Participant collection
-      await db.collection('participants').createIndex(
-        { email: 1 }, 
-        { unique: true }
-      );
-
       // Create indexes for Registration collection
       await db.collection('registrations').createIndex(
         { accessCode: 1 }, 
@@ -83,6 +77,9 @@ class DatabaseConnection {
       );
       await db.collection('registrations').createIndex(
         { createdAt: 1 }
+      );
+      await db.collection('registrations').createIndex(
+        { 'participantData.email': 1 }
       );
 
       console.log('Database indexes created successfully');

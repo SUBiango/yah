@@ -2,7 +2,6 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const Joi = require('joi');
 const sanitizeHtml = require('sanitize-html');
-const Participant = require('../models/Participant');
 const Registration = require('../models/Registration');
 const AccessCode = require('../models/AccessCode');
 const { emailService } = require('../utils/email');

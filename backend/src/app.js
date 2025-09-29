@@ -13,6 +13,47 @@ const scannerRoutes = require('./routes/scanner');
 
 const app = express();
 
+// Add process error handlers to prevent crashes
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  console.error('Stack:', error.stack);
+  // Don't exit in production, just log the error
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit in production, just log the error
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
+});
+
+// Graceful shutdown handlers
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  try {
+    await dbConnection.disconnect();
+    process.exit(0);
+  } catch (error) {
+    console.error('Error during shutdown:', error);
+    process.exit(1);
+  }
+});
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT received, shutting down gracefully');
+  try {
+    await dbConnection.disconnect();
+    process.exit(0);
+  } catch (error) {
+    console.error('Error during shutdown:', error);
+    process.exit(1);
+  }
+});
+
 // Trust proxy for accurate IP addresses in production
 if (config.server.nodeEnv === 'production') {
   app.set('trust proxy', 1);
@@ -183,6 +224,26 @@ const globalLimiter = rateLimit({
 
 app.use(globalLimiter);
 
+// Request timeout middleware to prevent hanging requests
+app.use((req, res, next) => {
+  // Set timeout for all requests (25 seconds)
+  req.setTimeout(25000, () => {
+    console.error(`Request timeout for ${req.method} ${req.originalUrl} from ${req.headers.origin}`);
+    if (!res.headersSent) {
+      const origin = req.headers.origin;
+      if (origin) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', 'true');
+      }
+      res.status(408).json({
+        success: false,
+        error: 'Request timeout'
+      });
+    }
+  });
+  next();
+});
+
 // Request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
@@ -209,17 +270,33 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoint
+// Health check endpoint with enhanced monitoring
 app.get('/health', (req, res) => {
-  res.status(200).json({
+  const healthData = {
     success: true,
     data: {
       status: 'healthy',
       timestamp: new Date().toISOString(),
       environment: config.server.nodeEnv,
       uptime: process.uptime(),
+      memory: process.memoryUsage(),
+      version: process.version,
     },
-  });
+  };
+  
+  // Set CORS headers for health check
+  const origin = req.headers.origin;
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  res.status(200).json(healthData);
+});
+
+// Add a simple ping endpoint for monitoring
+app.get('/ping', (req, res) => {
+  res.status(200).text('pong');
 });
 
 // API routes
@@ -261,7 +338,13 @@ app.use((error, req, res, next) => {
     });
   }
   
-  // Default error response
+  // Default error response with CORS headers
+  const origin = req.headers.origin;
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  
   res.status(500).json({
     success: false,
     error: 'Internal server error',
@@ -272,34 +355,89 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Database connection and server startup
+// Database connection and server startup with enhanced error handling
 async function startServer() {
   try {
-    // Connect to database
-    await dbConnection.connect();
-    await dbConnection.createIndexes();
-    console.log('Database connected successfully');
+    console.log('🚀 Starting YAH Registration Server...');
     
-    // Initialize email service
-    try {
-      await emailService.initialize();
-      console.log('Email service initialized successfully');
-    } catch (emailError) {
-      console.warn('Email service initialization failed:', emailError.message);
-      console.warn('Emails will not be sent, but registration will still work');
+    // Connect to database with retry logic
+    let retries = 3;
+    while (retries > 0) {
+      try {
+        await dbConnection.connect();
+        console.log('✅ Database connected successfully');
+        break;
+      } catch (dbError) {
+        retries--;
+        console.error(`❌ Database connection failed. Retries left: ${retries}`, dbError.message);
+        if (retries === 0) throw dbError;
+        await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before retry
+      }
     }
     
-    // Start server
+    // Create indexes with error handling
+    try {
+      await dbConnection.createIndexes();
+      console.log('✅ Database indexes created');
+    } catch (indexError) {
+      console.warn('⚠️ Index creation warning:', indexError.message);
+      // Don't fail startup if index creation fails
+    }
+    
+    // Run database cleanup with error handling
+    try {
+      const DatabaseCleanup = require('./utils/cleanup');
+      await DatabaseCleanup.runCleanup();
+      console.log('✅ Database cleanup completed');
+    } catch (cleanupError) {
+      console.warn('⚠️ Database cleanup warning:', cleanupError.message);
+      // Don't fail startup if cleanup fails
+    }
+    
+    // Initialize email service with error handling
+    try {
+      await emailService.initialize();
+      console.log('✅ Email service initialized successfully');
+    } catch (emailError) {
+      console.warn('⚠️ Email service initialization failed:', emailError.message);
+      console.warn('📧 Emails will not be sent, but registration will still work');
+    }
+    
+    // Start server with enhanced configuration
     const server = app.listen(config.server.port, () => {
       console.log(`
 🚀 YAH Youth Registration API Server Started
-📍 Environment: ${config.server.nodeEnv}
+� Environment: ${config.server.nodeEnv}
 🌐 Port: ${config.server.port}
-💻 Health: http://localhost:${config.server.port}/health
-📋 API: http://localhost:${config.server.port}/api
-🔒 Security: Helmet, CORS, Rate Limiting enabled
-⚡ Performance: Request logging and monitoring active
+� CORS: Enabled for production domains
+📧 Email: ${emailService.isInitialized ? 'Ready' : 'Disabled'}
+🗄️  Database: Connected
+⏰ Started: ${new Date().toISOString()}
       `);
+    });
+
+    // Configure server timeouts to handle connection issues
+    server.setTimeout(30000); // 30 second timeout
+    server.keepAliveTimeout = 65000; // 65 seconds (longer than most load balancers)
+    server.headersTimeout = 66000; // Slightly longer than keepAliveTimeout
+
+    // Handle server shutdown gracefully
+    process.on('SIGTERM', () => {
+      console.log('SIGTERM received, shutting down gracefully');
+      server.close(() => {
+        console.log('Server closed');
+        dbConnection.disconnect();
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', () => {
+      console.log('SIGINT received, shutting down gracefully');
+      server.close(() => {
+        console.log('Server closed');
+        dbConnection.disconnect();
+        process.exit(0);
+      });
     });
     
     // Graceful shutdown

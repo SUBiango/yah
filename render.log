@@ -1,0 +1,105 @@
+[Registration] Returning 10 transformed registrations
+[CORS] Request with no origin - allowing
+[CORS] Request with no origin - allowing
+[CORS] Request with no origin - allowing
+[CORS] Request with no origin - allowing
+[CORS] Request with no origin - allowing
+[CORS] Request with no origin - allowing
+[CORS] Request with no origin - allowing
+[CORS] Request from origin: https://www.yahsl.org
+[CORS] Environment: production
+[CORS] ✅ Origin https://www.yahsl.org allowed
+[MIDDLEWARE] Setting CORS headers for GET request from origin: https://www.yahsl.org
+[CORS] Request from origin: https://www.yahsl.org
+[CORS] Environment: production
+[CORS] ✅ Origin https://www.yahsl.org allowed
+[MIDDLEWARE] Setting CORS headers for GET request from origin: https://www.yahsl.org
+[Registration] Getting registrations with skip=0, limit=10
+[Registration] Total registration count: 11
+[Registration] Found 10 raw registrations (ALL STATUSES)
+[Registration] Registration statuses: [
+  {
+    id: new ObjectId('68da7bc2efc221e9a4ec185e'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68da0c6178d96411fbd41402'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d9a898fec8c4b1f033665a'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d9a12d149d96035d7f8020'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d9a08e1b0f1507250571ea'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d9991b4c315ae3f9ad99d9'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d997e893e9138c1e15cba6'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d994b5725738258aad0013'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d97223231272911ada2bb5'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  },
+  {
+    id: new ObjectId('68d96e3d9dd04358bfd1341a'),
+    status: 'confirmed',
+    hasQR: true,
+    hasParticipant: false,
+    hasParticipantData: true
+  }
+]
+[Registration] Found 10 raw registrations
+[Registration] Sample registration structure: {
+  _id: new ObjectId('68da7bc2efc221e9a4ec185e'),
+  hasParticipant: false,
+  hasParticipantData: true,
+  participantKeys: [],
+  participantDataKeys: [
+    'firstName', 'lastName',
+    'email',     'phone',
+    'age',       'occupation',
+    'gender',    'district',
+    'interest'
+  ]
+}
