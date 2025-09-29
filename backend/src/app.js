@@ -35,14 +35,18 @@ app.use(helmet({
   },
 }));
 
-// CORS configuration
+// CORS configuration with enhanced debugging and preflight handling
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    if (!origin) {
+      console.log('[CORS] Request with no origin - allowing');
+      return callback(null, true);
+    }
     
     // In development, allow all origins
     if (config.server.nodeEnv === 'development') {
+      console.log('[CORS] Development mode - allowing all origins');
       return callback(null, true);
     }
     
@@ -53,22 +57,30 @@ const corsOptions = {
       'https://yahsl.org', // Alternative without www
       'https://subiaango.github.io', // GitHub Pages if using
       'https://yah-frontend.onrender.com', // Render frontend if used
+      'http://localhost:3000', // Local development
+      'http://127.0.0.1:3000', // Local development alternative
     ];
 
     console.log(`[CORS] Request from origin: ${origin}`);
-    console.log(`[CORS] Allowed origins:`, allowedOrigins);
+    console.log(`[CORS] Environment: ${config.server.nodeEnv}`);
 
     if (allowedOrigins.includes(origin)) {
-      console.log(`[CORS] Origin ${origin} allowed`);
+      console.log(`[CORS] ✅ Origin ${origin} allowed`);
       return callback(null, true);
     }
     
-    console.error(`[CORS] Origin ${origin} blocked`);
+    console.error(`[CORS] ❌ Origin ${origin} blocked - not in allowed origins:`, allowedOrigins);
+    // In production, be more permissive to avoid blocking legitimate requests
+    if (config.server.nodeEnv === 'production' && origin && origin.includes('yahsl.org')) {
+      console.log(`[CORS] ✅ Allowing yahsl.org subdomain: ${origin}`);
+      return callback(null, true);
+    }
+    
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
   allowedHeaders: [
     'Origin',
     'X-Requested-With', 
@@ -76,15 +88,61 @@ const corsOptions = {
     'Accept',
     'Authorization',
     'Cache-Control',
-    'X-HTTP-Method-Override'
+    'X-HTTP-Method-Override',
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Headers',
+    'Access-Control-Allow-Methods',
+  ],
+  exposedHeaders: [
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Headers',
+    'Access-Control-Allow-Methods',
   ],
   preflightContinue: false,
+  maxAge: 86400, // Cache preflight response for 24 hours
 };
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
+// Explicit preflight handler for all routes with enhanced debugging
+app.options('*', (req, res) => {
+  const origin = req.headers.origin;
+  console.log(`[PREFLIGHT] OPTIONS request from origin: ${origin}`);
+  console.log(`[PREFLIGHT] Request headers:`, JSON.stringify(req.headers, null, 2));
+  
+  // Set CORS headers explicitly for preflight requests
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Max-Age', '86400');
+  res.header('Vary', 'Origin');
+  
+  console.log(`[PREFLIGHT] Responding with CORS headers for origin: ${origin}`);
+  console.log(`[PREFLIGHT] Response headers:`, {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH',
+    'Access-Control-Allow-Credentials': 'true'
+  });
+  
+  res.status(200).end();
+});
+
+// Additional CORS middleware for all requests
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  if (origin) {
+    console.log(`[MIDDLEWARE] Setting CORS headers for ${req.method} request from origin: ${origin}`);
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Vary', 'Origin');
+  }
+  
+  next();
+});
 
 // Body parsing middleware
 app.use(express.json({ 
