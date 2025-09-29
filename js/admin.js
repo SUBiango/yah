@@ -211,7 +211,14 @@ class AdminDashboard {
 
     async loadStatistics() {
         try {
-            const response = await fetch(`${this.apiBaseUrl}/admin/stats`);
+            const response = await fetch(`${this.apiBaseUrl}/admin/stats`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
             const data = await response.json();
 
             if (response.ok && data.success) {
@@ -252,7 +259,14 @@ class AdminDashboard {
             const url = `${this.apiBaseUrl}/admin/registrations?skip=${(this.currentPage - 1) * this.itemsPerPage}&limit=${this.itemsPerPage}`;
             console.log('[Admin] API URL:', url);
             
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
             console.log('[Admin] Response status:', response.status, response.statusText);
             
             const data = await response.json();
@@ -771,8 +785,10 @@ class AdminDashboard {
                 // Call the backend API to send confirmation email
                 const response = await fetch(`${this.apiBaseUrl}/admin/send-confirmation`, {
                     method: 'POST',
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({ 
                         registrationId: registrationId
@@ -826,8 +842,10 @@ class AdminDashboard {
             // Call API to generate access codes
             const response = await fetch(`${this.apiBaseUrl}/admin/access-codes`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({ count })
             });
