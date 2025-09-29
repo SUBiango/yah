@@ -160,6 +160,37 @@
             color: #e67e22;
         }
         
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .summit-hero {
+                padding-top: 6rem !important; /* Extra top padding for mobile to avoid hamburger menu overlap */
+                padding-bottom: 3rem !important;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .display-3 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .summit-hero {
+                padding-top: 7rem !important; /* Even more top padding for small mobile devices */
+            }
+            
+            .countdown-timer {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
+            
+            .countdown-item {
+                padding: 0.5rem;
+            }
+        }
+        
         .summit-stats {
             background: rgba(255, 193, 7, 0.1);
             border-radius: 20px;
@@ -235,7 +266,7 @@
                     </p>
                     <p class="h5 mb-4">
                         <i class="fas fa-map-marker-alt me-2"></i>
-                        Koidu Youth Council Hall, Koidu City, Sierra Leone
+                        Fachima Complex Hall, Bona Street, Koidu City, Kono.
                     </p>
                     
                     <!-- Countdown Timer -->
@@ -270,12 +301,12 @@
                     </div>
                     
                     <div class="hero-actions mt-5">
-                        <a href="#registration" class="btn btn-light btn-lg me-3 px-5 py-3">
+                        <a href="/note.html" class="btn btn-light btn-lg me-3 px-5 py-3">
                             <i class="fas fa-ticket-alt me-2"></i>Register Now
                         </a>
-                        <a href="#schedule" class="btn btn-outline-light btn-lg px-5 py-3">
+                        <!-- <a href="#schedule" class="btn btn-outline-light btn-lg px-5 py-3">
                             <i class="fas fa-calendar me-2"></i>View Schedule
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -288,189 +319,149 @@
             <div class="row g-4">
                 <div class="col-md-3">
                     <div class="summit-stats">
-                        <span class="stat-number">500+</span>
+                        <span class="stat-number">200+</span>
                         <div class="fw-semibold">Attendees</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="summit-stats">
-                        <span class="stat-number">50+</span>
+                        <span class="stat-number">5</span>
                         <div class="fw-semibold">Speakers</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="summit-stats">
-                        <span class="stat-number">25+</span>
-                        <div class="fw-semibold">Workshops</div>
+                        <span class="stat-number">5</span>
+                        <div class="fw-semibold">Sessions</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="summit-stats">
-                        <span class="stat-number">3</span>
-                        <div class="fw-semibold">Days</div>
+                        <span class="stat-number">1</span>
+                        <div class="fw-semibold">Day</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Keynote Speakers -->
+    <!-- Keynote Speaker -->
     <section class="py-5 bg-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Keynote Speakers</h2>
+                    <h2 class="display-5 fw-bold mb-4">Keynote Speaker</h2>
                     <p class="lead text-muted">
-                        Learn from industry leaders, changemakers, and visionaries who are shaping the future.
+                        Our featured speaker who will inspire and guide us through this transformative journey.
+                    </p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="speaker-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <img src="assets/speaker-photos/2025/Mohamed Samu.jpeg" alt="Mohamed Samu" class="speaker-image" />
+                            <h5 class="card-title mb-2">Mohamed Samu</h5>
+                            <p class="text-muted mb-2">Innovator | Applied Entomologist</p>
+                            <p class="card-text small">
+                                Applied entomologist and founder of Entotech Innovations. 2025 winner of President Bio's 
+                                Big Five Investment Innovation Award. Erasmus Mundus graduate and Mandela Washington Fellow, 
+                                combining innovation, entrepreneurship, and leadership for sustainable impact.
+                            </p>
+                            <div class="speaker-social">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Speakers -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Our Speakers</h2>
+                    <p class="lead text-muted">
+                        Meet the local leaders, changemakers, and visionaries who are shaping our community.
                     </p>
                 </div>
             </div>
             <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-md-6">
                     <div class="speaker-card card h-100">
                         <div class="card-body text-center p-4">
-                            <div class="speaker-image-placeholder bg-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="fas fa-user fa-3x text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-2">Dr. Sarah Johnson</h5>
-                            <p class="text-muted mb-2">CEO, Global Youth Foundation</p>
+                            <img src="assets/speaker-photos/2025/His Worship Mayor Komba Sam.jpeg" alt="His Worship Mayor Komba Sam" class="speaker-image" />
+                            <h5 class="card-title mb-2">His Worship Mayor Komba Sam</h5>
+                            <p class="text-muted mb-2">Mayor - Koidu New Sembehun City Council</p>
                             <p class="card-text small">
-                                A Harvard graduate and Forbes 30 Under 30 recipient, Dr. Johnson has dedicated her career 
-                                to youth empowerment and social innovation.
+                                Historic two-term mayor serving 169,000+ residents since 2018. 
+                                Holds advanced degrees in Business Administration and Economics, 
+                                championing youth empowerment and community transformation.
                             </p>
-                            <div class="speaker-topic mb-3">
-                                <span class="badge bg-warning text-dark">Opening Keynote</span>
-                            </div>
-                            <h6 class="text-primary">"The Future Belongs to Bold Youth"</h6>
                             <div class="speaker-social">
+                                <a href="https://www.facebook.com/share/1ABAAm4TbV/?mibextid=wwXIfr"><i class="fab fa-facebook"></i></a>
                                 <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-md-6">
                     <div class="speaker-card card h-100">
                         <div class="card-body text-center p-4">
-                            <div class="speaker-image-placeholder bg-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="fas fa-user fa-3x text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-2">Marcus Rodriguez</h5>
-                            <p class="text-muted mb-2">Tech Entrepreneur & Investor</p>
+                            <img src="assets/speaker-photos/2025/Osman Yaah.jpeg" alt="Osman Yaah" class="speaker-image" />
+                            <h5 class="card-title mb-2">Osman Yaah</h5>
+                            <p class="text-muted mb-2">Innovator and Entrepreneur</p>
                             <p class="card-text small">
-                                Serial entrepreneur who built three successful startups before age 30. 
-                                Now focuses on mentoring young entrepreneurs.
+                                Co-founder of Auto-Smart Irrigation & Energy Company Ltd and award-winning innovator. 
+                                Winner of President Bio's 2024 Innovation Award ($30,000), transforming agriculture 
+                                through climate-smart technology and empowering vulnerable communities.
                             </p>
-                            <div class="speaker-topic mb-3">
-                                <span class="badge bg-success text-white">Innovation Track</span>
-                            </div>
-                            <h6 class="text-primary">"Building Tomorrow's Solutions Today"</h6>
                             <div class="speaker-social">
+                                <a href="https://www.facebook.com/osmanyaah?mibextid=wwXIfr"><i class="fab fa-facebook"></i></a>
                                 <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-6">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="speaker-image-placeholder bg-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="fas fa-user fa-3x text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-2">Aisha Okonkwo</h5>
-                            <p class="text-muted mb-2">Climate Activist & UN Ambassador</p>
-                            <p class="card-text small">
-                                Award-winning environmental activist working with the UN on youth climate initiatives. 
-                                Featured in TIME Magazine's Next Generation Leaders.
-                            </p>
-                            <div class="speaker-topic mb-3">
-                                <span class="badge bg-info text-white">Sustainability Track</span>
-                            </div>
-                            <h6 class="text-primary">"Youth Leading Climate Action"</h6>
-                            <div class="speaker-social">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-md-6">
                     <div class="speaker-card card h-100">
                         <div class="card-body text-center p-4">
-                            <div class="speaker-image-placeholder bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="fas fa-user fa-3x text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-2">David Kim</h5>
-                            <p class="text-muted mb-2">Social Impact Investor</p>
+                            <img src="assets/speaker-photos/2025/Rebecca Yei Sam.jpeg" alt="Rebecca Yei Sam" class="speaker-image" />
+                            <h5 class="card-title mb-2">Rebecca Yei Sam</h5>
+                            <p class="text-muted mb-2">Honourable Member of Parliament</p>
                             <p class="card-text small">
-                                Managing Partner at NextGen Ventures, focusing on investments that create positive social impact 
-                                while generating sustainable returns.
+                                First woman elected to represent Kono District in Parliament (2018, 2023). 
+                                Deputy Chair of Parliamentary Committee on Lands and Environment, 
+                                championing women's empowerment and youth participation in decision-making.
                             </p>
-                            <div class="speaker-topic mb-3">
-                                <span class="badge bg-warning text-dark">Finance Track</span>
-                            </div>
-                            <h6 class="text-primary">"Investing in Change"</h6>
                             <div class="speaker-social">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
                                 <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-md-6">
                     <div class="speaker-card card h-100">
                         <div class="card-body text-center p-4">
-                            <div class="speaker-image-placeholder bg-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="fas fa-user fa-3x text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-2">Lisa Chen</h5>
-                            <p class="text-muted mb-2">Digital Marketing Expert</p>
+                            <img src="assets/speaker-photos/2025/Tamba Songu Mbriwa.jpeg" alt="Tamba Songu Mbriwa" class="speaker-image" />
+                            <h5 class="card-title mb-2">Tamba Songu Mbriwa</h5>
+                            <p class="text-muted mb-2">Entrepreneur | Gemmologist | Business Consultant</p>
                             <p class="card-text small">
-                                Former Head of Social Impact at Meta, now running her own agency helping nonprofits 
-                                amplify their digital presence and reach.
+                                CEO of Legacy Group of Companies with global business reach from Asia to Europe. 
+                                Master's in Gemology, passionate mentor for young entrepreneurs, 
+                                believing true leadership is measured by empowering others.
                             </p>
-                            <div class="speaker-topic mb-3">
-                                <span class="badge bg-danger text-white">Marketing Track</span>
-                            </div>
-                            <h6 class="text-primary">"Digital Storytelling for Impact"</h6>
                             <div class="speaker-social">
+                                <a href="https://www.facebook.com/share/19qc43BhmB/?mibextid=wwXIfr"><i class="fab fa-facebook"></i></a>
                                 <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="speaker-image-placeholder bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="fas fa-user fa-3x text-white"></i>
-                            </div>
-                            <h5 class="card-title mb-2">James Williams</h5>
-                            <p class="text-muted mb-2">Leadership Development Coach</p>
-                            <p class="card-text small">
-                                Former military officer turned leadership coach, specializing in developing 
-                                young leaders for the 21st century workplace.
-                            </p>
-                            <div class="speaker-topic mb-3">
-                                <span class="badge bg-secondary text-white">Leadership Track</span>
-                            </div>
-                            <h6 class="text-primary">"Leading with Purpose"</h6>
-                            <div class="speaker-social">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
                             </div>
                         </div>
                     </div>
@@ -480,7 +471,7 @@
     </section>
 
     <!-- Event Schedule -->
-    <section id="schedule" class="py-5">
+    <!-- <section id="schedule" class="py-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center mb-5">
@@ -491,7 +482,7 @@
                 </div>
             </div>
             
-            <!-- Day 1 -->
+            
             <div class="schedule-day">
                 <div class="d-flex align-items-center mb-4">
                     <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
@@ -544,349 +535,28 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Day 2 -->
-            <div class="schedule-day">
-                <div class="d-flex align-items-center mb-4">
-                    <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
-                        2
-                    </div>
-                    <div>
-                        <h3 class="mb-1">Day 2: Skills & Development</h3>
-                        <p class="text-muted mb-0">Saturday, November 16, 2025</p>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="schedule-item">
-                            <div class="schedule-time">8:30 AM - 9:30 AM</div>
-                            <h6>Morning Energizer & Breakfast</h6>
-                            <p class="text-muted small mb-0">High-energy start with motivational session</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">9:30 AM - 11:00 AM</div>
-                            <h6>Keynote: Building Tomorrow's Solutions</h6>
-                            <p class="text-muted small mb-0">Marcus Rodriguez on innovation and entrepreneurship</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">11:30 AM - 1:00 PM</div>
-                            <h6>Intensive Workshop Sessions</h6>
-                            <p class="text-muted small mb-0">Deep-dive skills workshops in chosen tracks</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="schedule-item">
-                            <div class="schedule-time">2:00 PM - 3:30 PM</div>
-                            <h6>Innovation Challenge Presentations</h6>
-                            <p class="text-muted small mb-0">Teams present solutions to real-world problems</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">4:00 PM - 5:30 PM</div>
-                            <h6>Mentorship Speed Networking</h6>
-                            <p class="text-muted small mb-0">Connect with mentors in your field of interest</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">7:00 PM - 10:00 PM</div>
-                            <h6>Gala Dinner & Awards</h6>
-                            <p class="text-muted small mb-0">Celebrate achievements with dinner and entertainment</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Day 3 -->
-            <div class="schedule-day">
-                <div class="d-flex align-items-center mb-4">
-                    <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
-                        3
-                    </div>
-                    <div>
-                        <h3 class="mb-1">Day 3: Action & Commitment</h3>
-                        <p class="text-muted mb-0">Sunday, November 17, 2025</p>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="schedule-item">
-                            <div class="schedule-time">9:00 AM - 10:00 AM</div>
-                            <h6>Reflection & Goal Setting</h6>
-                            <p class="text-muted small mb-0">Personal action planning session</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">10:30 AM - 12:00 PM</div>
-                            <h6>Community Action Planning</h6>
-                            <p class="text-muted small mb-0">Collaborative project development</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="schedule-item">
-                            <div class="schedule-time">1:00 PM - 2:30 PM</div>
-                            <h6>Closing Keynote & Commitments</h6>
-                            <p class="text-muted small mb-0">Final inspiration and public commitments</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">2:30 PM - 3:00 PM</div>
-                            <h6>Farewell & Alumni Network</h6>
-                            <p class="text-muted small mb-0">Join the YAH Summit Alumni Network</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Registration Section -->
     <section id="registration" class="py-5 bg-light">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
+                <div class="col-lg-8 mx-auto text-center">
                     <h2 class="display-5 fw-bold mb-4">Register for Summit 2025</h2>
-                    <p class="lead text-muted">
-                        Secure your spot at the most transformative youth event of the year.
+                    <p class="lead text-muted mb-5">
+                        Secure your spot at the most transformative youth event of the year. Contact Mariama (Finance Officer) at +232 88 412 479 to secure your registration code.
                     </p>
-                </div>
-            </div>
-            
-            <!-- Pricing Options -->
-            <div class="row g-4 mb-5">
-                <div class="col-lg-4">
-                    <div class="pricing-card card">
-                        <div class="card-body p-4 text-center">
-                            <h5 class="card-title">Student</h5>
-                            <div class="price-amount">$75</div>
-                            <p class="text-muted">Early Bird Special</p>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-check text-success me-2"></i>All sessions access</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Welcome materials</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Lunch included</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Certificate</li>
-                            </ul>
-                            <button class="btn btn-outline-primary w-100" onclick="selectTicket('student', 75)">
-                                Select Plan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4">
-                    <div class="pricing-card card featured">
-                        <div class="card-body p-4 text-center">
-                            <div class="badge bg-warning text-dark mb-2">Most Popular</div>
-                            <h5 class="card-title">Professional</h5>
-                            <div class="price-amount">$150</div>
-                            <p class="text-muted">Full Experience</p>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-check text-success me-2"></i>All sessions access</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Premium materials</li>
-                                <li><i class="fas fa-check text-success me-2"></i>All meals included</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Gala dinner</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Mentorship session</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Alumni network</li>
-                            </ul>
-                            <button class="btn btn-warning w-100" onclick="selectTicket('professional', 150)">
-                                Select Plan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4">
-                    <div class="pricing-card card">
-                        <div class="card-body p-4 text-center">
-                            <h5 class="card-title">Virtual</h5>
-                            <div class="price-amount">$25</div>
-                            <p class="text-muted">Online Access</p>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-check text-success me-2"></i>Live streaming</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Digital materials</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Online networking</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Recordings access</li>
-                                <li><i class="fas fa-times text-muted me-2"></i>Meals not included</li>
-                            </ul>
-                            <button class="btn btn-outline-primary w-100" onclick="selectTicket('virtual', 25)">
-                                Select Plan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Registration Form -->
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="registration-form">
-                        <div class="text-center mb-4">
-                            <h4>Complete Your Registration</h4>
-                            <p class="text-muted">Fill out the form below to secure your spot</p>
-                        </div>
-                        
-                        <form id="registrationForm">
-                            <div class="row g-3">
-                                <!-- Selected Ticket Display -->
-                                <div class="col-12">
-                                    <div class="selected-ticket alert alert-info" style="display: none;">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <strong>Selected: </strong>
-                                                <span id="selectedTicketType"></span> Ticket
-                                            </div>
-                                            <div>
-                                                <strong>$<span id="selectedTicketPrice"></span></strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Personal Information -->
-                                <div class="col-md-6">
-                                    <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="firstName" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="lastName" required>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" id="phone" required>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="age" class="form-label">Age <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="age" required>
-                                        <option value="">Select age range</option>
-                                        <option value="15-18">15-18</option>
-                                        <option value="19-24">19-24</option>
-                                        <option value="25-30">25-30</option>
-                                        <option value="31-35">31-35</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="occupation" class="form-label">Occupation/Status <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="occupation" required>
-                                        <option value="">Select status</option>
-                                        <option value="student">Student</option>
-                                        <option value="professional">Working Professional</option>
-                                        <option value="entrepreneur">Entrepreneur</option>
-                                        <option value="unemployed">Currently Unemployed</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <label for="organization" class="form-label">School/Organization</label>
-                                    <input type="text" class="form-control" id="organization" placeholder="Your school, company, or organization">
-                                </div>
-                                
-                                <!-- Track Selection -->
-                                <div class="col-12">
-                                    <label class="form-label">Primary Track of Interest <span class="text-danger">*</span></label>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="track" id="innovation" value="innovation" required>
-                                                <label class="form-check-label" for="innovation">
-                                                    Innovation & Entrepreneurship
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="track" id="leadership" value="leadership" required>
-                                                <label class="form-check-label" for="leadership">
-                                                    Leadership Development
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="track" id="sustainability" value="sustainability" required>
-                                                <label class="form-check-label" for="sustainability">
-                                                    Sustainability & Impact
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Dietary Requirements -->
-                                <div class="col-12">
-                                    <label for="dietary" class="form-label">Dietary Requirements/Allergies</label>
-                                    <input type="text" class="form-control" id="dietary" placeholder="e.g., Vegetarian, Gluten-free, None">
-                                </div>
-                                
-                                <!-- Emergency Contact -->
-                                <div class="col-md-6">
-                                    <label for="emergencyName" class="form-label">Emergency Contact Name</label>
-                                    <input type="text" class="form-control" id="emergencyName">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="emergencyPhone" class="form-label">Emergency Contact Phone</label>
-                                    <input type="tel" class="form-control" id="emergencyPhone">
-                                </div>
-                                
-                                <!-- Additional Options -->
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="newsletter">
-                                        <label class="form-check-label" for="newsletter">
-                                            Subscribe to YAH newsletter for future events and updates
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="terms" required>
-                                        <label class="form-check-label" for="terms">
-                                            I agree to the <a href="#" target="_blank">Terms & Conditions</a> and <a href="#" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <!-- Payment Summary -->
-                                <div class="col-12">
-                                    <div class="payment-summary bg-light p-3 rounded">
-                                        <div class="d-flex justify-content-between">
-                                            <span>Ticket Price:</span>
-                                            <span id="ticketPrice">Please select a ticket</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <span>Processing Fee:</span>
-                                            <span id="processingFee">$0</span>
-                                        </div>
-                                        <hr>
-                                        <div class="d-flex justify-content-between fw-bold">
-                                            <span>Total:</span>
-                                            <span id="totalPrice">$0</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-warning btn-lg w-100">
-                                        <i class="fas fa-credit-card me-2"></i>
-                                        Proceed to Payment
-                                    </button>
-                                    <p class="text-muted small text-center mt-2">
-                                        Secure payment powered by Stripe. You will be redirected to complete payment.
-                                    </p>
-                                </div>
-                            </div>
-                        </form>
+                    
+                    <!-- CTA Button -->
+                    <div class="text-center">
+                        <a href="note.html" class="btn btn-warning btn-lg px-5 py-3 fs-5 fw-bold">
+                            <i class="fas fa-ticket-alt me-2"></i>
+                            Register Now
+                        </a>
+                        <p class="text-muted mt-3">
+                            Limited seats available
+                        </p>
                     </div>
                 </div>
             </div>
@@ -900,70 +570,15 @@
                 <div class="col-lg-8 mx-auto text-center mb-5">
                     <h2 class="display-5 fw-bold mb-4">Venue & Location</h2>
                     <p class="lead text-muted">
-                        Join us at the state-of-the-art Grand Convention Center in the heart of downtown.
+                        Join us at the Fachima Complex Hall, Bona Street, Koidu City, Kono.
                     </p>
-                </div>
-            </div>
-            
-            <div class="row g-5 align-items-center">
-                <div class="col-lg-6">
-                    <div class="venue-info">
-                        <h4 class="mb-3">Grand Convention Center</h4>
-                        <div class="venue-details">
-                            <div class="d-flex mb-3">
-                                <i class="fas fa-map-marker-alt text-warning fa-lg me-3 mt-1"></i>
-                                <div>
-                                    <strong>Address:</strong><br>
-                                    123 Convention Avenue<br>
-                                    Downtown District, City 12345
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex mb-3">
-                                <i class="fas fa-car text-warning fa-lg me-3 mt-1"></i>
-                                <div>
-                                    <strong>Parking:</strong><br>
-                                    Free parking available in attached garage
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex mb-3">
-                                <i class="fas fa-train text-warning fa-lg me-3 mt-1"></i>
-                                <div>
-                                    <strong>Public Transport:</strong><br>
-                                    Metro Station: Central Square (5 min walk)<br>
-                                    Bus Routes: 15, 23, 42
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex mb-3">
-                                <i class="fas fa-bed text-warning fa-lg me-3 mt-1"></i>
-                                <div>
-                                    <strong>Accommodation:</strong><br>
-                                    Discounted rates at partner hotels<br>
-                                    <a href="#" class="text-primary">View hotel options</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-6">
-                    <div class="venue-map">
-                        <div class="bg-light rounded p-5 text-center">
-                            <i class="fas fa-map fa-5x text-warning mb-3"></i>
-                            <h5>Interactive Map</h5>
-                            <p class="text-muted">Detailed venue map and directions will be provided to registered attendees</p>
-                            <button class="btn btn-outline-warning">Get Directions</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FAQ Section -->
-    <section class="py-5 bg-light">
+    <!-- <section class="py-5 bg-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center mb-5">
@@ -1029,7 +644,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Footer -->
     <footer class="bg-primary text-white py-4">
@@ -1037,7 +652,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Empowering young people for self-transformation.</p>
+                    <p class="mb-0">Leading change through local action.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="quick-links">
@@ -1060,7 +675,7 @@
     </button>
     
     <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1">
+    <!-- <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header border-0 text-center">
@@ -1079,7 +694,7 @@
             </div>
         </div>
     </div>
-    
+     -->
     <script src="js/bootstrap.bundle.js"></script>
     <script src="js/main.js"></script>
     <script src="js/summit.js"></script>

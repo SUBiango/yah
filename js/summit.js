@@ -46,16 +46,18 @@ class SummitRegistration {
             seconds: document.getElementById('seconds')
         };
         
-        if (elements.days) elements.days.textContent = days.toString().padStart(2, '0');
-        if (elements.hours) elements.hours.textContent = hours.toString().padStart(2, '0');
-        if (elements.minutes) elements.minutes.textContent = minutes.toString().padStart(2, '0');
-        if (elements.seconds) elements.seconds.textContent = seconds.toString().padStart(2, '0');
+        const newValues = {
+            days: days.toString().padStart(2, '0'),
+            hours: hours.toString().padStart(2, '0'),
+            minutes: minutes.toString().padStart(2, '0'),
+            seconds: seconds.toString().padStart(2, '0')
+        };
         
-        // Add animation effect
-        Object.values(elements).forEach(el => {
-            if (el) {
-                el.style.transform = 'scale(1.1)';
-                setTimeout(() => el.style.transform = 'scale(1)', 100);
+        // Update values without animation
+        Object.keys(elements).forEach(key => {
+            const element = elements[key];
+            if (element) {
+                element.textContent = newValues[key];
             }
         });
     }
