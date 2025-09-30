@@ -8,11 +8,12 @@ class AccessCode {
    * Generate a new unique access code
    * @param {Object} options - Configuration options
    * @param {number} options.expiryHours - Hours until expiry (default: 72)
+   * @param {Date} options.expiryDate - Specific expiry date (overrides expiryHours)
    * @param {string} options.eventName - Event name for tracking (optional)
    * @returns {Object} The created access code
    */
   static async generate(options = {}) {
-    const { expiryHours = 72, eventName } = options;
+    const { expiryHours = 72, expiryDate, eventName } = options;
     const db = dbConnection.getDatabase();
     
     // Generate cryptographically secure 8-character code
@@ -100,7 +101,7 @@ class AccessCode {
     const accessCodeObj = {
       code,
       isUsed: false,
-      expiresAt: new Date(Date.now() + expiryHours * 60 * 60 * 1000),
+      expiresAt: expiryDate || new Date(Date.now() + expiryHours * 60 * 60 * 1000),
       createdAt: new Date(),
     };
     

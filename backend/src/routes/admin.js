@@ -81,6 +81,10 @@ const generateAccessCodesSchema = Joi.object({
       'number.min': 'Expiry hours must be between 1 and 168 (1 week)',
       'number.max': 'Expiry hours must be between 1 and 168 (1 week)',
     }),
+  useFixedExpiry: Joi.boolean().default(true)
+    .messages({
+      'boolean.base': 'useFixedExpiry must be a boolean value',
+    }),
   eventName: Joi.string().max(100).optional()
     .messages({
       'string.max': 'Event name cannot exceed 100 characters',
@@ -119,8 +123,11 @@ router.post('/generate-codes', adminLimiter, async (req, res) => {
       });
     }
 
-    const { count, expiryHours, eventName } = value;
+    const { count, expiryHours, useFixedExpiry, eventName } = value;
 
+    // Set fixed expiry date for the summit (November 14th, 2025 at 11:59 PM)
+    const summitExpiryDate = new Date('2025-11-14T23:59:59.000Z');
+    
     // Generate access codes with full details
     const codes = [];
     const maxRetries = 3;
@@ -130,14 +137,15 @@ router.post('/generate-codes', adminLimiter, async (req, res) => {
       while (retries < maxRetries) {
         try {
           const accessCode = await AccessCode.generate({
-            expiryHours,
-            eventName: eventName || 'Test Event'
+            expiryHours: useFixedExpiry ? undefined : expiryHours,
+            expiryDate: useFixedExpiry ? summitExpiryDate : undefined,
+            eventName: eventName || 'Youth Summit 2025'
           });
           
           codes.push({
             code: accessCode.code,
             expiresAt: accessCode.expiresAt,
-            eventName: accessCode.eventName || 'Test Event',
+            eventName: accessCode.eventName || 'Youth Summit 2025',
             createdAt: accessCode.createdAt
           });
           break;
@@ -160,8 +168,9 @@ router.post('/generate-codes', adminLimiter, async (req, res) => {
       data: {
         codes,
         generated: codes.length,
-        expiryHours,
-        eventName: eventName || 'Test Event'
+        expiryDate: useFixedExpiry ? summitExpiryDate : undefined,
+        expiryHours: useFixedExpiry ? undefined : expiryHours,
+        eventName: eventName || 'Youth Summit 2025'
       },
       meta: {
         responseTime: `${responseTime}ms`,
@@ -202,7 +211,10 @@ router.post('/access-codes', adminLimiter, async (req, res) => {
       });
     }
 
-    const { count, expiryHours, eventName } = value;
+    const { count, expiryHours, useFixedExpiry, eventName } = value;
+
+    // Set fixed expiry date for the summit (November 14th, 2025 at 11:59 PM)
+    const summitExpiryDate = new Date('2025-11-14T23:59:59.000Z');
 
     // Generate access codes with retry logic for duplicates
     const codes = [];
@@ -214,7 +226,11 @@ router.post('/access-codes', adminLimiter, async (req, res) => {
         let retries = 0;
         while (retries < maxRetries) {
           try {
-            const code = await AccessCode.generate();
+            const code = await AccessCode.generate({
+              expiryHours: useFixedExpiry ? undefined : expiryHours,
+              expiryDate: useFixedExpiry ? summitExpiryDate : undefined,
+              eventName: eventName || 'Youth Summit 2025'
+            });
             codes.push(code.code);
             break;
           } catch (generateError) {
@@ -237,7 +253,11 @@ router.post('/access-codes', adminLimiter, async (req, res) => {
             let retries = 0;
             while (retries < maxRetries) {
               try {
-                return await AccessCode.generate();
+                return await AccessCode.generate({
+                  expiryHours: useFixedExpiry ? undefined : expiryHours,
+                  expiryDate: useFixedExpiry ? summitExpiryDate : undefined,
+                  eventName: eventName || 'Youth Summit 2025'
+                });
               } catch (generateError) {
                 if (generateError.message.includes('E11000') && retries < maxRetries - 1) {
                   retries++;
@@ -262,6 +282,9 @@ router.post('/access-codes', adminLimiter, async (req, res) => {
       data: {
         codes,
         generated: codes.length,
+        expiryDate: useFixedExpiry ? summitExpiryDate : undefined,
+        expiryHours: useFixedExpiry ? undefined : expiryHours,
+        eventName: eventName || 'Youth Summit 2025'
       },
       meta: {
         responseTime: `${responseTime}ms`,
