@@ -21,6 +21,8 @@ class AdminDashboard {
         this.checkAuthState();
         this.bindEvents();
         this.setupEventListeners();
+        // Add CORS connectivity test
+        this.testCORSConnectivity();
     }
 
     checkAuthState() {
@@ -210,24 +212,67 @@ class AdminDashboard {
     }
 
     async loadStatistics() {
+        console.log('[ADMIN] Loading statistics from:', `${this.apiBaseUrl}/admin/stats`);
+        console.log('[ADMIN] Current origin:', window.location.origin);
+        
         try {
-            const response = await fetch(`${this.apiBaseUrl}/admin/stats`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
-            const data = await response.json();
+            // Add retry logic for CORS issues
+            let lastError;
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                try {
+                    console.log(`[ADMIN] Statistics attempt ${attempt}/3`);
+                    
+                    const response = await fetch(`${this.apiBaseUrl}/admin/stats`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    console.log('[ADMIN] Statistics response status:', response.status);
+                    console.log('[ADMIN] Statistics response headers:', Array.from(response.headers.entries()));
+                    
+                    const data = await response.json();
+                    console.log('[ADMIN] Statistics response data:', data);
 
-            if (response.ok && data.success) {
-                this.updateStatistics(data.data);
-            } else {
-                throw new Error(data.error || 'Failed to load statistics');
+                    if (response.ok && data.success) {
+                        console.log('[ADMIN] Statistics loaded successfully');
+                        this.updateStatistics(data.data);
+                        return; // Success, exit retry loop
+                    } else {
+                        throw new Error(data.error || `Failed to load statistics: ${response.status} ${response.statusText}`);
+                    }
+                } catch (fetchError) {
+                    lastError = fetchError;
+                    console.warn(`[ADMIN] Statistics attempt ${attempt} failed:`, fetchError);
+                    
+                    // Wait before retry (exponential backoff)
+                    if (attempt < 3) {
+                        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s
+                        console.log(`[ADMIN] Retrying in ${delay}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
+                }
             }
+            
+            // All attempts failed
+            throw lastError;
+            
         } catch (error) {
             console.error('Statistics loading error:', error);
+            console.error('Error type:', error.constructor.name);
+            console.error('Error message:', error.message);
+            
+            // Check if it's a CORS error
+            if (error.message.includes('CORS') || error.message.includes('cors') || 
+                error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+                this.showAlert('Unable to connect to the server. Please check your internet connection and try refreshing the page.', 'error');
+            } else {
+                this.showAlert('Failed to load statistics. Please try again later.', 'error');
+            }
+            
             // Use mock data for demo
             this.updateStatistics({
                 totalParticipants: 0,
@@ -1047,6 +1092,51 @@ class AdminDashboard {
 
     simulateDelay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async testCORSConnectivity() {
+        console.log('[CORS-TEST] Testing backend connectivity...');
+        console.log('[CORS-TEST] API Base URL:', this.apiBaseUrl);
+        console.log('[CORS-TEST] Current Origin:', window.location.origin);
+        
+        try {
+            // Test simple health endpoint first
+            const healthResponse = await fetch(`${this.apiBaseUrl.replace('/api', '')}/health`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (healthResponse.ok) {
+                console.log('[CORS-TEST] ✅ Basic health check passed');
+                
+                // Test admin health endpoint
+                const adminHealthResponse = await fetch(`${this.apiBaseUrl}/admin/health`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (adminHealthResponse.ok) {
+                    console.log('[CORS-TEST] ✅ Admin health check passed');
+                    console.log('[CORS-TEST] Response headers:', Array.from(adminHealthResponse.headers.entries()));
+                } else {
+                    console.warn('[CORS-TEST] ⚠️ Admin health check failed:', adminHealthResponse.status);
+                }
+            } else {
+                console.warn('[CORS-TEST] ⚠️ Basic health check failed:', healthResponse.status);
+            }
+            
+        } catch (error) {
+            console.error('[CORS-TEST] ❌ Connectivity test failed:', error);
+            console.error('[CORS-TEST] Error details:', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+            });
+        }
     }
 }
 
