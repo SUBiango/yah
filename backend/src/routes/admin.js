@@ -402,13 +402,14 @@ router.get('/stats', adminLimiter, async (req, res) => {
     console.log(`[ADMIN] GET /stats - Starting stats calculation`);
     
     // Fetch all statistics in parallel for performance
-    let registrationStats, accessCodeStats;
+    let registrationStats, accessCodeStats, statusBreakdown;
     try {
-      [registrationStats, accessCodeStats] = await Promise.all([
+      [registrationStats, accessCodeStats, statusBreakdown] = await Promise.all([
         Registration.getStats(),
         AccessCode.getStats(),
+        Registration.getStatusBreakdown()
       ]);
-      console.log(`[ADMIN] Stats fetched - Registration stats:`, registrationStats, `Access code stats:`, accessCodeStats);
+      console.log(`[ADMIN] Stats fetched - Registration stats:`, registrationStats, `Access code stats:`, accessCodeStats, `Status breakdown:`, statusBreakdown);
     } catch (dbError) {
       console.error(`[ADMIN] Database error in /stats:`, dbError);
       throw new Error(`Statistics query failed: ${dbError.message}`);
@@ -425,6 +426,7 @@ router.get('/stats', adminLimiter, async (req, res) => {
       data: {
         totalRegistrations,
         totalParticipants,
+        statusBreakdown: statusBreakdown,
         accessCodes: accessCodeStats,
         demographics: {
           // We could calculate demographics from embedded participant data if needed

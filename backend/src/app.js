@@ -79,9 +79,11 @@ app.use(helmet({
 // CORS configuration with enhanced debugging and preflight handling
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps, curl, or health checks)
     if (!origin) {
-      console.log('[CORS] Request with no origin - allowing');
+      if (config.server.nodeEnv === 'development') {
+        console.log('[CORS] Request with no origin - allowing');
+      }
       return callback(null, true);
     }
     

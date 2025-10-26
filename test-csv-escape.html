@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Escape Test</title>
+</head>
+<body>
+    <h1>CSV Escaping Test</h1>
+    <button onclick="testCsvEscape()">Test CSV Escape</button>
+    <pre id="output"></pre>
+
+    <script>
+        function testCsvEscape() {
+            // Test cases with special characters
+            const testCodes = [
+                'ABC123',
+                'CODE"WITH"QUOTES',
+                'CODE,WITH,COMMAS',
+                'CODE\nWITH\nNEWLINES',
+                'NORMAL-CODE-456',
+                '"STARTS-WITH-QUOTE',
+                'ENDS-WITH-QUOTE"'
+            ];
+
+            // Escape function from admin.js
+            const escapeCsvField = (value) => {
+                const stringValue = String(value);
+                const escaped = stringValue.replace(/"/g, '""');
+                return `"${escaped}"`;
+            };
+
+            // Build CSV
+            const header = '"Access Code"';
+            const rows = testCodes.map(code => escapeCsvField(code));
+            const csvContent = header + '\r\n' + rows.join('\r\n');
+
+            // Display result
+            document.getElementById('output').textContent = 
+                '=== CSV Content ===\n' + csvContent + 
+                '\n\n=== Array Representation ===\n' + 
+                JSON.stringify(rows, null, 2);
+
+            // Create download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'test_csv_escape.csv');
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            alert('CSV downloaded! Check the file and the output below.');
+        }
+    </script>
+</body>
+</html>

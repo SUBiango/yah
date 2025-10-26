@@ -443,6 +443,43 @@ class Registration {
 
     return registrations.length > 0 ? registrations[0] : null;
   }
+
+  /**
+   * Get status breakdown for all registrations
+   * @returns {Object} Status counts { confirmed, pending, cancelled }
+   */
+  static async getStatusBreakdown() {
+    const db = dbConnection.getDatabase();
+    
+    try {
+      const breakdown = await db.collection('registrations').aggregate([
+        {
+          $group: {
+            _id: '$status',
+            count: { $sum: 1 }
+          }
+        }
+      ]).toArray();
+
+      // Convert array to object with default values
+      const statusCounts = {
+        confirmed: 0,
+        pending: 0,
+        cancelled: 0
+      };
+
+      breakdown.forEach(item => {
+        if (item._id && statusCounts.hasOwnProperty(item._id)) {
+          statusCounts[item._id] = item.count;
+        }
+      });
+
+      return statusCounts;
+    } catch (error) {
+      console.error('[Registration] Error getting status breakdown:', error);
+      throw new Error('Failed to retrieve status breakdown');
+    }
+  }
 }
 
 module.exports = Registration;

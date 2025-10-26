@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd backend && nodemon src/app.js",
     "sass:build": "sass --no-source-map scss:css",
-    "sass:watch": "sass --no-source-map --watch scss:css"
+    "sass:watch": "sass --no-source-map --watch scss:css",
+    "start": "cd backend && node src/app.js",
+    "start:dev": "cd backend && npm run dev"
   },
   "keywords": [],
   "author": "",

@@ -17,40 +17,29 @@ class AdminDashboard {
             : 'https://yah-backend.onrender.com/api'; // Production (yahsl.org)
         this.adminPasscode = 'YAH@Admin2025'; // Default admin passcode
         
-        // Logging configuration
-        // Log levels: 'debug' (all), 'info', 'warn', 'error' (critical only)
-        this.logLevel = this.isDevEnvironment ? 'debug' : 'error';
-        this.debug = this.isDevEnvironment; // For backward compatibility
+        // Debug flag - enable verbose logging in development only
+        this.debug = this.isDevEnvironment;
         
         this.init();
     }
     
-    // Logger wrapper with log levels
-    // Levels: debug < info < warn < error
+    // Logger wrapper - conditionally logs based on debug flag
     log(...args) {
-        // Only log debug messages in development
-        if (this.logLevel === 'debug') {
+        if (this.debug) {
             console.log('[Admin]', ...args);
         }
     }
     
-    logInfo(...args) {
-        // Log info and above (info, warn, error)
-        if (['debug', 'info', 'warn', 'error'].includes(this.logLevel)) {
-            console.info('[Admin Info]', ...args);
+    logError(...args) {
+        if (this.debug) {
+            console.error('[Admin Error]', ...args);
         }
     }
     
     logWarn(...args) {
-        // Log warnings in development and when explicitly set to warn level
-        if (['debug', 'warn'].includes(this.logLevel)) {
+        if (this.debug) {
             console.warn('[Admin Warning]', ...args);
         }
-    }
-    
-    logError(...args) {
-        // ALWAYS log errors regardless of log level - critical for production debugging
-        console.error('[Admin Error]', ...args);
     }
 
     init() {
@@ -130,11 +119,11 @@ class AdminDashboard {
                 const button = e.target.classList.contains('btn-view') ? e.target : e.target.closest('.btn-view');
                 // Try to get participant ID from button first, then from row
                 let participantId = button.dataset.participantId || button.closest('tr')?.dataset.participantId;
-                this.log('View clicked for participant:', participantId, 'button:', button);
+                console.log('View clicked for participant:', participantId, 'button:', button);
                 if (participantId) {
                     this.viewParticipant(participantId);
                 } else {
-                    this.logError('No participant ID found for view button');
+                    console.error('No participant ID found for view button');
                 }
             }
 
@@ -144,11 +133,11 @@ class AdminDashboard {
                 const button = e.target.classList.contains('btn-qr') ? e.target : e.target.closest('.btn-qr');
                 // Try to get participant ID from button first, then from row
                 let participantId = button.dataset.participantId || button.closest('tr')?.dataset.participantId;
-                this.log('QR clicked for participant:', participantId, 'button:', button);
+                console.log('QR clicked for participant:', participantId, 'button:', button);
                 if (participantId) {
                     this.downloadParticipantQR(participantId);
                 } else {
-                    this.logError('No participant ID found for QR button');
+                    console.error('No participant ID found for QR button');
                 }
             }
 
@@ -158,11 +147,11 @@ class AdminDashboard {
                 const button = e.target.classList.contains('btn-email') ? e.target : e.target.closest('.btn-email');
                 // Try to get participant ID from button first, then from row
                 let participantId = button.dataset.participantId || button.closest('tr')?.dataset.participantId;
-                this.log('Email clicked for participant:', participantId, 'button:', button);
+                console.log('Email clicked for participant:', participantId, 'button:', button);
                 if (participantId) {
                     this.sendConfirmationEmail(participantId);
                 } else {
-                    this.logError('No participant ID found for email button');
+                    console.error('No participant ID found for email button');
                 }
             }
 
@@ -213,7 +202,7 @@ class AdminDashboard {
             }
 
         } catch (error) {
-            this.logError('Passcode verification error:', error);
+            console.error('Passcode verification error:', error);
             this.showPasscodeAlert('Authentication failed. Please try again.', 'danger');
         } finally {
             this.setButtonLoading(submitButton, false);
@@ -240,7 +229,7 @@ class AdminDashboard {
             ]);
             
         } catch (error) {
-            this.logError('Failed to load dashboard data:', error);
+            console.error('Failed to load dashboard data:', error);
             this.showAlert('Failed to load dashboard data', 'error');
         } finally {
             this.showLoading(false);
@@ -248,15 +237,15 @@ class AdminDashboard {
     }
 
     async loadStatistics() {
-        this.log('[ADMIN] Loading statistics from:', `${this.apiBaseUrl}/admin/stats`);
-        this.log('[ADMIN] Current origin:', window.location.origin);
+        console.log('[ADMIN] Loading statistics from:', `${this.apiBaseUrl}/admin/stats`);
+        console.log('[ADMIN] Current origin:', window.location.origin);
         
         try {
             // Add retry logic for CORS issues
             let lastError;
             for (let attempt = 1; attempt <= 3; attempt++) {
                 try {
-                    this.log(`[ADMIN] Statistics attempt ${attempt}/3`);
+                    console.log(`[ADMIN] Statistics attempt ${attempt}/3`);
                     
                     const response = await fetch(`${this.apiBaseUrl}/admin/stats`, {
                         method: 'GET',
@@ -267,14 +256,14 @@ class AdminDashboard {
                         }
                     });
                     
-                    this.log('[ADMIN] Statistics response status:', response.status);
-                    this.log('[ADMIN] Statistics response headers:', Array.from(response.headers.entries()));
+                    console.log('[ADMIN] Statistics response status:', response.status);
+                    console.log('[ADMIN] Statistics response headers:', Array.from(response.headers.entries()));
                     
                     const data = await response.json();
-                    this.log('[ADMIN] Statistics response data:', data);
+                    console.log('[ADMIN] Statistics response data:', data);
 
                     if (response.ok && data.success) {
-                        this.log('[ADMIN] Statistics loaded successfully');
+                        console.log('[ADMIN] Statistics loaded successfully');
                         this.updateStatistics(data.data);
                         return; // Success, exit retry loop
                     } else {
@@ -282,12 +271,12 @@ class AdminDashboard {
                     }
                 } catch (fetchError) {
                     lastError = fetchError;
-                    this.logWarn(`[ADMIN] Statistics attempt ${attempt} failed:`, fetchError);
+                    console.warn(`[ADMIN] Statistics attempt ${attempt} failed:`, fetchError);
                     
                     // Wait before retry (exponential backoff)
                     if (attempt < 3) {
                         const delay = Math.pow(2, attempt) * 1000; // 2s, 4s
-                        this.log(`[ADMIN] Retrying in ${delay}ms...`);
+                        console.log(`[ADMIN] Retrying in ${delay}ms...`);
                         await new Promise(resolve => setTimeout(resolve, delay));
                     }
                 }
@@ -297,9 +286,9 @@ class AdminDashboard {
             throw lastError;
             
         } catch (error) {
-            this.logError('Statistics loading error:', error);
-            this.logError('Error type:', error.constructor.name);
-            this.logError('Error message:', error.message);
+            console.error('Statistics loading error:', error);
+            console.error('Error type:', error.constructor.name);
+            console.error('Error message:', error.message);
             
             // Check if it's a CORS error
             if (error.message.includes('CORS') || error.message.includes('cors') || 
@@ -332,20 +321,20 @@ class AdminDashboard {
         if (stats.statusBreakdown) {
             document.getElementById('confirmedRegistrations').textContent = stats.statusBreakdown.confirmed || 0;
             document.getElementById('pendingRegistrations').textContent = stats.statusBreakdown.pending || 0;
-            this.log('Status breakdown from backend:', stats.statusBreakdown);
+            console.log('Status breakdown from backend:', stats.statusBreakdown);
         } else {
             // Fallback: if backend doesn't provide breakdown, show zeros
-            this.logWarn('Status breakdown not available from backend');
+            console.warn('Status breakdown not available from backend');
             document.getElementById('confirmedRegistrations').textContent = 0;
             document.getElementById('pendingRegistrations').textContent = 0;
         }
     }
 
     async loadParticipants() {
-        this.log('Loading participants...');
+        console.log('Loading participants...');
         try {
             const url = `${this.apiBaseUrl}/admin/registrations?skip=${(this.currentPage - 1) * this.itemsPerPage}&limit=${this.itemsPerPage}`;
-            this.log('[Admin] API URL:', url);
+            console.log('[Admin] API URL:', url);
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -355,25 +344,25 @@ class AdminDashboard {
                     'Accept': 'application/json'
                 }
             });
-            this.log('[Admin] Response status:', response.status, response.statusText);
+            console.log('[Admin] Response status:', response.status, response.statusText);
             
             const data = await response.json();
-            this.log('[Admin] Full API Response:', data);
+            console.log('[Admin] Full API Response:', data);
 
             if (response.ok && data.success) {
-                this.log('[Admin] Raw registrations data:', data.data);
+                console.log('[Admin] Raw registrations data:', data.data);
                 this.participants = data.data.registrations || [];
                 this.totalParticipants = data.data.total || 0;
                 this.filteredParticipants = [...this.participants];
                 
-                this.log('Loaded participants from API:', this.participants);
-                this.log('[Admin] Total participants count:', this.totalParticipants);
+                console.log('Loaded participants from API:', this.participants);
+                console.log('[Admin] Total participants count:', this.totalParticipants);
                 this.renderParticipantsTable();
                 this.updateParticipantCount();
                 // Update statistics with correct counts after loading participants
                 this.updateParticipantStatistics();
             } else {
-                this.logError('[Admin] API call failed:', {
+                console.error('[Admin] API call failed:', {
                     status: response.status,
                     statusText: response.statusText,
                     responseData: data
@@ -381,8 +370,8 @@ class AdminDashboard {
                 throw new Error(data.error || 'Failed to load participants');
             }
         } catch (error) {
-            this.logError('Participants loading error:', error);
-            this.logError('[Admin] Error details:', {
+            console.error('Participants loading error:', error);
+            console.error('[Admin] Error details:', {
                 message: error.message,
                 stack: error.stack,
                 apiUrl: `${this.apiBaseUrl}/admin/registrations`
@@ -401,20 +390,20 @@ class AdminDashboard {
         const tbody = document.getElementById('participantsTableBody');
         const emptyState = document.getElementById('emptyState');
         
-        this.log('Rendering participants table...');
-        this.log('Filtered participants count:', this.filteredParticipants.length);
+        console.log('Rendering participants table...');
+        console.log('Filtered participants count:', this.filteredParticipants.length);
         
         if (this.filteredParticipants.length === 0) {
             tbody.innerHTML = '';
             emptyState.style.display = 'block';
-            this.log('No participants to display, showing empty state');
+            console.log('No participants to display, showing empty state');
             return;
         }
         
         emptyState.style.display = 'none';
         
         // Debug logging
-        this.log('Rendering participants:', this.filteredParticipants);
+        console.log('Rendering participants:', this.filteredParticipants);
         
         const tableHTML = this.filteredParticipants.map((registration, index) => {
             const participant = registration.participant || registration;
@@ -428,7 +417,7 @@ class AdminDashboard {
             const registrationId = registration.id || registration._id; // Keep database ID for internal operations
             
             // Debug logging for each registration
-            this.log(`Processing registration ${index + 1}:`, {
+            console.log(`Processing registration ${index + 1}:`, {
                 id: registration.id,
                 _id: registration._id,
                 participantId: participantId,
@@ -474,21 +463,21 @@ class AdminDashboard {
                 </tr>
             `;
             
-            this.log(`Generated HTML for ${registrationId}:`, rowHTML.substring(0, 200) + '...');
+            console.log(`Generated HTML for ${registrationId}:`, rowHTML.substring(0, 200) + '...');
             return rowHTML;
         }).join('');
         
         tbody.innerHTML = tableHTML;
-        this.log('Table rendered successfully with', this.filteredParticipants.length, 'participants');
+        console.log('Table rendered successfully with', this.filteredParticipants.length, 'participants');
         
         // Verify that the data attributes are set correctly
         setTimeout(() => {
             const rows = tbody.querySelectorAll('tr[data-participant-id]');
-            this.log('Verification: Found', rows.length, 'rows with data-participant-id attributes');
+            console.log('Verification: Found', rows.length, 'rows with data-participant-id attributes');
             rows.forEach((row, index) => {
                 const participantId = row.dataset.participantId;
                 const buttons = row.querySelectorAll('button[data-participant-id]');
-                this.log(`Row ${index + 1}: participant-id="${participantId}", buttons with data-participant-id: ${buttons.length}`);
+                console.log(`Row ${index + 1}: participant-id="${participantId}", buttons with data-participant-id: ${buttons.length}`);
             });
         }, 100);
     }
@@ -514,7 +503,7 @@ class AdminDashboard {
         // Status breakdown (confirmed/pending) is now handled by updateStatistics() 
         // which gets accurate global counts from the backend stats endpoint
         document.getElementById('totalParticipants').textContent = this.totalParticipants;
-        this.log('Total participants updated:', this.totalParticipants);
+        console.log('Total participants updated:', this.totalParticipants);
     }
 
     // Search and Filter Methods
@@ -587,8 +576,8 @@ class AdminDashboard {
 
     // Participant Management Methods
     viewParticipant(participantId) {
-        this.log('Viewing participant with ID:', participantId);
-        this.log('Available participants:', this.participants.map(p => ({ 
+        console.log('Viewing participant with ID:', participantId);
+        console.log('Available participants:', this.participants.map(p => ({ 
             participantId: p.participantId,
             _id: p._id, 
             name: `${p.participant?.firstName} ${p.participant?.lastName}` 
@@ -597,19 +586,19 @@ class AdminDashboard {
         // Search for participant by participantId field
         const registration = this.participants.find(p => p.participantId === participantId);
         if (!registration) {
-            this.logError('Participant not found with ID:', participantId);
-            this.log('Searching in participants array:', this.participants);
+            console.error('Participant not found with ID:', participantId);
+            console.log('Searching in participants array:', this.participants);
             this.showAlert(`Participant with ID ${participantId} not found`, 'error');
             return;
         }
 
-        this.log('Found registration:', registration);
+        console.log('Found registration:', registration);
         const participant = registration.participant || registration;
         
         // Debug: Log all available participant fields
-        this.log('All participant fields:', Object.keys(participant));
-        this.log('Participant data:', participant);
-        this.log('Field debugging:', {
+        console.log('All participant fields:', Object.keys(participant));
+        console.log('Participant data:', participant);
+        console.log('Field debugging:', {
             district: participant.district,
             location: participant.location,
             occupation: participant.occupation,
@@ -626,12 +615,12 @@ class AdminDashboard {
         let qrCodeUrl;
         if (registration.qrCode) {
             qrCodeUrl = registration.qrCode;
-            this.log('Using existing QR code from registration');
+            console.log('Using existing QR code from registration');
         } else {
             // Generate QR code with the same format as email confirmations
             const qrData = displayId;
             qrCodeUrl = this.generateQRCodeDataURL(qrData);
-            this.log('Generated new QR code for registration');
+            console.log('Generated new QR code for registration');
         }
         
         modalBody.innerHTML = `
@@ -721,12 +710,12 @@ class AdminDashboard {
             let qrCodeUrl;
             if (registration.qrCode) {
                 qrCodeUrl = registration.qrCode;
-                this.log('Using existing QR code from registration for download');
+                console.log('Using existing QR code from registration for download');
             } else {
                 // Generate QR code data - match the format used in email confirmations
                 const qrData = displayId;
                 qrCodeUrl = this.generateQRCodeDataURL(qrData);
-                this.log('Generated new QR code for download');
+                console.log('Generated new QR code for download');
             }
             
             // Download the QR code
@@ -740,7 +729,7 @@ class AdminDashboard {
             this.showAlert(`QR code downloaded for ${participant.firstName} ${participant.lastName}!`, 'success');
             
         } catch (error) {
-            this.logError('QR download error:', error);
+            console.error('QR download error:', error);
             this.showAlert('Failed to download QR code', 'error');
         }
     }
@@ -887,7 +876,7 @@ class AdminDashboard {
                 }
                 
             } catch (apiError) {
-                this.logWarn('API call failed, falling back to simulation:', apiError);
+                console.warn('API call failed, falling back to simulation:', apiError);
                 
                 // Fallback to simulation if API is not available
                 await this.simulateDelay(2500);
@@ -895,7 +884,7 @@ class AdminDashboard {
             }
             
         } catch (error) {
-            this.logError('Email sending error:', error);
+            console.error('Email sending error:', error);
             this.showAlert('Failed to send confirmation email', 'error');
         }
     }
@@ -971,32 +960,21 @@ class AdminDashboard {
 
     downloadAccessCodes(codes) {
         try {
-            this.log('Starting download for codes:', codes.length, 'codes');
+            console.log('[ADMIN] Starting download for codes:', codes.length, 'codes');
             
             if (!codes || !Array.isArray(codes) || codes.length === 0) {
-                this.logError('Invalid codes array for download:', codes);
+                console.error('[ADMIN] Invalid codes array for download:', codes);
                 this.showAlert('Cannot download - no valid codes provided', 'error');
                 return;
             }
             
-            // Create CSV content with proper escaping
-            // Escape double quotes by doubling them and wrap each field in quotes
-            const escapeCsvField = (value) => {
-                const stringValue = String(value);
-                const escaped = stringValue.replace(/"/g, '""');
-                return `"${escaped}"`;
-            };
-            
-            // Build CSV with header and escaped rows using CRLF line endings
-            const header = '"Access Code"';
-            const rows = codes.map(code => escapeCsvField(code));
-            const csvContent = header + '\r\n' + rows.join('\r\n');
-            
-            this.log('CSV content preview:', csvContent.substring(0, 200) + '...');
+            // Create CSV content
+            const csvContent = 'Access Code\n' + codes.join('\n');
+            console.log('[ADMIN] CSV content preview:', csvContent.substring(0, 200) + '...');
             
             // Create blob
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            this.log('Blob created, size:', blob.size, 'bytes');
+            console.log('[ADMIN] Blob created, size:', blob.size, 'bytes');
             
             // Create download link
             const link = document.createElement('a');
@@ -1011,22 +989,22 @@ class AdminDashboard {
                 
                 document.body.appendChild(link);
                 
-                this.log('Triggering download for:', filename);
+                console.log('[ADMIN] Triggering download for:', filename);
                 link.click();
                 
                 // Clean up
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                this.log('Download completed successfully');
+                console.log('[ADMIN] Download completed successfully');
                 this.showAlert(`Downloaded ${codes.length} access codes as ${filename}`, 'success', 3000);
             } else {
-                this.logError('Browser does not support HTML5 download attribute');
+                console.error('[ADMIN] Browser does not support HTML5 download attribute');
                 this.showAlert('Download not supported in this browser', 'error');
             }
             
         } catch (error) {
-            this.logError('Download error:', error);
+            console.error('[ADMIN] Download error:', error);
             this.showAlert('Failed to download access codes: ' + error.message, 'error');
         }
     }
@@ -1055,7 +1033,7 @@ class AdminDashboard {
             this.showAlert('Data exported successfully!', 'success');
             
         } catch (error) {
-            this.logError('Export error:', error);
+            console.error('Export error:', error);
             this.showAlert('Failed to export data', 'error');
         }
     }
@@ -1089,7 +1067,7 @@ class AdminDashboard {
                 await this.loadParticipants();
             }
         } catch (error) {
-            this.logError('Dashboard refresh error:', error);
+            console.error('Dashboard refresh error:', error);
         }
     }
 
@@ -1188,9 +1166,9 @@ class AdminDashboard {
     }
 
     async testCORSConnectivity() {
-        this.log('[CORS-TEST] Testing backend connectivity...');
-        this.log('[CORS-TEST] API Base URL:', this.apiBaseUrl);
-        this.log('[CORS-TEST] Current Origin:', window.location.origin);
+        console.log('[CORS-TEST] Testing backend connectivity...');
+        console.log('[CORS-TEST] API Base URL:', this.apiBaseUrl);
+        console.log('[CORS-TEST] Current Origin:', window.location.origin);
         
         try {
             // Test simple health endpoint first
@@ -1200,7 +1178,7 @@ class AdminDashboard {
             });
             
             if (healthResponse.ok) {
-                this.log('[CORS-TEST] ✅ Basic health check passed');
+                console.log('[CORS-TEST] ✅ Basic health check passed');
                 
                 // Test admin health endpoint
                 const adminHealthResponse = await fetch(`${this.apiBaseUrl}/admin/health`, {
@@ -1213,18 +1191,18 @@ class AdminDashboard {
                 });
                 
                 if (adminHealthResponse.ok) {
-                    this.log('[CORS-TEST] ✅ Admin health check passed');
-                    this.log('[CORS-TEST] Response headers:', Array.from(adminHealthResponse.headers.entries()));
+                    console.log('[CORS-TEST] ✅ Admin health check passed');
+                    console.log('[CORS-TEST] Response headers:', Array.from(adminHealthResponse.headers.entries()));
                 } else {
-                    this.logWarn('[CORS-TEST] ⚠️ Admin health check failed:', adminHealthResponse.status);
+                    console.warn('[CORS-TEST] ⚠️ Admin health check failed:', adminHealthResponse.status);
                 }
             } else {
-                this.logWarn('[CORS-TEST] ⚠️ Basic health check failed:', healthResponse.status);
+                console.warn('[CORS-TEST] ⚠️ Basic health check failed:', healthResponse.status);
             }
             
         } catch (error) {
-            this.logError('[CORS-TEST] ❌ Connectivity test failed:', error);
-            this.logError('[CORS-TEST] Error details:', {
+            console.error('[CORS-TEST] ❌ Connectivity test failed:', error);
+            console.error('[CORS-TEST] Error details:', {
                 name: error.name,
                 message: error.message,
                 stack: error.stack

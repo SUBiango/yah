@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Logger Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .dev-mode { background-color: #4CAF50; color: white; }
+        .prod-mode { background-color: #f44336; color: white; }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard Logger Test</h1>
+    
+    <div class="note">
+        <strong>Note:</strong> Open the browser console (F12) to see the logging output.
+    </div>
+
+    <div class="test-section">
+        <h3>Current Mode</h3>
+        <p>Environment: <strong id="currentMode"></strong></p>
+        <p>Log Level: <strong id="logLevel"></strong></p>
+        <button class="dev-mode" onclick="simulateDevMode()">Simulate Dev Mode</button>
+        <button class="prod-mode" onclick="simulateProdMode()">Simulate Prod Mode</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Test Logging Methods</h3>
+        <button onclick="testLog()">Test log()</button>
+        <button onclick="testLogInfo()">Test logInfo()</button>
+        <button onclick="testLogWarn()">Test logWarn()</button>
+        <button onclick="testLogError()">Test logError()</button>
+        <button onclick="testAll()">Test All Levels</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Expected Behavior</h3>
+        <pre>
+<strong>Development Mode (localhost):</strong>
+- log()      → ✅ Shown (debug messages)
+- logInfo()  → ✅ Shown (info messages)
+- logWarn()  → ✅ Shown (warnings)
+- logError() → ✅ Shown (errors)
+
+<strong>Production Mode (www.yahsl.org):</strong>
+- log()      → ❌ Hidden (debug suppressed)
+- logInfo()  → ❌ Hidden (info suppressed)
+- logWarn()  → ❌ Hidden (warnings suppressed)
+- logError() → ✅ ALWAYS SHOWN (critical errors)
+        </pre>
+    </div>
+
+    <div class="test-section">
+        <h3>Console Output</h3>
+        <p>Check your browser console for the actual output. Errors will always appear, even in production mode.</p>
+    </div>
+
+    <script>
+        // Mock AdminDashboard logging system
+        class LoggerTest {
+            constructor(isDevEnvironment) {
+                this.isDevEnvironment = isDevEnvironment;
+                this.logLevel = isDevEnvironment ? 'debug' : 'error';
+                this.debug = isDevEnvironment;
+            }
+
+            log(...args) {
+                if (this.logLevel === 'debug') {
+                    console.log('[Admin]', ...args);
+                }
+            }
+
+            logInfo(...args) {
+                if (['debug', 'info', 'warn', 'error'].includes(this.logLevel)) {
+                    console.info('[Admin Info]', ...args);
+                }
+            }
+
+            logWarn(...args) {
+                if (['debug', 'warn'].includes(this.logLevel)) {
+                    console.warn('[Admin Warning]', ...args);
+                }
+            }
+
+            logError(...args) {
+                // ALWAYS log errors regardless of log level
+                console.error('[Admin Error]', ...args);
+            }
+        }
+
+        let logger;
+
+        function updateDisplay() {
+            document.getElementById('currentMode').textContent = 
+                logger.isDevEnvironment ? 'Development' : 'Production';
+            document.getElementById('logLevel').textContent = logger.logLevel;
+        }
+
+        function simulateDevMode() {
+            console.clear();
+            console.log('🔄 Switching to DEVELOPMENT mode...');
+            logger = new LoggerTest(true);
+            updateDisplay();
+            console.log('✅ Development mode active - all logs enabled');
+        }
+
+        function simulateProdMode() {
+            console.clear();
+            console.log('🔄 Switching to PRODUCTION mode...');
+            logger = new LoggerTest(false);
+            updateDisplay();
+            console.log('✅ Production mode active - only errors shown');
+        }
+
+        function testLog() {
+            console.log('\n--- Testing log() ---');
+            logger.log('This is a debug message');
+            console.log('Expected:', logger.logLevel === 'debug' ? 'Shown' : 'Hidden');
+        }
+
+        function testLogInfo() {
+            console.log('\n--- Testing logInfo() ---');
+            logger.logInfo('This is an info message');
+            console.log('Expected:', logger.logLevel === 'debug' ? 'Shown' : 'Hidden');
+        }
+
+        function testLogWarn() {
+            console.log('\n--- Testing logWarn() ---');
+            logger.logWarn('This is a warning message');
+            console.log('Expected:', logger.logLevel === 'debug' ? 'Shown' : 'Hidden');
+        }
+
+        function testLogError() {
+            console.log('\n--- Testing logError() ---');
+            logger.logError('This is an error message');
+            console.log('Expected: ALWAYS SHOWN');
+        }
+
+        function testAll() {
+            console.log('\n=== Testing All Log Levels ===\n');
+            logger.log('1. Debug log');
+            logger.logInfo('2. Info log');
+            logger.logWarn('3. Warning log');
+            logger.logError('4. Error log');
+            console.log('\n=== Test Complete ===');
+        }
+
+        // Initialize with current hostname detection
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+        logger = new LoggerTest(isLocalhost);
+        updateDisplay();
+
+        console.log('🧪 Logger Test Initialized');
+        console.log('Current mode:', logger.isDevEnvironment ? 'Development' : 'Production');
+        console.log('Log level:', logger.logLevel);
+    </script>
+</body>
+</html>
