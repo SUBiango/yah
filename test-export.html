@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Export Functionality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .loading {
+            background-color: #6c757d !important;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Export Functionality Test</h1>
+        
+        <div class="test-section">
+            <h3>1. Backend Connection Test</h3>
+            <button onclick="testConnection()">Test Connection</button>
+            <div id="connection-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Fetch All Participants Test</h3>
+            <button onclick="testFetchAll()">Fetch All 88 Participants</button>
+            <div id="fetch-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. CSV Generation Test</h3>
+            <button onclick="testCSVGeneration()">Generate Sample CSV</button>
+            <div id="csv-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Full Export Test</h3>
+            <button onclick="testFullExport()">Export All Participants</button>
+            <div id="export-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>5. Admin Dashboard Test</h3>
+            <a href="admin.html" target="_blank">
+                <button>Open Admin Dashboard</button>
+            </a>
+            <div class="test-result info">
+                Test the "Export Data" button in the admin dashboard.<br>
+                Expected: Should download a CSV file with all 88 participants.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        async function testConnection() {
+            const resultDiv = document.getElementById('connection-result');
+            const button = event.target;
+            
+            button.textContent = 'Testing...';
+            button.classList.add('loading');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/health`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = `✅ Connection successful<br>Service: ${data.service}<br>Status: ${data.status}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Connection failed: ${error.message}`;
+            } finally {
+                button.textContent = 'Test Connection';
+                button.classList.remove('loading');
+            }
+        }
+
+        async function testFetchAll() {
+            const resultDiv = document.getElementById('fetch-result');
+            const button = event.target;
+            
+            button.textContent = 'Fetching...';
+            button.classList.add('loading');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/registrations?skip=0&limit=1000`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const participants = data.data.registrations;
+                    const total = data.data.total;
+                    
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = `✅ Fetched ${participants.length} of ${total} participants<br>
+                                         Response time: ${data.meta.responseTime}<br>
+                                         Sample participant: ${participants[0]?.participant?.firstName} ${participants[0]?.participant?.lastName}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Fetch failed: ${error.message}`;
+            } finally {
+                button.textContent = 'Fetch All 88 Participants';
+                button.classList.remove('loading');
+            }
+        }
+
+        async function testCSVGeneration() {
+            const resultDiv = document.getElementById('csv-result');
+            const button = event.target;
+            
+            button.textContent = 'Generating...';
+            button.classList.add('loading');
+            
+            try {
+                // Fetch sample data
+                const response = await fetch(`${API_BASE_URL}/admin/registrations?skip=0&limit=5`);
+                const data = await response.json();
+                const participants = data.data.registrations;
+                
+                // Generate CSV (simplified version)
+                const headers = ['Participant ID', 'Name', 'Email', 'Status'];
+                const rows = participants.map(reg => {
+                    const p = reg.participant;
+                    return [reg.participantId, `${p.firstName} ${p.lastName}`, p.email, reg.status];
+                });
+                
+                const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\\n');
+                
+                resultDiv.className = 'test-result success';
+                resultDiv.innerHTML = `✅ CSV generated successfully<br>
+                                     Rows: ${rows.length + 1} (including header)<br>
+                                     Preview:<br><pre>${csv.substring(0, 200)}...</pre>`;
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ CSV generation failed: ${error.message}`;
+            } finally {
+                button.textContent = 'Generate Sample CSV';
+                button.classList.remove('loading');
+            }
+        }
+
+        async function testFullExport() {
+            const resultDiv = document.getElementById('export-result');
+            const button = event.target;
+            
+            button.textContent = 'Exporting...';
+            button.classList.add('loading');
+            
+            try {
+                // Simulate the full export process
+                resultDiv.className = 'test-result info';
+                resultDiv.innerHTML = '🔄 Fetching all participants...';
+                
+                const response = await fetch(`${API_BASE_URL}/admin/registrations?skip=0&limit=1000`);
+                const data = await response.json();
+                const participants = data.data.registrations;
+                
+                resultDiv.innerHTML = `🔄 Generating CSV for ${participants.length} participants...`;
+                
+                // Generate comprehensive CSV
+                const headers = [
+                    'Participant ID', 'First Name', 'Last Name', 'Email', 'Phone',
+                    'Age', 'Gender', 'District', 'Occupation', 'Interest Area',
+                    'Access Code', 'Registration Date', 'Status'
+                ];
+
+                const rows = participants.map(reg => {
+                    const p = reg.participant;
+                    const date = new Date(reg.registrationDate || reg.createdAt);
+                    return [
+                        reg.participantId || 'N/A',
+                        p.firstName || '',
+                        p.lastName || '',
+                        p.email || '',
+                        p.phone || '',
+                        p.age || '',
+                        p.gender || '',
+                        p.district || '',
+                        p.occupation || '',
+                        p.interest || '',
+                        reg.accessCode || '',
+                        date.toLocaleDateString(),
+                        reg.status || 'pending'
+                    ];
+                });
+
+                const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\\r\\n');
+                
+                // Create and download file
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = `all_participants_${new Date().toISOString().split('T')[0]}_${participants.length}records.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                resultDiv.className = 'test-result success';
+                resultDiv.innerHTML = `✅ Export completed!<br>
+                                     Downloaded: all_participants_${new Date().toISOString().split('T')[0]}_${participants.length}records.csv<br>
+                                     Total participants: ${participants.length}<br>
+                                     Fields: ${headers.length}`;
+                
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Export failed: ${error.message}`;
+            } finally {
+                button.textContent = 'Export All Participants';
+                button.classList.remove('loading');
+            }
+        }
+
+        // Auto-test connection on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testConnection, 500);
+        });
+    </script>
+</body>
+</html>

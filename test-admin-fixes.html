@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin Dashboard Fixes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Admin Dashboard Fixes Verification</h1>
+        
+        <div class="test-section">
+            <h3>1. Backend API Connectivity Test</h3>
+            <button onclick="testBackendConnectivity()">Test Backend Connection</button>
+            <div id="backend-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Statistics API Test</h3>
+            <button onclick="testStatistics()">Test Statistics Endpoint</button>
+            <div id="stats-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Registrations Pagination Test</h3>
+            <button onclick="testPagination()">Test Pagination Endpoints</button>
+            <div id="pagination-result" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Admin Dashboard Test</h3>
+            <a href="admin.html" target="_blank">
+                <button>Open Admin Dashboard</button>
+            </a>
+            <div class="test-result info">
+                Use passcode: <strong>YAH@Admin2025</strong><br>
+                Expected results:<br>
+                • Total Participants: 88<br>
+                • Confirmed: 88, Pending: 0<br>
+                • Pagination showing "1-10 of 88 participants (Page 1/9)"<br>
+                • Working pagination navigation buttons
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        async function testBackendConnectivity() {
+            const resultDiv = document.getElementById('backend-result');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/health`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = `✅ Backend is connected and healthy<br>
+                                         Status: ${data.status}<br>
+                                         Service: ${data.service}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Backend connection failed: ${error.message}`;
+            }
+        }
+
+        async function testStatistics() {
+            const resultDiv = document.getElementById('stats-result');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/stats`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const stats = data.data;
+                    
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = `✅ Statistics loaded successfully<br>
+                                         Total Participants: ${stats.totalParticipants}<br>
+                                         Status Breakdown: Confirmed=${stats.statusBreakdown.confirmed}, Pending=${stats.statusBreakdown.pending}<br>
+                                         Access Codes: ${stats.accessCodes.total} total, ${stats.accessCodes.used} used<br>
+                                         Response Time: ${data.meta.responseTime}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Statistics test failed: ${error.message}`;
+            }
+        }
+
+        async function testPagination() {
+            const resultDiv = document.getElementById('pagination-result');
+            
+            try {
+                // Test multiple pages
+                const tests = [
+                    { skip: 0, limit: 10, page: 1 },
+                    { skip: 10, limit: 10, page: 2 },
+                    { skip: 80, limit: 10, page: 9 }
+                ];
+                
+                const results = [];
+                
+                for (const test of tests) {
+                    const response = await fetch(`${API_BASE_URL}/admin/registrations?skip=${test.skip}&limit=${test.limit}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        results.push(`Page ${test.page}: ${data.data.registrations.length} records (Total: ${data.data.total})`);
+                    } else {
+                        throw new Error(`Page ${test.page} failed: HTTP ${response.status}`);
+                    }
+                }
+                
+                resultDiv.className = 'test-result success';
+                resultDiv.innerHTML = `✅ Pagination tests passed<br>` + results.join('<br>');
+                
+            } catch (error) {
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Pagination test failed: ${error.message}`;
+            }
+        }
+
+        // Auto-run tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                testBackendConnectivity();
+                setTimeout(() => testStatistics(), 500);
+                setTimeout(() => testPagination(), 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

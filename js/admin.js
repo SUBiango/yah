@@ -10,6 +10,11 @@ class AdminDashboard {
         this.participants = [];
         this.filteredParticipants = [];
         
+        // Filter state
+        this.searchTerm = '';
+        this.statusFilter = '';
+        this.sortBy = 'name';
+        
         // Environment detection
         this.isDevEnvironment = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
         this.apiBaseUrl = this.isDevEnvironment
@@ -370,6 +375,7 @@ class AdminDashboard {
                 this.log('[Admin] Total participants count:', this.totalParticipants);
                 this.renderParticipantsTable();
                 this.updateParticipantCount();
+                this.renderPagination();
                 // Update statistics with correct counts after loading participants
                 this.updateParticipantStatistics();
             } else {
@@ -393,6 +399,7 @@ class AdminDashboard {
             this.totalParticipants = 0;
             this.renderParticipantsTable();
             this.updateParticipantCount();
+            this.renderPagination();
             this.showAlert('Failed to load participants. Please check your connection and try again.', 'error');
         }
     }
@@ -505,7 +512,15 @@ class AdminDashboard {
     updateParticipantCount() {
         const countElement = document.getElementById('participantCount');
         if (countElement) {
-            countElement.textContent = `${this.filteredParticipants.length} participants`;
+            const currentPageStart = (this.currentPage - 1) * this.itemsPerPage + 1;
+            const currentPageEnd = Math.min(this.currentPage * this.itemsPerPage, this.totalParticipants);
+            const totalPages = Math.ceil(this.totalParticipants / this.itemsPerPage);
+            
+            if (this.totalParticipants === 0) {
+                countElement.textContent = '0 participants';
+            } else {
+                countElement.textContent = `${currentPageStart}-${currentPageEnd} of ${this.totalParticipants} participants (Page ${this.currentPage}/${totalPages})`;
+            }
         }
     }
 
@@ -517,62 +532,184 @@ class AdminDashboard {
         this.log('Total participants updated:', this.totalParticipants);
     }
 
+    renderPagination() {
+        const paginationElement = document.getElementById('pagination');
+        if (!paginationElement) return;
+
+        const totalPages = Math.ceil(this.totalParticipants / this.itemsPerPage);
+        
+        if (totalPages <= 1) {
+            paginationElement.innerHTML = '';
+            return;
+        }
+
+        let paginationHTML = '';
+
+        // Previous button
+        const prevDisabled = this.currentPage === 1 ? 'disabled' : '';
+        paginationHTML += `
+            <li class="page-item ${prevDisabled}">
+                <a class="page-link" href="#" data-page="${this.currentPage - 1}" ${prevDisabled ? 'tabindex="-1"' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        `;
+
+        // Page numbers with smart truncation
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        // Adjust if we're near the end
+        if (endPage - startPage < maxVisiblePages - 1) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // First page + ellipsis if needed
+        if (startPage > 1) {
+            paginationHTML += `
+                <li class="page-item">
+                    <a class="page-link" href="#" data-page="1">1</a>
+                </li>
+            `;
+            if (startPage > 2) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+
+        // Main page numbers
+        for (let i = startPage; i <= endPage; i++) {
+            const activeClass = i === this.currentPage ? 'active' : '';
+            paginationHTML += `
+                <li class="page-item ${activeClass}">
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `;
+        }
+
+        // Last page + ellipsis if needed
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+            paginationHTML += `
+                <li class="page-item">
+                    <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+                </li>
+            `;
+        }
+
+        // Next button
+        const nextDisabled = this.currentPage === totalPages ? 'disabled' : '';
+        paginationHTML += `
+            <li class="page-item ${nextDisabled}">
+                <a class="page-link" href="#" data-page="${this.currentPage + 1}" ${nextDisabled ? 'tabindex="-1"' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        `;
+
+        paginationElement.innerHTML = paginationHTML;
+
+        // Add click handlers for pagination
+        paginationElement.querySelectorAll('.page-link[data-page]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = parseInt(link.dataset.page);
+                if (page !== this.currentPage && page >= 1 && page <= totalPages) {
+                    this.goToPage(page);
+                }
+            });
+        });
+    }
+
+    async goToPage(page) {
+        if (page === this.currentPage || page < 1) return;
+        
+        this.currentPage = page;
+        this.showLoading(true);
+        
+        try {
+            await this.loadParticipants();
+        } catch (error) {
+            this.logError('Failed to load page:', error);
+            this.showAlert('Failed to load page data', 'error');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
     // Search and Filter Methods
     handleSearch(query) {
-        const searchTerm = query.toLowerCase().trim();
-        
-        if (!searchTerm) {
-            this.filteredParticipants = [...this.participants];
-        } else {
-            this.filteredParticipants = this.participants.filter(registration => {
-                const participant = registration.participant || registration;
-                return (
-                    participant.firstName?.toLowerCase().includes(searchTerm) ||
-                    participant.lastName?.toLowerCase().includes(searchTerm) ||
-                    participant.email?.toLowerCase().includes(searchTerm) ||
-                    participant.phone?.includes(searchTerm) ||
-                    registration.id?.toLowerCase().includes(searchTerm)
-                );
-            });
-        }
-        
-        this.renderParticipantsTable();
-        this.updateParticipantCount();
+        this.searchTerm = query.toLowerCase().trim();
+        this.currentPage = 1; // Reset to first page when searching
+        this.applyFilters();
     }
 
     handleStatusFilter(status) {
-        if (!status) {
-            this.filteredParticipants = [...this.participants];
-        } else {
-            this.filteredParticipants = this.participants.filter(registration => 
-                registration.status === status
-            );
-        }
-        
-        this.renderParticipantsTable();
-        this.updateParticipantCount();
+        this.statusFilter = status;
+        this.currentPage = 1; // Reset to first page when filtering
+        this.applyFilters();
     }
 
     handleSort(sortBy) {
-        this.filteredParticipants.sort((a, b) => {
-            const participantA = a.participant || a;
-            const participantB = b.participant || b;
-            
-            switch (sortBy) {
-                case 'name':
-                    return `${participantA.firstName} ${participantA.lastName}`.localeCompare(
-                        `${participantB.firstName} ${participantB.lastName}`
-                    );
-                case 'email':
-                    return participantA.email.localeCompare(participantB.email);
-                case 'date':
-                    return new Date(b.registrationDate || b.createdAt) - new Date(a.registrationDate || a.createdAt);
-                default:
-                    return 0;
-            }
-        });
+        this.sortBy = sortBy;
+        this.currentPage = 1; // Reset to first page when sorting
+        this.applyFilters();
+    }
+
+    applyFilters() {
+        // For client-side filtering (current page only)
+        let filtered = [...this.participants];
         
+        // Apply search filter
+        if (this.searchTerm) {
+            filtered = filtered.filter(registration => {
+                const participant = registration.participant || registration;
+                return (
+                    participant.firstName?.toLowerCase().includes(this.searchTerm) ||
+                    participant.lastName?.toLowerCase().includes(this.searchTerm) ||
+                    participant.email?.toLowerCase().includes(this.searchTerm) ||
+                    participant.phone?.includes(this.searchTerm) ||
+                    registration.participantId?.toLowerCase().includes(this.searchTerm)
+                );
+            });
+        }
+
+        // Apply status filter
+        if (this.statusFilter) {
+            filtered = filtered.filter(registration => 
+                registration.status === this.statusFilter
+            );
+        }
+
+        // Apply sorting
+        if (this.sortBy) {
+            filtered.sort((a, b) => {
+                const participantA = a.participant || a;
+                const participantB = b.participant || b;
+                
+                switch (this.sortBy) {
+                    case 'name':
+                        return `${participantA.firstName} ${participantA.lastName}`.localeCompare(
+                            `${participantB.firstName} ${participantB.lastName}`
+                        );
+                    case 'email':
+                        return participantA.email.localeCompare(participantB.email);
+                    case 'date':
+                        return new Date(b.registrationDate || b.createdAt) - new Date(a.registrationDate || a.createdAt);
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        this.filteredParticipants = filtered;
         this.renderParticipantsTable();
+        this.updateParticipantCount();
+        
+        // Note: For true server-side filtering, we would need to modify loadParticipants
+        // to send search/filter parameters to the backend API
     }
 
     resetFilters() {
@@ -580,9 +717,15 @@ class AdminDashboard {
         document.getElementById('statusFilter').value = '';
         document.getElementById('sortBy').value = 'name';
         
+        this.searchTerm = '';
+        this.statusFilter = '';
+        this.sortBy = 'name';
+        this.currentPage = 1;
+        
         this.filteredParticipants = [...this.participants];
         this.renderParticipantsTable();
         this.updateParticipantCount();
+        this.renderPagination();
     }
 
     // Participant Management Methods
@@ -1033,49 +1176,172 @@ class AdminDashboard {
 
     async exportData() {
         try {
-            this.showAlert('Preparing data export...', 'info');
+            this.showAlert('Preparing full data export...', 'info', 3000);
             
-            // Simulate API call
-            await this.simulateDelay(2000);
+            // Fetch ALL participants from backend for export
+            const allParticipants = await this.fetchAllParticipants();
             
-            const csvData = this.generateParticipantsCSV();
+            if (!allParticipants || allParticipants.length === 0) {
+                this.showAlert('No participants found to export', 'warning');
+                return;
+            }
+            
+            this.log(`Exporting ${allParticipants.length} participants to CSV`);
+            
+            const csvData = this.generateParticipantsCSV(allParticipants);
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             
             if (link.download !== undefined) {
                 const url = URL.createObjectURL(blob);
+                const filename = `all_participants_${new Date().toISOString().split('T')[0]}_${allParticipants.length}records.csv`;
                 link.setAttribute('href', url);
-                link.setAttribute('download', `participants_${new Date().toISOString().split('T')[0]}.csv`);
+                link.setAttribute('download', filename);
                 link.style.visibility = 'hidden';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                
+                // Clean up
+                URL.revokeObjectURL(url);
             }
             
-            this.showAlert('Data exported successfully!', 'success');
+            this.showAlert(`Successfully exported ${allParticipants.length} participants!`, 'success', 4000);
             
         } catch (error) {
             this.logError('Export error:', error);
-            this.showAlert('Failed to export data', 'error');
+            this.showAlert('Failed to export data: ' + error.message, 'error');
         }
     }
 
-    generateParticipantsCSV() {
-        const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Registration Date', 'Status'];
-        const rows = this.participants.map(registration => {
+    async fetchAllParticipants() {
+        this.log('Fetching all participants for export...');
+        try {
+            // Use a large limit to get all participants in one request
+            // Backend has a max limit of 1000, which should be sufficient for most cases
+            const url = `${this.apiBaseUrl}/admin/registrations?skip=0&limit=1000`;
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch participants');
+            }
+
+            this.log(`Fetched ${data.data.registrations.length} of ${data.data.total} total participants for export`);
+            
+            // If there are more participants than the limit, we need to fetch them in batches
+            if (data.data.total > data.data.registrations.length) {
+                this.log('Fetching remaining participants in batches...');
+                const allParticipants = [...data.data.registrations];
+                const limit = 1000;
+                
+                for (let skip = limit; skip < data.data.total; skip += limit) {
+                    this.log(`Fetching batch: skip=${skip}, limit=${limit}`);
+                    
+                    const batchResponse = await fetch(`${this.apiBaseUrl}/admin/registrations?skip=${skip}&limit=${limit}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (batchResponse.ok) {
+                        const batchData = await batchResponse.json();
+                        if (batchData.success && batchData.data.registrations) {
+                            allParticipants.push(...batchData.data.registrations);
+                            this.log(`Total fetched so far: ${allParticipants.length}`);
+                        }
+                    }
+                }
+                
+                return allParticipants;
+            }
+            
+            return data.data.registrations;
+            
+        } catch (error) {
+            this.logError('Error fetching all participants:', error);
+            throw new Error(`Failed to fetch participant data: ${error.message}`);
+        }
+    }
+
+    generateParticipantsCSV(participants = null) {
+        // Use provided participants or fall back to current page data
+        const dataToExport = participants || this.participants;
+        
+        // Comprehensive headers for all participant data
+        const headers = [
+            'Participant ID',
+            'First Name', 
+            'Last Name',
+            'Email',
+            'Phone',
+            'Age',
+            'Gender', 
+            'District',
+            'Occupation',
+            'Interest Area',
+            'Church Affiliation',
+            'Access Code',
+            'Registration Date',
+            'Registration Time',
+            'Status'
+        ];
+
+        // Helper function to escape CSV fields properly
+        const escapeCsvField = (value) => {
+            if (value === null || value === undefined) return '';
+            const stringValue = String(value);
+            // Escape double quotes by doubling them and wrap in quotes if contains comma, quote, or newline
+            if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+                return `"${stringValue.replace(/"/g, '""')}"`;
+            }
+            return stringValue;
+        };
+
+        const rows = dataToExport.map(registration => {
             const participant = registration.participant || registration;
+            const registrationDate = new Date(registration.registrationDate || registration.createdAt);
+            
             return [
-                registration.id,
-                participant.firstName,
-                participant.lastName,
-                participant.email,
-                participant.phone || '',
-                new Date(registration.registrationDate || registration.createdAt).toLocaleDateString(),
-                registration.status
+                escapeCsvField(registration.participantId || registration.id || 'N/A'),
+                escapeCsvField(participant.firstName || ''),
+                escapeCsvField(participant.lastName || ''),
+                escapeCsvField(participant.email || ''),
+                escapeCsvField(participant.phone || ''),
+                escapeCsvField(participant.age || ''),
+                escapeCsvField(participant.gender || ''),
+                escapeCsvField(participant.district || participant.location || ''),
+                escapeCsvField(participant.occupation || ''),
+                escapeCsvField(participant.interest || ''),
+                escapeCsvField(participant.churchAffiliation || ''),
+                escapeCsvField(registration.accessCode || ''),
+                escapeCsvField(registrationDate.toLocaleDateString()),
+                escapeCsvField(registrationDate.toLocaleTimeString()),
+                escapeCsvField(registration.status || 'pending')
             ];
         });
         
-        return [headers, ...rows].map(row => row.join(',')).join('\n');
+        // Create CSV with proper line endings (CRLF for Excel compatibility)
+        const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\r\n');
+        
+        this.log(`Generated CSV with ${rows.length} participants and ${headers.length} fields`);
+        return csvContent;
     }
 
     async refreshDashboardData() {
