@@ -3,166 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore Young Access Hub's flagship projects: E-Learning Platform and Annual Youth Summit designed to empower young people">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Explore Young Access Hub's flagship projects: the Khantan E-Learning App and the Annual Youth Summit.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Our Projects | Young Access Hub</title>
 </head>
 <body>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="Young Access Hub" height="40" class="d-inline-block align-text-top">
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="42">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="projects.html">Projects</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="news.html">News</a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link" href="about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                    <a class="nav__link nav__link--active" href="projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                    <ul class="nav__dropdown">
+                        <li><a href="projects/kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                        <li><a href="projects/summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                    </ul>
+                </li>
+                    <li><a class="nav__link" href="news.html">News</a></li>
+                    <li><a class="nav__link" href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Page Header -->
-    <section class="hero-section py-5">
+    <header class="page-header text-center">
         <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-4 fw-bold text-white mb-4">Our Flagship Projects</h1>
-                    <p class="lead text-white-50 mb-4">
-                        Innovative initiatives designed to empower young people with the skills, 
-                        knowledge, and networks they need to transform their lives.
-                    </p>
-                </div>
-            </div>
+            <span class="badge badge--light mb-3">What We Build</span>
+            <h1 class="page-header__title" style="margin-top:var(--space-3);">Our Flagship Projects</h1>
+            <p class="page-header__subtitle" style="max-width:580px;margin-inline:auto;">
+                Innovative initiatives designed to empower young people with the skills,
+                knowledge, and networks they need to transform their lives.
+            </p>
         </div>
-    </section>
+    </header>
 
     <!-- E-Learning Platform -->
-    <section class="py-5 bg-light">
+    <section class="section">
         <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
-                    <div class="project-info">
-                        <div class="mb-4">
-                            <span class="badge bg-primary fs-6 mb-3">Digital Learning</span>
-                            <h2 class="display-5 fw-bold mb-3">Khantan E-Learning App</h2>
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-7);" data-animate>
+                <div>
+                    <span class="badge badge--primary mb-3">Digital Learning</span>
+                    <h2 class="heading--lg mb-3" style="margin-top:var(--space-3);">Kantan Learning App</h2>
+                    <p class="text--lead text--muted mb-4">
+                        A comprehensive digital learning ecosystem providing young people with accessible,
+                        high-quality education and skill development opportunities — anywhere, anytime.
+                    </p>
+                    <h5 class="mb-3" style="color:var(--color-primary);">Key Features</h5>
+                    <div class="grid grid--2" style="gap:var(--space-2);margin-bottom:var(--space-5);">
+                        <div class="feature-item"><i class="fas fa-play-circle"></i> Video Lessons</div>
+                        <div class="feature-item"><i class="fas fa-tasks"></i> Skill Assessments</div>
+                        <div class="feature-item"><i class="fas fa-chart-line"></i> Progress Tracking</div>
+                        <div class="feature-item"><i class="fas fa-users"></i> Peer Learning Groups</div>
+                        <div class="feature-item"><i class="fas fa-certificate"></i> Digital Certificates</div>
+                        <div class="feature-item"><i class="fas fa-mobile-alt"></i> Mobile &amp; Offline</div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex-between mb-2">
+                            <small class="font-semibold" style="color:var(--color-text-muted);">Development Progress</small>
+                            <small class="font-semibold" style="color:var(--color-primary);">35%</small>
                         </div>
-                        <p class="lead mb-4">
-                            Our comprehensive digital learning ecosystem will provide young people with 
-                            accessible, high-quality education and skill development opportunities.
-                        </p>
-                        <div class="features mb-4">
-                            <h5 class="mb-3">Key Features:</h5>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="feature-item">
-                                        <i class="fas fa-play-circle text-primary me-2"></i>
-                                        <span>Interactive Video Lessons</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="feature-item">
-                                        <i class="fas fa-tasks text-primary me-2"></i>
-                                        <span>Skill Assessments</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="feature-item">
-                                        <i class="fas fa-chart-line text-primary me-2"></i>
-                                        <span>Progress Tracking</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="feature-item">
-                                        <i class="fas fa-users text-primary me-2"></i>
-                                        <span>Peer Learning Groups</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="feature-item">
-                                        <i class="fas fa-certificate text-primary me-2"></i>
-                                        <span>Digital Certificates</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="feature-item">
-                                        <i class="fas fa-mobile-alt text-primary me-2"></i>
-                                        <span>Mobile Accessibility</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width:35%;"></div>
                         </div>
-                        <div class="project-status mb-4">
-                            <h6 class="text-muted">Project Status:</h6>
-                            <div class="progress mb-2" style="height: 8px;">
-                                <div class="progress-bar" role="progressbar" style="width: 35%"></div>
-                            </div>
-                            <small class="text-muted">Pre-launch development - 35% Complete</small>
-                        </div>
-                        <div class="project-actions">
-                            <a href="#beta-signup" class="btn btn-primary btn-lg me-3">
-                                <i class="fas fa-user-plus me-2"></i>Join Beta
-                            </a>
-                            <a href="#learn-more-elearning" class="btn btn-outline-primary btn-lg">
-                                <i class="fas fa-info-circle me-2"></i>Learn More
-                            </a>
-                        </div>
+                        <small class="text--muted" style="margin-top:var(--space-1);display:block;">Pre-launch development phase</small>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="contact.html" class="btn btn--primary btn--lg">
+                            <i class="fas fa-user-plus"></i> Join Beta Waitlist
+                        </a>
+                        <a href="contact.html" class="btn btn--outline btn--lg">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="project-visual text-center">
-                        <div class="platform-mockup bg-white rounded shadow p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-graduation-cap fa-5x text-primary"></i>
+                <div data-animate data-animate-delay="2">
+                    <div class="card card--elevated" style="background:linear-gradient(160deg,var(--color-primary),var(--color-secondary));padding:var(--space-6);text-align:center;min-height:420px;display:flex;flex-direction:column;justify-content:center;gap:var(--space-4);">
+                        <i class="fas fa-graduation-cap" style="font-size:4rem;color:rgba(255,255,255,.9);"></i>
+                        <h4 style="color:#fff;font-family:var(--font-display);">Interactive Learning Dashboard</h4>
+                        <div class="feature-box" style="background:rgba(255,255,255,.15);text-align:left;">
+                            <i class="fas fa-book-open" style="color:#fff;"></i>
+                            <div>
+                                <strong style="color:#fff;">Course Library</strong>
+                                <p style="margin:0;color:rgba(255,255,255,.75);font-size:.85rem;">50+ Skill Development Courses</p>
                             </div>
-                            <h4 class="mb-3">Interactive Learning Dashboard</h4>
-                            <div class="mockup-features">
-                                <div class="feature-box bg-light rounded p-3 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-book-open text-primary me-3"></i>
-                                        <div class="text-start">
-                                            <h6 class="mb-1">Course Library</h6>
-                                            <small class="text-muted">50+ Skill Development Courses</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feature-box bg-light rounded p-3 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-trophy text-warning me-3"></i>
-                                        <div class="text-start">
-                                            <h6 class="mb-1">Achievement System</h6>
-                                            <small class="text-muted">Badges & Certifications</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feature-box bg-light rounded p-3">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-comments text-success me-3"></i>
-                                        <div class="text-start">
-                                            <h6 class="mb-1">Community Forum</h6>
-                                            <small class="text-muted">Peer Support & Mentorship</small>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="feature-box" style="background:rgba(255,255,255,.15);text-align:left;">
+                            <i class="fas fa-trophy" style="color:var(--color-accent);"></i>
+                            <div>
+                                <strong style="color:#fff;">Achievement System</strong>
+                                <p style="margin:0;color:rgba(255,255,255,.75);font-size:.85rem;">Badges &amp; Certifications</p>
+                            </div>
+                        </div>
+                        <div class="feature-box" style="background:rgba(255,255,255,.15);text-align:left;margin-bottom:0;">
+                            <i class="fas fa-comments" style="color:#fff;"></i>
+                            <div>
+                                <strong style="color:#fff;">Community Forum</strong>
+                                <p style="margin:0;color:rgba(255,255,255,.75);font-size:.85rem;">Peer Support &amp; Mentorship</p>
                             </div>
                         </div>
                     </div>
@@ -170,176 +118,113 @@
             </div>
         </div>
     </section>
+
+    <hr class="divider">
 
     <!-- Youth Summit -->
-    <section class="py-5">
+    <section class="section">
         <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 order-lg-2">
-                    <div class="project-info">
-                        <div class="mb-4">
-                            <span class="badge bg-warning fs-6 mb-3">Annual Event</span>
-                            <h2 class="display-5 fw-bold mb-3">YAH Youth Summit</h2>
-                        </div>
-                        <p class="lead mb-4">
-                            A transformative one-day annual gathering that brings together young leaders, 
-                            mentors, and changemakers for learning, networking, and inspiration.
-                        </p>
-                        <div class="summit-highlights mb-4">
-                            <h5 class="mb-3">Summit Highlights:</h5>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="highlight-item">
-                                        <i class="fas fa-microphone text-warning me-2"></i>
-                                        <span>Keynote Speaker</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="highlight-item">
-                                        <i class="fas fa-tools text-warning me-2"></i>
-                                        <span>Skills Workshops</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="highlight-item">
-                                        <i class="fas fa-handshake text-warning me-2"></i>
-                                        <span>Networking Sessions</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="highlight-item">
-                                        <i class="fas fa-lightbulb text-warning me-2"></i>
-                                        <span>Innovation Challenge</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="highlight-item">
-                                        <i class="fas fa-user-tie text-warning me-2"></i>
-                                        <span>Mentorship Matching</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="highlight-item">
-                                        <i class="fas fa-award text-warning me-2"></i>
-                                        <span>Recognition Awards</span>
-                                    </div>
-                                </div>
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-7);" data-animate>
+                <div data-animate data-animate-delay="2" style="order:2;">
+                    <div class="card card--elevated" style="background:linear-gradient(160deg,var(--color-accent-dk),var(--color-accent));padding:var(--space-6);text-align:center;min-height:380px;display:flex;flex-direction:column;justify-content:center;gap:var(--space-4);">
+                        <i class="fas fa-users" style="font-size:4rem;color:rgba(255,255,255,.9);"></i>
+                        <h4 style="color:#fff;font-family:var(--font-display);">YAH Youth Summit 2025</h4>
+                        <div class="grid grid--3 text-center" style="gap:var(--space-3);">
+                            <div style="background:rgba(255,255,255,.18);padding:var(--space-4);border-radius:var(--radius);">
+                                <strong style="font-family:var(--font-display);font-size:2rem;color:#fff;display:block;">250+</strong>
+                                <small style="color:rgba(255,255,255,.8);">Attendees</small>
                             </div>
-                        </div>
-                        <div class="summit-stats mb-4">
-                            <div class="row text-center">
-                                <div class="col-4">
-                                    <h4 class="text-warning mb-1">250+</h4>
-                                    <small class="text-muted">Attendees</small>
-                                </div>
-                                <div class="col-4">
-                                    <h4 class="text-warning mb-1">1</h4>
-                                    <small class="text-muted">Day</small>
-                                </div>
-                                <div class="col-4">
-                                    <h4 class="text-warning mb-1">4+</h4>
-                                    <small class="text-muted">Workshops</small>
-                                </div>
+                            <div style="background:rgba(255,255,255,.18);padding:var(--space-4);border-radius:var(--radius);">
+                                <strong style="font-family:var(--font-display);font-size:2rem;color:#fff;display:block;">1</strong>
+                                <small style="color:rgba(255,255,255,.8);">Day</small>
                             </div>
-                        </div>
-                        <div class="project-actions">
-                            <a href="https://chat.whatsapp.com/FU7ZuiRFnMXIhfl05iJ1s3?mode=ac_t" target="_blank" class="btn btn-warning btn-lg me-3">
-                                <i class="fas fa-calendar me-2"></i>Join Waitlist
-                            </a>
-                            <!-- <a href="#summit-info" class="btn btn-outline-warning btn-lg">
-                                <i class="fas fa-info-circle me-2"></i>View Past Events
-                            </a> -->
+                            <div style="background:rgba(255,255,255,.18);padding:var(--space-4);border-radius:var(--radius);">
+                                <strong style="font-family:var(--font-display);font-size:2rem;color:#fff;display:block;">4+</strong>
+                                <small style="color:rgba(255,255,255,.8);">Workshops</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 order-lg-1">
-                    <div class="project-visual text-center">
-                        <div class="summit-showcase bg-warning bg-opacity-10 rounded shadow p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-users fa-5x text-warning"></i>
-                            </div>
-                            <h4 class="mb-4">Youth Summit 2025</h4>
-                            <div class="agenda-preview">
-                                <div class="day-item bg-white rounded p-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="day-number bg-warning text-white rounded-circle me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                                            1
-                                        </div>
-                                        <div class="text-start">
-                                            <h6 class="mb-1">One Day: Transformation</h6>
-                                            <small class="text-muted">Keynotes, Workshops, Networking & Action Planning</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div style="order:1;">
+                    <span class="badge badge--accent mb-3">Annual Event</span>
+                    <h2 class="heading--lg mb-3" style="margin-top:var(--space-3);">YAH Youth Summit</h2>
+                    <p class="text--lead text--muted mb-4">
+                        A transformative one-day annual gathering bringing together young leaders,
+                        mentors, and changemakers for learning, networking, and inspiration.
+                    </p>
+                    <h5 class="mb-3" style="color:var(--color-accent-dk);">Summit Highlights</h5>
+                    <div class="grid grid--2" style="gap:var(--space-2);margin-bottom:var(--space-5);">
+                        <div class="feature-item"><i class="fas fa-microphone" style="color:var(--color-accent-dk);"></i> Keynote Speaker</div>
+                        <div class="feature-item"><i class="fas fa-tools" style="color:var(--color-accent-dk);"></i> Skills Workshops</div>
+                        <div class="feature-item"><i class="fas fa-handshake" style="color:var(--color-accent-dk);"></i> Networking</div>
+                        <div class="feature-item"><i class="fas fa-lightbulb" style="color:var(--color-accent-dk);"></i> Innovation Challenge</div>
+                        <div class="feature-item"><i class="fas fa-user-tie" style="color:var(--color-accent-dk);"></i> Mentorship Matching</div>
+                        <div class="feature-item"><i class="fas fa-award" style="color:var(--color-accent-dk);"></i> Recognition Awards</div>
                     </div>
+                    <a href="https://chat.whatsapp.com/FU7ZuiRFnMXIhfl05iJ1s3?mode=ac_t" target="_blank" rel="noopener" class="btn btn--accent btn--lg">
+                        <i class="fas fa-calendar"></i> Join the Waitlist
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Get Involved -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h2 class="display-5 fw-bold mb-4">Get Involved</h2>
-                    <p class="lead mb-4">
-                        Ready to be part of the transformation? Join us as a participant, volunteer, 
-                        mentor, or partner organization.
-                    </p>
-                    <div class="row g-3 justify-content-center">
-                        <!-- <div class="col-md-6 col-lg-3">
-                            <a href="contact.html" class="btn btn-warning btn-lg w-100">
-                                <i class="fas fa-user-plus me-2"></i>Join Program
-                            </a>
-                        </div> -->
-                        <div class="col-md-6 col-lg-3">
-                            <a href="contact.html" class="btn btn-outline-light btn-lg w-100">
-                                <i class="fas fa-hands-helping me-2"></i>Volunteer
-                            </a>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <a href="contact.html" class="btn btn-outline-light btn-lg w-100">
-                                <i class="fas fa-handshake me-2"></i>Partner
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Get Involved CTA -->
+    <section class="section bg--primary text-center">
+        <div class="container" data-animate>
+            <span class="badge badge--light mb-3">Take Action</span>
+            <h2 class="heading--lg text--white mb-3" style="margin-top:var(--space-3);">Get Involved</h2>
+            <p class="text--lead text--white-muted mb-4" style="max-width:560px;margin-inline:auto;">
+                Ready to be part of the transformation? Join us as a participant, volunteer, mentor, or partner.
+            </p>
+            <div class="flex flex-wrap gap-3" style="justify-content:center;">
+                <a href="contact.html" class="btn btn--accent btn--lg">
+                    <i class="fas fa-hands-helping"></i> Volunteer
+                </a>
+                <a href="contact.html" class="btn btn--outline-light btn--lg">
+                    <i class="fas fa-handshake"></i> Partner With Us
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white py-4">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Leading change through local action.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="quick-links">
-                        <a href="index.html" class="text-white me-3">Home</a>
-                        <a href="about.html" class="text-white me-3">About</a>
-                        <a href="projects.html" class="text-white me-3">Projects</a>
-                        <a href="contact.html" class="text-white">Contact</a>
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Leading change through local action.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
-                    <p class="mt-2 mb-0">
-                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
-                    </p>
                 </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2025 Young Access Hub. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button type="button" class="btn btn-warning position-fixed bottom-0 end-0 m-3 rounded-circle back-to-top" style="display: none;">
+    <button type="button" class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
-    
-    <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/main.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/projects.js" defer></script>
 </body>
 </html>

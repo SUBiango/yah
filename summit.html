@@ -3,699 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="YAH Youth Summit 2025 - Join 500+ young leaders for three days of inspiration, learning, and transformation. Register now!">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <title>Youth Summit 2025 | Young Access Hub</title>
+    <meta name="description" content="YAH Youth Summit 2026 — Planning is underway. Sign up to be the first to receive updates, speaker announcements, and registration details.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Summit 2026 | Young Access Hub</title>
     <style>
-        /* Summit-specific styles */
-        .summit-hero {
-            background: linear-gradient(135deg, #ffc107 0%, #ff8c00 50%, #e67e22 100%);
+        .coming-soon-hero {
+            background: linear-gradient(135deg, var(--color-primary-dk) 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: calc(var(--nav-height) + var(--space-6)) 0 var(--space-8);
             position: relative;
             overflow: hidden;
         }
-        
-        .summit-hero::before {
+        .coming-soon-hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
+            top: -120px; right: -120px;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.06);
+            pointer-events: none;
         }
-        
-        .countdown-timer {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
+        .coming-soon-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -80px;
+            width: 320px; height: 320px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.04);
+            pointer-events: none;
         }
-        
-        .countdown-item {
-            text-align: center;
-            padding: 1rem;
+        /* Animated pulse ring around the year */
+        .year-badge {
+            position: relative;
+            display: inline-block;
+            margin-bottom: var(--space-5);
         }
-        
-        .countdown-number {
-            font-size: 3rem;
-            font-weight: bold;
+        .year-badge__ring {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,.3);
+            animation: pulse-ring 2.5s ease-in-out infinite;
+        }
+        .year-badge__ring:nth-child(2) { inset: -24px; animation-delay: .5s; opacity: .5; }
+        .year-badge__ring:nth-child(3) { inset: -36px; animation-delay: 1s; opacity: .25; }
+        @keyframes pulse-ring {
+            0%   { transform: scale(1);   opacity: .8; }
+            50%  { transform: scale(1.04); opacity: .4; }
+            100% { transform: scale(1);   opacity: .8; }
+        }
+        /* Signup form card */
+        .signup-card {
+            background: rgba(255,255,255,.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            max-width: 520px;
+        }
+        .signup-form {
+            display: flex;
+            gap: var(--space-2);
+            margin-top: var(--space-4);
+        }
+        .signup-form input[type="email"] {
+            flex: 1;
+            padding: .75rem 1.1rem;
+            border-radius: var(--radius-pill);
+            border: 2px solid rgba(255,255,255,.4);
+            background: rgba(255,255,255,.15);
             color: #fff;
-            display: block;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: .95rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color .2s;
         }
-        
-        .countdown-label {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.9);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .speaker-card {
+        .signup-form input[type="email"]::placeholder { color: rgba(255,255,255,.6); }
+        .signup-form input[type="email"]:focus { border-color: rgba(255,255,255,.8); background: rgba(255,255,255,.2); }
+        .signup-form button {
+            padding: .75rem 1.5rem;
+            border-radius: var(--radius-pill);
+            background: var(--color-accent);
+            color: #fff;
+            font-weight: 700;
+            font-size: .9rem;
             border: none;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: background .2s, transform .15s;
+            white-space: nowrap;
         }
-        
-        .speaker-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .speaker-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #ffc107;
-            margin: 1rem auto;
-        }
-        
-        .speaker-social {
-            margin-top: 1rem;
-        }
-        
-        .speaker-social a {
-            color: #6c757d;
-            margin: 0 8px;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-        }
-        
-        .speaker-social a:hover {
-            color: #ffc107;
-        }
-        
-        .schedule-day {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .schedule-item {
-            border-left: 4px solid #ffc107;
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .schedule-item::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            background: #ffc107;
-            border-radius: 50%;
-        }
-        
-        .schedule-time {
-            font-weight: bold;
-            color: #e67e22;
-            font-size: 1.1rem;
-        }
-        
-        .registration-form {
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-        
-        .pricing-card {
-            border-radius: 20px;
-            border: none;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .pricing-card.featured {
-            transform: scale(1.05);
-            border: 3px solid #ffc107;
-        }
-        
-        .pricing-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ffc107, #e67e22);
-        }
-        
-        .price-amount {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #e67e22;
-        }
-        
-        /* Mobile responsive adjustments */
-        @media (max-width: 768px) {
-            .summit-hero {
-                padding-top: 6rem !important; /* Extra top padding for mobile to avoid hamburger menu overlap */
-                padding-bottom: 3rem !important;
-            }
-            
-            .countdown-number {
-                font-size: 2rem;
-            }
-            
-            .display-3 {
-                font-size: 2.5rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .summit-hero {
-                padding-top: 7rem !important; /* Even more top padding for small mobile devices */
-            }
-            
-            .countdown-timer {
-                padding: 1.5rem;
-                margin: 1.5rem 0;
-            }
-            
-            .countdown-item {
-                padding: 0.5rem;
-            }
-        }
-        
-        .summit-stats {
-            background: rgba(255, 193, 7, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
+        .signup-form button:hover { background: var(--color-accent-dk); transform: scale(1.03); }
+        /* what to expect cards */
+        .expect-card {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            padding: var(--space-5);
             text-align: center;
+            transition: transform var(--transition), box-shadow var(--transition);
         }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #e67e22;
-            display: block;
+        .expect-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .expect-card__icon {
+            width: 56px; height: 56px;
+            border-radius: var(--radius);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto var(--space-3);
+            font-size: 1.4rem;
         }
-        
-        .venue-map {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        @media (max-width: 480px) {
+            .signup-form { flex-direction: column; }
+            .signup-form button { width: 100%; }
         }
     </style>
 </head>
 <body>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="Young Access Hub" height="40" class="d-inline-block align-text-top">
+    <nav class="nav nav--transparent">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="42">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="news.html">News</a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link active" href="summit.html">Summit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link" href="about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                    <a class="nav__link" href="projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                    <ul class="nav__dropdown">
+                        <li><a href="projects/kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                        <li><a href="projects/summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                    </ul>
+                </li>
+                    <li><a class="nav__link nav__link--active" href="summit.html">Summit</a></li>
+                    <li><a class="nav__link" href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Summit Hero Section -->
-    <section class="summit-hero py-5 text-white">
-        <div class="container">
-            <div class="row align-items-center min-vh-100">
-                <div class="col-lg-8 mx-auto text-center position-relative">
-                    <div class="summit-badge mb-4">
-                        <span class="badge bg-light text-dark fs-6 px-4 py-2 rounded-pill">
-                            <i class="fas fa-calendar-alt me-2"></i>November 15, 2025
+    <!-- Hero -->
+    <section class="coming-soon-hero">
+        <div class="container" style="position:relative;z-index:1;">
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-8);">
+
+                <!-- Left: copy -->
+                <div>
+                    <div class="year-badge">
+                        <div class="year-badge__ring"></div>
+                        <div class="year-badge__ring"></div>
+                        <div class="year-badge__ring"></div>
+                        <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:.8rem;font-weight:800;padding:.4rem 1rem;border-radius:var(--radius-pill);letter-spacing:.08em;text-transform:uppercase;">
+                            4th Annual Edition
                         </span>
                     </div>
-                    <h1 class="display-3 fw-bold mb-4">
-                        YAH Youth Summit <span class="text-warning">2025</span>
+                    <h1 style="font-size:clamp(2.8rem,7vw,5.5rem);font-weight:800;color:#fff;line-height:1;letter-spacing:-0.03em;margin:var(--space-3) 0 var(--space-3);">
+                        YAH Youth<br>Summit<br>
+                        <span style="color:var(--color-accent);font-size:1.1em;">2026</span>
                     </h1>
-                    <p class="lead mb-4 fs-4">
-                        Join 200+ young leaders for a full day of transformative inspiration, 
-                        skill-building, networking, and creating positive change.
+                    <p style="font-size:1.2rem;color:rgba(255,255,255,.85);line-height:1.7;max-width:480px;margin-bottom:var(--space-5);">
+                        We're planning something extraordinary. The 4th Annual YAH Youth Summit
+                        is in the works — bigger, bolder, and more impactful than ever.
                     </p>
-                    <p class="h5 mb-4">
-                        <i class="fas fa-map-marker-alt me-2"></i>
-                        Fachima Complex Hall, Bona Street, Koidu City, Kono.
-                    </p>
-                    
-                    <!-- Countdown Timer -->
-                    <div class="countdown-timer">
-                        <h3 class="mb-4">Summit Countdown</h3>
-                        <div class="row" id="countdown">
-                            <div class="col-3">
-                                <div class="countdown-item">
-                                    <span class="countdown-number" id="days">00</span>
-                                    <div class="countdown-label">Days</div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="countdown-item">
-                                    <span class="countdown-number" id="hours">00</span>
-                                    <div class="countdown-label">Hours</div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="countdown-item">
-                                    <span class="countdown-number" id="minutes">00</span>
-                                    <div class="countdown-label">Minutes</div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="countdown-item">
-                                    <span class="countdown-number" id="seconds">00</span>
-                                    <div class="countdown-label">Seconds</div>
-                                </div>
-                            </div>
+                    <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;">
+                        <div style="display:flex;align-items:center;gap:var(--space-2);">
+                            <div style="width:10px;height:10px;border-radius:50%;background:var(--color-accent);animation:pulse-ring 1.5s ease-in-out infinite;"></div>
+                            <span style="color:rgba(255,255,255,.9);font-weight:600;font-size:.95rem;">Planning in progress</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:var(--space-2);">
+                            <i class="fas fa-map-marker-alt" style="color:var(--color-accent);"></i>
+                            <span style="color:rgba(255,255,255,.9);font-weight:600;font-size:.95rem;">Kono District, Sierra Leone</span>
                         </div>
                     </div>
-                    
-                    <div class="hero-actions mt-5">
-                        <a href="/note.html" class="btn btn-light btn-lg me-3 px-5 py-3">
-                            <i class="fas fa-ticket-alt me-2"></i>Register Now
-                        </a>
-                        <!-- <a href="#schedule" class="btn btn-outline-light btn-lg px-5 py-3">
-                            <i class="fas fa-calendar me-2"></i>View Schedule
-                        </a> -->
-                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Summit Stats -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <div class="summit-stats">
-                        <span class="stat-number">200+</span>
-                        <div class="fw-semibold">Attendees</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="summit-stats">
-                        <span class="stat-number">5</span>
-                        <div class="fw-semibold">Speakers</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="summit-stats">
-                        <span class="stat-number">5</span>
-                        <div class="fw-semibold">Sessions</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="summit-stats">
-                        <span class="stat-number">1</span>
-                        <div class="fw-semibold">Day</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Keynote Speaker -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Keynote Speaker</h2>
-                    <p class="lead text-muted">
-                        Our featured speaker who will inspire and guide us through this transformative journey.
-                    </p>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-8">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="assets/speaker-photos/2025/Mohamed Samu.jpeg" alt="Mohamed Samu" class="speaker-image" />
-                            <h5 class="card-title mb-2">Mohamed Samu</h5>
-                            <p class="text-muted mb-2">Innovator | Applied Entomologist</p>
-                            <p class="card-text small">
-                                Applied entomologist and founder of Entotech Innovations. 2025 winner of President Bio's 
-                                Big Five Investment Innovation Award. Erasmus Mundus graduate and Mandela Washington Fellow, 
-                                combining innovation, entrepreneurship, and leadership for sustainable impact.
+                <!-- Right: signup card -->
+                <div>
+                    <div class="signup-card">
+                        <div style="text-align:center;margin-bottom:var(--space-4);">
+                            <div style="width:56px;height:56px;background:var(--color-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-3);">
+                                <i class="fas fa-bell" style="color:#fff;font-size:1.4rem;"></i>
+                            </div>
+                            <h3 style="color:#fff;font-weight:800;font-size:1.4rem;margin:0 0 var(--space-2);">Stay in the Loop</h3>
+                            <p style="color:rgba(255,255,255,.8);font-size:.9rem;line-height:1.6;margin:0;">
+                                Be the first to know when speaker announcements, the official theme,
+                                and registration open for Summit 2026.
                             </p>
-                            <div class="speaker-social">
-                                <a href="#"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Other Speakers -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Our Speakers</h2>
-                    <p class="lead text-muted">
-                        Meet the local leaders, changemakers, and visionaries who are shaping our community.
-                    </p>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-6 col-md-6">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="assets/speaker-photos/2025/His Worship Mayor Komba Sam.jpeg" alt="His Worship Mayor Komba Sam" class="speaker-image" />
-                            <h5 class="card-title mb-2">His Worship Mayor Komba Sam</h5>
-                            <p class="text-muted mb-2">Mayor - Koidu New Sembehun City Council</p>
-                            <p class="card-text small">
-                                Historic two-term mayor serving 169,000+ residents since 2018. 
-                                Holds advanced degrees in Business Administration and Economics, 
-                                championing youth empowerment and community transformation.
-                            </p>
-                            <div class="speaker-social">
-                                <a href="https://www.facebook.com/share/1ABAAm4TbV/?mibextid=wwXIfr"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                            </div>
+                        <form class="signup-form" id="summitSignupForm" novalidate>
+                            <input type="email" id="signupEmail" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit">
+                                <i class="fas fa-paper-plane"></i> Notify Me
+                            </button>
+                        </form>
+                        <div id="signupFeedback" style="display:none;margin-top:var(--space-3);padding:var(--space-3);background:rgba(255,255,255,.15);border-radius:var(--radius);text-align:center;color:#fff;font-size:.9rem;font-weight:600;">
+                            <i class="fas fa-check-circle" style="color:var(--color-accent);margin-right:6px;"></i>
+                            You're on the list! We'll be in touch soon.
                         </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-6 col-md-6">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="assets/speaker-photos/2025/Osman Yaah.jpeg" alt="Osman Yaah" class="speaker-image" />
-                            <h5 class="card-title mb-2">Osman Yaah</h5>
-                            <p class="text-muted mb-2">Innovator and Entrepreneur</p>
-                            <p class="card-text small">
-                                Co-founder of Auto-Smart Irrigation & Energy Company Ltd and award-winning innovator. 
-                                Winner of President Bio's 2024 Innovation Award ($30,000), transforming agriculture 
-                                through climate-smart technology and empowering vulnerable communities.
-                            </p>
-                            <div class="speaker-social">
-                                <a href="https://www.facebook.com/osmanyaah?mibextid=wwXIfr"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="assets/speaker-photos/2025/Rebecca Yei Sam.jpeg" alt="Rebecca Yei Sam" class="speaker-image" />
-                            <h5 class="card-title mb-2">Rebecca Yei Sam</h5>
-                            <p class="text-muted mb-2">Honourable Member of Parliament</p>
-                            <p class="card-text small">
-                                First woman elected to represent Kono District in Parliament (2018, 2023). 
-                                Chairperson for the Labour Committee in Parliament, championing women's empowerment and youth participation in decision-making.
-                            </p>
-                            <div class="speaker-social">
-                                <a href="#"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                    <div class="speaker-card card h-100">
-                        <div class="card-body text-center p-4">
-                            <img src="assets/speaker-photos/2025/Tamba Songu Mbriwa.jpeg" alt="Tamba Songu Mbriwa" class="speaker-image" />
-                            <h5 class="card-title mb-2">Tamba Songu Mbriwa</h5>
-                            <p class="text-muted mb-2">Entrepreneur | Gemmologist | Business Consultant</p>
-                            <p class="card-text small">
-                                CEO of Legacy Group of Companies with global business reach from Asia to Europe. 
-                                Master's in Gemology, passionate mentor for young entrepreneurs, 
-                                believing true leadership is measured by empowering others.
-                            </p>
-                            <div class="speaker-social">
-                                <a href="https://www.facebook.com/share/19qc43BhmB/?mibextid=wwXIfr"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Event Schedule -->
-    <!-- <section id="schedule" class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Event Schedule</h2>
-                    <p class="lead text-muted">
-                        Three action-packed days of learning, networking, and transformation.
-                    </p>
-                </div>
-            </div>
-            
-            
-            <div class="schedule-day">
-                <div class="d-flex align-items-center mb-4">
-                    <div class="day-number bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-weight: bold; font-size: 1.2rem;">
-                        1
-                    </div>
-                    <div>
-                        <h3 class="mb-1">Day 1: Inspiration & Vision</h3>
-                        <p class="text-muted mb-0">Friday, November 15, 2025</p>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="schedule-item">
-                            <div class="schedule-time">8:00 AM - 9:00 AM</div>
-                            <h6>Registration & Welcome Breakfast</h6>
-                            <p class="text-muted small mb-0">Check-in, networking, and continental breakfast</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">9:00 AM - 10:30 AM</div>
-                            <h6>Opening Ceremony & Keynote</h6>
-                            <p class="text-muted small mb-0">Dr. Sarah Johnson: "The Future Belongs to Bold Youth"</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">11:00 AM - 12:00 PM</div>
-                            <h6>Panel: Young Leaders Changing the World</h6>
-                            <p class="text-muted small mb-0">Interactive discussion with emerging leaders</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="schedule-item">
-                            <div class="schedule-time">1:00 PM - 2:00 PM</div>
-                            <h6>Networking Lunch</h6>
-                            <p class="text-muted small mb-0">Connect with fellow attendees and speakers</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">2:30 PM - 4:00 PM</div>
-                            <h6>Workshop Sessions (Track 1)</h6>
-                            <p class="text-muted small mb-0">Choose from Innovation, Leadership, or Sustainability tracks</p>
-                        </div>
-                        
-                        <div class="schedule-item">
-                            <div class="schedule-time">6:00 PM - 8:00 PM</div>
-                            <h6>Welcome Reception</h6>
-                            <p class="text-muted small mb-0">Casual networking with refreshments and entertainment</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-    <!-- Registration Section -->
-    <section id="registration" class="py-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h2 class="display-5 fw-bold mb-4">Register for Summit 2025</h2>
-                    <p class="lead text-muted mb-5">
-                        Secure your spot at the most transformative youth event of the year. Contact Mariama (Finance Officer) at +232 88 412 479 to secure your registration code.
-                    </p>
-                    
-                    <!-- CTA Button -->
-                    <div class="text-center">
-                        <a href="note.html" class="btn btn-warning btn-lg px-5 py-3 fs-5 fw-bold">
-                            <i class="fas fa-ticket-alt me-2"></i>
-                            Register Now
-                        </a>
-                        <p class="text-muted mt-3">
-                            Limited seats available
+                        <p style="color:rgba(255,255,255,.55);font-size:.78rem;text-align:center;margin:var(--space-3) 0 0;">
+                            No spam. Unsubscribe anytime.
                         </p>
                     </div>
+
+                    <!-- Archive link -->
+                    <div style="text-align:center;margin-top:var(--space-4);">
+                        <a href="summits.html" style="color:rgba(255,255,255,.7);font-size:.9rem;font-weight:600;text-decoration:none;transition:color .2s;">
+                            <i class="fas fa-archive" style="margin-right:6px;"></i>
+                            View previous summits
+                        </a>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Venue Information -->
-    <section class="py-5">
+    <!-- What to expect -->
+    <section class="section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Venue & Location</h2>
-                    <p class="lead text-muted">
-                        Join us at the Fachima Complex Hall, Bona Street, Koidu City, Kono.
+            <div class="text-center mb-5" data-animate>
+                <span class="badge badge--primary mb-3">What's Coming</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">What to Expect in 2026</h2>
+                <p class="text--muted" style="margin-top:var(--space-3);">Details will be confirmed soon — here's what every summit includes.</p>
+            </div>
+            <div class="grid grid--3" style="gap:var(--space-4);">
+                <div class="expect-card" data-animate>
+                    <div class="expect-card__icon" style="background:var(--color-primary-lt);">
+                        <i class="fas fa-microphone" style="color:var(--color-primary);"></i>
+                    </div>
+                    <h5 style="font-weight:700;margin-bottom:var(--space-2);">Inspiring Speakers</h5>
+                    <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                        Leaders, innovators, and changemakers from Sierra Leone and beyond
+                        sharing stories and insights that move young people to act.
+                    </p>
+                </div>
+                <div class="expect-card" data-animate data-animate-delay="2">
+                    <div class="expect-card__icon" style="background:var(--color-secondary-lt);">
+                        <i class="fas fa-tools" style="color:var(--color-secondary-dk);"></i>
+                    </div>
+                    <h5 style="font-weight:700;margin-bottom:var(--space-2);">Practical Workshops</h5>
+                    <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                        Hands-on sessions covering entrepreneurship, digital skills, civic
+                        leadership, and career development — skills you can use immediately.
+                    </p>
+                </div>
+                <div class="expect-card" data-animate data-animate-delay="3">
+                    <div class="expect-card__icon" style="background:var(--color-accent-lt);">
+                        <i class="fas fa-users" style="color:var(--color-accent-dk);"></i>
+                    </div>
+                    <h5 style="font-weight:700;margin-bottom:var(--space-2);">Community &amp; Networking</h5>
+                    <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                        A room full of ambitious young people from across Kono District.
+                        Mentors, peers, and connections that last well beyond the day.
+                    </p>
+                </div>
+                <div class="expect-card" data-animate>
+                    <div class="expect-card__icon" style="background:var(--color-success-lt);">
+                        <i class="fas fa-lightbulb" style="color:var(--color-success);"></i>
+                    </div>
+                    <h5 style="font-weight:700;margin-bottom:var(--space-2);">EmpowerYouth Challenge</h5>
+                    <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                        Youth-led pitches tackling real community problems, judged by
+                        mentors and community leaders — with recognition for the best ideas.
+                    </p>
+                </div>
+                <div class="expect-card" data-animate data-animate-delay="2">
+                    <div class="expect-card__icon" style="background:var(--color-primary-lt);">
+                        <i class="fas fa-award" style="color:var(--color-primary);"></i>
+                    </div>
+                    <h5 style="font-weight:700;margin-bottom:var(--space-2);">Recognition Ceremony</h5>
+                    <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                        Honouring outstanding young leaders, volunteers, and contributors
+                        making a difference in their communities.
+                    </p>
+                </div>
+                <div class="expect-card" data-animate data-animate-delay="3">
+                    <div class="expect-card__icon" style="background:var(--color-secondary-lt);">
+                        <i class="fas fa-camera" style="color:var(--color-secondary-dk);"></i>
+                    </div>
+                    <h5 style="font-weight:700;margin-bottom:var(--space-2);">Memorable Moments</h5>
+                    <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                        A day you won't forget — from the opening keynote to the final
+                        group photo and the summit pledge that brings everyone together.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
-    <!-- <section class="py-5 bg-light">
+    <!-- Past editions teaser -->
+    <section class="section bg--subtle">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Frequently Asked Questions</h2>
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-7);">
+                <div data-animate>
+                    <span class="badge badge--secondary mb-3">The Legacy</span>
+                    <h2 class="heading--lg mb-3" style="margin-top:var(--space-3);">3 Summits,<br>550+ Young Lives Touched</h2>
+                    <p class="text--muted" style="line-height:1.8;margin-bottom:var(--space-4);">
+                        Since 2023, the YAH Youth Summit has grown into one of Kono District's most
+                        anticipated youth events — bringing together students, entrepreneurs,
+                        community leaders, and changemakers year after year.
+                    </p>
+                    <a href="summits.html" class="btn btn--primary">
+                        <i class="fas fa-archive"></i> Browse Past Summits
+                    </a>
                 </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="accordion" id="summitFAQ">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    What's included in my registration?
-                                </button>
-                            </h2>
-                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#summitFAQ">
-                                <div class="accordion-body">
-                                    Your registration includes access to all sessions, welcome materials, lunch on all three days (for in-person tickets), networking events, and a digital certificate of participation. Professional tickets also include the gala dinner and exclusive mentorship sessions.
-                                </div>
-                            </div>
+                <div data-animate data-animate-delay="2">
+                    <div class="grid grid--2" style="gap:var(--space-3);">
+                        <div style="background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));border-radius:var(--radius-lg);padding:var(--space-5);text-align:center;color:#fff;">
+                            <strong style="display:block;font-size:2rem;font-weight:800;">2025</strong>
+                            <small style="opacity:.8;font-size:.8rem;">3rd Edition</small>
+                            <div style="margin-top:var(--space-2);font-size:.85rem;opacity:.9;">200+ attendees</div>
                         </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                    Can I get a refund if I can't attend?
-                                </button>
-                            </h2>
-                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#summitFAQ">
-                                <div class="accordion-body">
-                                    Full refunds are available up to 30 days before the event. Between 30-14 days, a 50% refund is available. No refunds within 14 days of the event, but you can transfer your ticket to another person or switch to virtual attendance.
-                                </div>
-                            </div>
+                        <div style="background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));border-radius:var(--radius-lg);padding:var(--space-5);text-align:center;color:#fff;">
+                            <strong style="display:block;font-size:2rem;font-weight:800;">2022</strong>
+                            <small style="opacity:.8;font-size:.8rem;">2nd Edition</small>
+                            <div style="margin-top:var(--space-2);font-size:.85rem;opacity:.9;">200+ attendees</div>
                         </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                    Is virtual participation really worth it?
-                                </button>
-                            </h2>
-                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#summitFAQ">
-                                <div class="accordion-body">
-                                    Absolutely! Virtual attendees get live streaming of all main sessions, access to online networking rooms, digital materials, and recordings of all sessions. While you'll miss some in-person networking, it's a great option for those who can't travel.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                                    What should I bring to the summit?
-                                </button>
-                            </h2>
-                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#summitFAQ">
-                                <div class="accordion-body">
-                                    Bring your enthusiasm, business cards, a notebook, and comfortable shoes! All materials will be provided. For professional attendees, business casual attire is recommended for the gala dinner.
-                                </div>
-                            </div>
+                        <div style="background:linear-gradient(135deg,var(--color-accent-dk),var(--color-accent));border-radius:var(--radius-lg);padding:var(--space-5);text-align:center;color:#fff;grid-column:span 2;">
+                            <strong style="display:block;font-size:2rem;font-weight:800;">2020</strong>
+                            <small style="opacity:.85;font-size:.8rem;">Inaugural Edition</small>
+                            <div style="margin-top:var(--space-2);font-size:.85rem;opacity:.9;">150+ attendees · Where it all began</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white py-4">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Leading change through local action.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="quick-links">
-                        <a href="index.html" class="text-white me-3">Home</a>
-                        <a href="about.html" class="text-white me-3">About</a>
-                        <a href="projects.html" class="text-white me-3">Projects</a>
-                        <a href="contact.html" class="text-white">Contact</a>
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Leading change through local action.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
-                    <p class="mt-2 mb-0">
-                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
-                    </p>
                 </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="summits.html">Summit Archive</a></li>
+                        <li><a href="summit-2025.html">Summit 2025</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2026 Young Access Hub. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button type="button" class="btn btn-warning position-fixed bottom-0 end-0 m-3 rounded-circle back-to-top" style="display: none;">
+    <button type="button" class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
-    
-    <!-- Success Modal -->
-    <!-- <div class="modal fade" id="successModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header border-0 text-center">
-                    <div class="w-100">
-                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                        <h4 class="modal-title">Registration Successful!</h4>
-                    </div>
-                </div>
-                <div class="modal-body text-center">
-                    <p>Thank you for registering for YAH Youth Summit 2025!</p>
-                    <p class="text-muted">You will receive a confirmation email shortly with your ticket and additional information.</p>
-                </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Continue</button>
-                </div>
-            </div>
-        </div>
-    </div>
-     -->
-    <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/summit.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script>
+        document.getElementById('summitSignupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value.trim();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('signupEmail').style.borderColor = '#ff6b6b';
+                return;
+            }
+            // TODO: wire to your backend / mailing list service
+            document.getElementById('signupEmail').style.borderColor = '';
+            this.style.display = 'none';
+            document.getElementById('signupFeedback').style.display = 'block';
+        });
+    </script>
 </body>
 </html>

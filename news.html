@@ -1,426 +1,283 @@
 <!DOCTYPE html>
-<html lang="en">                    <li class="nav-item">
-                        <a class="nav-link" href="news.html">News</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="summit.html">Summit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stay updated with the latest news, announcements, and success stories from Young Access Hub">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <title>News & Updates | Young Access Hub</title>
+    <meta name="description" content="Stay updated with the latest news, announcements, and success stories from Young Access Hub.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>News &amp; Updates | Young Access Hub</title>
 </head>
 <body>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="Young Access Hub" height="40" class="d-inline-block align-text-top">
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="42">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="news.html">News</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link" href="about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                    <a class="nav__link" href="projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                    <ul class="nav__dropdown">
+                        <li><a href="projects/kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                        <li><a href="projects/summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                    </ul>
+                </li>
+                    <li><a class="nav__link nav__link--active" href="news.html">News</a></li>
+                    <li><a class="nav__link" href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Page Header -->
-    <section class="hero-section py-5">
+    <header class="page-header text-center">
         <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-4 fw-bold text-white mb-4">News & Updates</h1>
-                    <p class="lead text-white-50 mb-4">
-                        Stay informed about our latest initiatives, events, success stories, and community impact.
-                    </p>
-                </div>
-            </div>
+            <span class="badge badge--light mb-3">Latest Updates</span>
+            <h1 class="page-header__title" style="margin-top:var(--space-3);">News &amp; Updates</h1>
+            <p class="page-header__subtitle">
+                Stay informed about our latest initiatives, events, success stories, and community impact.
+            </p>
         </div>
-    </section>
+    </header>
 
     <!-- Featured Article -->
-    <section class="py-5 bg-light">
+    <section class="section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-10 mx-auto">
-                    <article class="featured-article card border-0 shadow-lg">
-                        <div class="row g-0">
-                            <div class="col-md-6">
-                                <div class="article-image bg-primary d-flex align-items-center justify-content-center h-100">
-                                    <i class="fas fa-rocket fa-5x text-white"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card-body p-5">
-                                    <div class="mb-3">
-                                        <span class="badge bg-primary fs-6">Featured</span>
-                                        <small class="text-muted ms-2">September 1, 2025</small>
-                                    </div>
-                                    <h2 class="card-title h3 mb-3">E-Learning Platform Beta Launch: Early Access Now Available</h2>
-                                    <p class="card-text mb-4">
-                                        We're thrilled to announce the beta launch of our comprehensive e-learning platform! 
-                                        The first 100 young people can now access our interactive courses, skill assessments, 
-                                        and community features completely free.
-                                    </p>
-                                    <a href="#article-1" class="btn btn-primary">
-                                        <i class="fas fa-arrow-right me-2"></i>Read Full Article
-                                    </a>
-                                </div>
-                            </div>
+            <div class="card card--elevated" data-animate style="overflow:hidden;">
+                <div class="grid grid--2 grid--align-center" style="gap:0;">
+                    <div style="background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));padding:var(--space-7);display:flex;align-items:center;justify-content:center;min-height:280px;">
+                        <i class="fas fa-rocket" style="font-size:5rem;color:rgba(255,255,255,.85);"></i>
+                    </div>
+                    <div class="card__body card__body--lg">
+                        <div class="flex gap-2 mb-3" style="align-items:center;">
+                            <span class="badge badge--primary">Featured</span>
+                            <small class="text--muted">September 1, 2025</small>
                         </div>
-                    </article>
+                        <h2 class="card__title" style="font-size:1.6rem;margin-bottom:var(--space-3);">
+                            E-Learning Platform Beta Launch: Early Access Now Available
+                        </h2>
+                        <p class="card__text" style="font-size:1rem;">
+                            We're thrilled to announce the beta launch of our comprehensive e-learning platform!
+                            The first 100 young people can now access our interactive courses, skill assessments,
+                            and community features completely free.
+                        </p>
+                        <a href="contact.html" class="btn btn--primary btn--lg" style="margin-top:var(--space-4);">
+                            <i class="fas fa-arrow-right"></i> Get Early Access
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- News Categories Filter -->
-    <section class="py-4 bg-white border-bottom">
+    <!-- Filter Bar -->
+    <section class="section--sm" style="border-bottom:2px solid var(--color-border);">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="news-filters text-center">
-                        <button class="btn btn-outline-primary me-2 mb-2 filter-btn active" data-filter="all">All News</button>
-                        <button class="btn btn-outline-primary me-2 mb-2 filter-btn" data-filter="announcements">Announcements</button>
-                        <button class="btn btn-outline-primary me-2 mb-2 filter-btn" data-filter="events">Events</button>
-                        <button class="btn btn-outline-primary me-2 mb-2 filter-btn" data-filter="success-stories">Success Stories</button>
-                        <button class="btn btn-outline-primary me-2 mb-2 filter-btn" data-filter="partnerships">Partnerships</button>
-                    </div>
-                </div>
+            <div class="flex flex-wrap gap-2" style="justify-content:center;" id="news-filters">
+                <button class="btn btn--outline btn--sm filter-btn filter-btn--active" data-filter="all">All News</button>
+                <button class="btn btn--outline btn--sm filter-btn" data-filter="announcements">Announcements</button>
+                <button class="btn btn--outline btn--sm filter-btn" data-filter="events">Events</button>
+                <button class="btn btn--outline btn--sm filter-btn" data-filter="success-stories">Success Stories</button>
+                <button class="btn btn--outline btn--sm filter-btn" data-filter="partnerships">Partnerships</button>
             </div>
         </div>
     </section>
 
     <!-- News Grid -->
-    <section class="py-5">
+    <section class="section bg--subtle">
         <div class="container">
-            <div class="row g-4" id="news-grid">
-                <!-- News Article 1 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="announcements">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-primary text-white border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-primary">Announcement</span>
-                                <small>Aug 28, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">New Partnership with Tech Leaders Network</h5>
-                            <p class="card-text">
-                                We've partnered with Tech Leaders Network to provide our youth with access to 
-                                cutting-edge technology training and mentorship opportunities.
-                            </p>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
-                        </div>
-                    </article>
-                </div>
+            <div class="grid grid--3" id="news-grid" style="gap:var(--space-5);">
 
-                <!-- News Article 2 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="events">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-warning text-dark border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-dark text-warning">Event</span>
-                                <small>Aug 25, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">Youth Summit 2025 Registration Opens</h5>
-                            <p class="card-text">
-                                Early bird registration is now open for our annual Youth Summit! 
-                                Join 250+ young leaders for three days of inspiration and transformation.
-                            </p>
-                            <a href="#" class="btn btn-outline-warning btn-sm">Register Now</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="announcements" data-animate>
+                    <div class="card__header bg-primary">
+                        <span class="badge badge--light">Announcement</span>
+                        <small>Aug 28, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">New Partnership with Tech Leaders Network</h5>
+                        <p class="card__text">We've partnered with Tech Leaders Network to provide our youth with access to cutting-edge technology training and mentorship.</p>
+                        <a href="#" class="btn btn--outline btn--sm">Read More</a>
+                    </div>
+                </article>
 
-                <!-- News Article 3 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="success-stories">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-success text-white border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-success">Success Story</span>
-                                <small>Aug 20, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">From YAH to Tech Startup: Maria's Journey</h5>
-                            <p class="card-text">
-                                Meet Maria Rodriguez, who went from YAH participant to launching her own 
-                                tech startup helping local businesses digitize their operations.
-                            </p>
-                            <a href="#" class="btn btn-outline-success btn-sm">Read Story</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="events" data-animate data-animate-delay="2">
+                    <div class="card__header bg-accent">
+                        <span class="badge badge--dark">Event</span>
+                        <small>Aug 25, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">Youth Summit 2025 Registration Opens</h5>
+                        <p class="card__text">Early bird registration is now open for our annual Youth Summit! Join 250+ young leaders for a day of inspiration.</p>
+                        <a href="summit.html" class="btn btn--accent btn--sm">Register Now</a>
+                    </div>
+                </article>
 
-                <!-- News Article 4 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="announcements">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-primary text-white border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-primary">Announcement</span>
-                                <small>Aug 15, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">100 Youth Complete Skills Development Program</h5>
-                            <p class="card-text">
-                                Celebrating our first cohort of 100 program graduates who have successfully 
-                                completed our comprehensive 6-month skills development program.
-                            </p>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="success-stories" data-animate data-animate-delay="3">
+                    <div class="card__header bg-success">
+                        <span class="badge badge--light">Success Story</span>
+                        <small>Aug 20, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">From YAH to Tech Startup: Maria's Journey</h5>
+                        <p class="card__text">Meet Maria Rodriguez, who went from YAH participant to launching her own tech startup helping local businesses digitise.</p>
+                        <a href="#" class="btn btn--success btn--sm">Read Story</a>
+                    </div>
+                </article>
 
-                <!-- News Article 5 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="partnerships">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-info text-white border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-info">Partnership</span>
-                                <small>Aug 10, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">Community Bank Sponsors Youth Entrepreneurship Program</h5>
-                            <p class="card-text">
-                                Local Community Bank has committed $50,000 to sponsor our new youth 
-                                entrepreneurship program launching this fall.
-                            </p>
-                            <a href="#" class="btn btn-outline-info btn-sm">Learn More</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="announcements" data-animate>
+                    <div class="card__header bg-primary">
+                        <span class="badge badge--light">Announcement</span>
+                        <small>Aug 15, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">100 Youth Complete Skills Development Programme</h5>
+                        <p class="card__text">Celebrating our first cohort of 100 programme graduates who have successfully completed our comprehensive skills programme.</p>
+                        <a href="#" class="btn btn--outline btn--sm">Read More</a>
+                    </div>
+                </article>
 
-                <!-- News Article 6 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="events">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-warning text-dark border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-dark text-warning">Event</span>
-                                <small>Aug 5, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">Monthly Skills Workshop: Digital Marketing</h5>
-                            <p class="card-text">
-                                Join us for our monthly skills workshop focusing on digital marketing 
-                                fundamentals for young entrepreneurs and career seekers.
-                            </p>
-                            <a href="#" class="btn btn-outline-warning btn-sm">Register</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="partnerships" data-animate data-animate-delay="2">
+                    <div class="card__header" style="background:var(--color-secondary);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:var(--space-3) var(--space-4);">
+                        <span class="badge badge--light">Partnership</span>
+                        <small>Aug 10, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">Community Bank Sponsors Youth Entrepreneurship</h5>
+                        <p class="card__text">Local Community Bank has committed funding to sponsor our new youth entrepreneurship programme launching this fall.</p>
+                        <a href="#" class="btn btn--outline btn--sm">Learn More</a>
+                    </div>
+                </article>
 
-                <!-- News Article 7 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="success-stories">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-success text-white border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-success">Success Story</span>
-                                <small>Jul 30, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">YAH Alumni Lands Dream Job at Fortune 500 Company</h5>
-                            <p class="card-text">
-                                James Chen, a graduate of our 2024 leadership program, has been hired as 
-                                a junior analyst at a Fortune 500 financial services company.
-                            </p>
-                            <a href="#" class="btn btn-outline-success btn-sm">Read Story</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="events" data-animate data-animate-delay="3">
+                    <div class="card__header bg-accent">
+                        <span class="badge badge--dark">Event</span>
+                        <small>Aug 5, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">Monthly Skills Workshop: Digital Marketing</h5>
+                        <p class="card__text">Join us for our monthly skills workshop focusing on digital marketing fundamentals for young entrepreneurs.</p>
+                        <a href="#" class="btn btn--accent btn--sm">Register</a>
+                    </div>
+                </article>
 
-                <!-- News Article 8 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="announcements">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-primary text-white border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-primary">Announcement</span>
-                                <small>Jul 25, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">New Mentorship Program Launches</h5>
-                            <p class="card-text">
-                                We're launching a comprehensive mentorship program pairing young people 
-                                with experienced professionals in their fields of interest.
-                            </p>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Apply</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="success-stories" data-animate>
+                    <div class="card__header bg-success">
+                        <span class="badge badge--light">Success Story</span>
+                        <small>Jul 30, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">YAH Alumni Lands Dream Job at Tech Company</h5>
+                        <p class="card__text">James Chen, a graduate of our 2024 leadership programme, has been hired as a junior analyst at a leading financial services firm.</p>
+                        <a href="#" class="btn btn--success btn--sm">Read Story</a>
+                    </div>
+                </article>
 
-                <!-- News Article 9 -->
-                <div class="col-lg-4 col-md-6 news-item" data-category="events">
-                    <article class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-warning text-dark border-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-dark text-warning">Event</span>
-                                <small>Jul 20, 2025</small>
-                            </div>
-                        </div>
-                        <div class="card-body p-4">
-                            <h5 class="card-title">Community Impact Showcase</h5>
-                            <p class="card-text">
-                                Join us for an evening celebrating the community impact projects led by 
-                                our youth participants over the past year.
-                            </p>
-                            <a href="#" class="btn btn-outline-warning btn-sm">RSVP</a>
-                        </div>
-                    </article>
-                </div>
+                <article class="card news-item" data-category="announcements" data-animate data-animate-delay="2">
+                    <div class="card__header bg-primary">
+                        <span class="badge badge--light">Announcement</span>
+                        <small>Jul 25, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">New Mentorship Programme Launches</h5>
+                        <p class="card__text">We're launching a comprehensive mentorship programme pairing young people with experienced professionals in their fields of interest.</p>
+                        <a href="contact.html" class="btn btn--outline btn--sm">Apply</a>
+                    </div>
+                </article>
+
+                <article class="card news-item" data-category="events" data-animate data-animate-delay="3">
+                    <div class="card__header bg-accent">
+                        <span class="badge badge--dark">Event</span>
+                        <small>Jul 20, 2025</small>
+                    </div>
+                    <div class="card__body">
+                        <h5 class="card__title">Community Impact Showcase Evening</h5>
+                        <p class="card__text">Join us for an evening celebrating the community impact projects led by our youth participants over the past year.</p>
+                        <a href="contact.html" class="btn btn--accent btn--sm">RSVP</a>
+                    </div>
+                </article>
+
             </div>
         </div>
     </section>
 
-    <!-- Newsletter Signup -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h2 class="display-5 fw-bold mb-4">Stay Updated</h2>
-                    <p class="lead mb-4">
-                        Subscribe to our newsletter to receive the latest news, event announcements, 
-                        and success stories directly in your inbox.
-                    </p>
-                    <form class="newsletter-form row g-3 justify-content-center">
-                        <div class="col-md-6">
-                            <input type="email" class="form-control form-control-lg" placeholder="Enter your email address" required>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-warning btn-lg w-100">
-                                <i class="fas fa-paper-plane me-2"></i>Subscribe
-                            </button>
-                        </div>
-                    </form>
-                    <small class="text-white-50 mt-3 d-block">
-                        We respect your privacy. Unsubscribe at any time.
-                    </small>
-                </div>
-            </div>
+    <!-- Newsletter -->
+    <section class="section bg--primary text-center">
+        <div class="container" data-animate>
+            <span class="badge badge--light mb-3">Stay Connected</span>
+            <h2 class="heading--lg text--white mb-3" style="margin-top:var(--space-3);">Stay Updated</h2>
+            <p class="text--lead text--white-muted mb-4" style="max-width:500px;margin-inline:auto;">
+                Subscribe to our newsletter for the latest news, event announcements, and success stories.
+            </p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" class="form-control" id="newsletterEmail" placeholder="Enter your email address…" style="max-width:340px;" required>
+                <button type="submit" class="btn btn--accent btn--lg">
+                    <i class="fas fa-paper-plane"></i> Subscribe
+                </button>
+            </form>
+            <small style="color:rgba(255,255,255,.45);display:block;margin-top:var(--space-4);">
+                We respect your privacy. Unsubscribe at any time.
+            </small>
         </div>
     </section>
 
     <!-- Archive -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h3 class="mb-4">Looking for Older News?</h3>
-                    <p class="text-muted mb-4">
-                        Browse our complete news archive to find articles and announcements from previous months.
-                    </p>
-                    <div class="archive-links">
-                        <a href="#" class="btn btn-outline-primary me-2 mb-2">2024 Archive</a>
-                        <a href="#" class="btn btn-outline-primary me-2 mb-2">2023 Archive</a>
-                        <a href="#" class="btn btn-outline-primary me-2 mb-2">2022 Archive</a>
-                    </div>
-                </div>
+    <section class="section--sm bg--subtle text-center">
+        <div class="container" data-animate>
+            <h3 class="heading--sm mb-3">Looking for Older News?</h3>
+            <p class="text--muted mb-4">Browse our complete news archive to find articles from previous years.</p>
+            <div class="flex flex-wrap gap-2" style="justify-content:center;">
+                <a href="#" class="btn btn--outline btn--sm">2024 Archive</a>
+                <a href="#" class="btn btn--outline btn--sm">2023 Archive</a>
+                <a href="#" class="btn btn--outline btn--sm">2022 Archive</a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white py-4">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Empowering young people for self-transformation.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="quick-links">
-                        <a href="index.html" class="text-white me-3">Home</a>
-                        <a href="about.html" class="text-white me-3">About</a>
-                        <a href="projects.html" class="text-white me-3">Projects</a>
-                        <a href="contact.html" class="text-white">Contact</a>
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Empowering young people for self-transformation.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
-                    <p class="mt-2 mb-0">
-                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
-                    </p>
                 </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2025 Young Access Hub. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button type="button" class="btn btn-warning position-fixed bottom-0 end-0 m-3 rounded-circle back-to-top" style="display: none;">
+    <button type="button" class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
-    
-    <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-        // News filtering functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            const newsItems = document.querySelectorAll('.news-item');
-            
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    const filter = this.getAttribute('data-filter');
-                    
-                    newsItems.forEach(item => {
-                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                            item.style.display = 'block';
-                            item.classList.add('fade-in');
-                        } else {
-                            item.style.display = 'none';
-                            item.classList.remove('fade-in');
-                        }
-                    });
-                });
-            });
-            
-            // Newsletter form handling
-            const newsletterForm = document.querySelector('.newsletter-form');
-            if (newsletterForm) {
-                newsletterForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const email = this.querySelector('input[type="email"]').value;
-                    
-                    // Simulate subscription (replace with actual implementation)
-                    if (email) {
-                        alert('Thank you for subscribing to our newsletter!');
-                        this.reset();
-                    }
-                });
-            }
-        });
-    </script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/news.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YAH Youth Summit 2023 — Highlights from the inaugural 1st Annual Youth Summit in Kono District, Sierra Leone.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Summit 2023 Highlights | Young Access Hub</title>
+    <style>
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3);
+        }
+        .gallery-grid__item {
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--color-gray-200);
+            aspect-ratio: 4/3;
+        }
+        .gallery-grid__item--wide { grid-column: span 2; aspect-ratio: 16/7; }
+        .gallery-grid__item--tall { grid-row: span 2; aspect-ratio: auto; }
+        .gallery-grid__item img { width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease; }
+        .gallery-grid__item:hover img { transform: scale(1.04); }
+        .gallery-placeholder {
+            width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+            background:var(--color-accent-lt);color:var(--color-accent-dk);gap:var(--space-2);
+            font-size:.8rem;font-weight:600;text-align:center;padding:var(--space-3);
+        }
+        .gallery-placeholder i { font-size:2rem;opacity:.5; }
+        .speaker-card {
+            background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--color-border);
+            overflow:hidden;transition:transform var(--transition),box-shadow var(--transition);
+        }
+        .speaker-card:hover { transform:translateY(-5px);box-shadow:var(--shadow-md); }
+        .speaker-card__photo-placeholder {
+            width:100px;height:100px;border-radius:50%;background:var(--color-accent-lt);
+            display:flex;align-items:center;justify-content:center;color:var(--color-accent-dk);
+            font-size:2rem;margin:var(--space-5) auto var(--space-3);border:4px solid var(--color-accent-lt);
+        }
+        .testimonial-card {
+            background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--color-border);
+            padding:var(--space-5);position:relative;
+        }
+        .testimonial-card::before {
+            content:'\201C';position:absolute;top:var(--space-3);left:var(--space-4);
+            font-size:4rem;line-height:1;color:var(--color-accent-lt);font-family:Georgia,serif;
+        }
+        @media (max-width:768px) {
+            .gallery-grid { grid-template-columns: repeat(2,1fr); }
+            .gallery-grid__item--wide { grid-column: span 2; }
+            .gallery-grid__item--tall { grid-row: span 1; aspect-ratio: 4/3; }
+        }
+        @media (max-width:480px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-grid__item--wide { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="42">
+            </a>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link" href="about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                    <a class="nav__link" href="projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                    <ul class="nav__dropdown">
+                        <li><a href="projects/kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                        <li><a href="projects/summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                    </ul>
+                </li>
+                    <li><a class="nav__link" href="news.html">News</a></li>
+                    <li><a class="nav__link" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero — amber/gold inaugural edition -->
+    <header style="background:linear-gradient(135deg,#b45309 0%,#d97706 40%,#f59e0b 100%);padding:calc(var(--nav-height) + var(--space-7)) 0 var(--space-7);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;"></div>
+        <div class="container" style="position:relative;z-index:1;">
+            <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-4);font-size:.85rem;">
+                <a href="summits.html" style="color:rgba(255,255,255,.7);text-decoration:none;">
+                    <i class="fas fa-chevron-left" style="margin-right:4px;"></i> All Summits
+                </a>
+            </div>
+            <span style="display:inline-flex;align-items:center;gap:var(--space-2);background:rgba(255,255,255,.2);color:#fff;padding:.4rem 1rem;border-radius:var(--radius-pill);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-4);">
+                <i class="fas fa-star"></i> Inaugural Edition
+            </span>
+            <h1 style="font-size:clamp(2.5rem,6vw,4.5rem);font-weight:800;color:#fff;line-height:1.05;margin:var(--space-3) 0 var(--space-3);letter-spacing:-0.025em;">
+                YAH Youth Summit<br><span style="color:#fff3;font-weight:400;font-size:.55em;display:block;margin-top:.25em;">Where It All Began</span>
+            </h1>
+            <p style="font-size:1.25rem;font-weight:600;color:rgba(255,255,255,.9);margin:0 0 var(--space-4);">
+                "Rise Up, Step Forward"
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-5);">
+                <div style="display:flex;align-items:center;gap:var(--space-2);background:rgba(255,255,255,.2);padding:.6rem 1.2rem;border-radius:var(--radius-pill);">
+                    <i class="fas fa-calendar" style="color:#fff;"></i>
+                    <span style="color:#fff;font-weight:600;font-size:.9rem;">November 2023</span>
+                    <!-- REPLACE: add exact date -->
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--space-2);background:rgba(255,255,255,.2);padding:.6rem 1.2rem;border-radius:var(--radius-pill);">
+                    <i class="fas fa-map-marker-alt" style="color:#fff;"></i>
+                    <span style="color:#fff;font-weight:600;font-size:.9rem;">Koidu City, Kono District</span>
+                    <!-- REPLACE: add exact venue -->
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--space-2);background:rgba(255,255,255,.2);padding:.6rem 1.2rem;border-radius:var(--radius-pill);">
+                    <i class="fas fa-users" style="color:#fff;"></i>
+                    <span style="color:#fff;font-weight:600;font-size:.9rem;">150+ Attendees</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Stats -->
+    <section class="section--sm" style="background:var(--color-gray-100);border-bottom:2px solid var(--color-border);">
+        <div class="container">
+            <div class="grid grid--4 text-center" style="gap:0;">
+                <div style="padding:var(--space-5);border-right:1px solid var(--color-border);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:#d97706;line-height:1;">150+</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Young People</span>
+                </div>
+                <div style="padding:var(--space-5);border-right:1px solid var(--color-border);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:#d97706;line-height:1;">5</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Guest Speakers</span>
+                </div>
+                <div style="padding:var(--space-5);border-right:1px solid var(--color-border);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:#d97706;line-height:1;">5</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Workshops</span>
+                </div>
+                <div style="padding:var(--space-5);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:#d97706;line-height:1;">1st</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Of Its Kind</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About This Summit -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-7);">
+                <div data-animate>
+                    <span style="display:inline-block;background:var(--color-accent-lt);color:var(--color-accent-dk);padding:.35rem 1rem;border-radius:var(--radius-pill);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">Where It All Began</span>
+                    <h2 class="heading--lg mb-3" style="margin-top:var(--space-3);">The Summit That Started a Movement</h2>
+                    <p class="text--lead text--muted mb-3">
+                        In 2020, Young Access Hub dared to dream big. What began as a vision became
+                        the first-ever YAH Youth Summit — bringing together over 150 young people from
+                        across Kono District for a historic day of inspiration and empowerment.
+                    </p>
+                    <p style="color:var(--color-text-muted);line-height:1.8;">
+                        Under the theme <strong style="color:#d97706;">"Rise Up, Step Forward,"</strong>
+                        participants heard from local leaders and change-makers, attended hands-on workshops,
+                        and left with a sense of community and possibility that many described as life-changing.
+                        This inaugural edition laid the foundation for everything that followed.
+                        <!-- REPLACE: Update with the actual narrative for the 2023 summit -->
+                    </p>
+                </div>
+                <div data-animate data-animate-delay="2">
+                    <!-- REPLACE: swap with an actual 2023 summit photo -->
+                    <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:var(--radius-lg);aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-3);color:#d97706;">
+                        <i class="fas fa-image" style="font-size:3rem;opacity:.4;"></i>
+                        <span style="font-weight:600;opacity:.6;font-size:.9rem;">Replace with 2023 summit photo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers -->
+    <section class="section" style="background:var(--color-gray-100);">
+        <div class="container">
+            <div class="text-center mb-5" data-animate>
+                <span style="display:inline-block;background:var(--color-accent-lt);color:var(--color-accent-dk);padding:.35rem 1rem;border-radius:var(--radius-pill);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">The Voices</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Featured Speakers</h2>
+                <p class="text--muted" style="margin-top:var(--space-3);">The leaders who took the stage at our very first summit.</p>
+            </div>
+            <div class="grid grid--2" style="gap:var(--space-4);max-width:780px;margin:0 auto;">
+
+                <!-- Speaker 1 -->
+                <div class="speaker-card text-center" data-animate>
+                    <div class="speaker-card__photo-placeholder"><i class="fas fa-user"></i></div>
+                    <!-- REPLACE: <img src="assets/photos/speaker.jpg" alt="Speaker Name" class="speaker-card__photo"> -->
+                    <div style="padding:0 var(--space-5) var(--space-5);">
+                        <span style="display:inline-block;background:var(--color-accent-lt);color:var(--color-accent-dk);padding:.3rem .8rem;border-radius:var(--radius-pill);font-size:.75rem;font-weight:700;margin-bottom:var(--space-2);">Keynote</span>
+                        <h4 style="font-weight:700;font-size:1.05rem;margin:var(--space-2) 0 var(--space-1);">Speaker Name</h4>
+                        <p style="font-size:.85rem;color:var(--color-text-muted);font-weight:600;margin-bottom:var(--space-3);">Title / Organisation — REPLACE</p>
+                        <p style="font-size:.9rem;color:var(--color-text-muted);line-height:1.7;margin-bottom:var(--space-3);">
+                            Brief biography and why this speaker inspired our inaugural audience.
+                            <!-- REPLACE with actual bio -->
+                        </p>
+                        <div style="background:var(--color-accent-lt);border-radius:var(--radius-pill);padding:.4rem 1rem;font-size:.8rem;font-weight:700;color:var(--color-accent-dk);display:inline-block;">
+                            <i class="fas fa-microphone" style="margin-right:4px;"></i> Topic: Add Topic Here
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speaker 2 -->
+                <div class="speaker-card text-center" data-animate data-animate-delay="2">
+                    <div class="speaker-card__photo-placeholder"><i class="fas fa-user"></i></div>
+                    <div style="padding:0 var(--space-5) var(--space-5);">
+                        <span style="display:inline-block;background:var(--color-primary-lt);color:var(--color-primary);padding:.3rem .8rem;border-radius:var(--radius-pill);font-size:.75rem;font-weight:700;margin-bottom:var(--space-2);">Speaker</span>
+                        <h4 style="font-weight:700;font-size:1.05rem;margin:var(--space-2) 0 var(--space-1);">Speaker Name</h4>
+                        <p style="font-size:.85rem;color:var(--color-text-muted);font-weight:600;margin-bottom:var(--space-3);">Title / Organisation — REPLACE</p>
+                        <p style="font-size:.9rem;color:var(--color-text-muted);line-height:1.7;margin-bottom:var(--space-3);">
+                            Brief biography and contribution to the inaugural edition.
+                            <!-- REPLACE with actual bio -->
+                        </p>
+                        <div style="background:var(--color-primary-lt);border-radius:var(--radius-pill);padding:.4rem 1rem;font-size:.8rem;font-weight:700;color:var(--color-primary);display:inline-block;">
+                            <i class="fas fa-microphone" style="margin-right:4px;"></i> Topic: Add Topic Here
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <p class="text-center" style="margin-top:var(--space-4);font-size:.9rem;color:var(--color-text-muted);">
+                <!-- REPLACE: Add more speaker cards as needed — copy the block above -->
+            </p>
+        </div>
+    </section>
+
+    <!-- Programme Highlights -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-animate>
+                <span style="display:inline-block;background:var(--color-accent-lt);color:var(--color-accent-dk);padding:.35rem 1rem;border-radius:var(--radius-pill);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">The Programme</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Day Highlights</h2>
+            </div>
+            <div class="grid grid--3" style="gap:var(--space-4);">
+                <div class="card card--flat" data-animate>
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-accent-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-microphone" style="color:#d97706;font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Opening Keynote</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                            A bold opening that set the tone for the entire day — and for the summits to come.
+                            <!-- REPLACE with actual keynote title and description -->
+                        </p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="2">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-primary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-tools" style="color:var(--color-primary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Skill-Building Workshops</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                            5 workshops giving participants practical tools in entrepreneurship, digital skills, and leadership.
+                            <!-- REPLACE with actual workshop titles -->
+                        </p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="3">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-secondary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-handshake" style="color:var(--color-secondary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Community Conversations</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                            Open dialogue sessions where young people shared challenges and co-created solutions.
+                            <!-- REPLACE with actual session description -->
+                        </p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate>
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-accent-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-flag" style="color:#d97706;font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Inaugural Pledge Ceremony</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                            Participants made a collective pledge to lead change in their communities — a powerful close to a historic day.
+                            <!-- REPLACE with actual closing description -->
+                        </p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="2">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-primary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-camera" style="color:var(--color-primary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">First Group Photo</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">
+                            The photo that started it all — 150+ young faces united by purpose.
+                            <!-- REPLACE with actual description -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="section" style="background:var(--color-gray-100);">
+        <div class="container">
+            <div class="text-center mb-5" data-animate>
+                <span style="display:inline-block;background:var(--color-accent-lt);color:var(--color-accent-dk);padding:.35rem 1rem;border-radius:var(--radius-pill);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">In Pictures</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Photo Gallery</h2>
+                <p class="text--muted" style="margin-top:var(--space-3);">Memories from the summit that started it all.</p>
+            </div>
+            <!-- REPLACE: swap gallery-placeholder divs with real <img> tags once photos are available -->
+            <div class="gallery-grid" data-animate>
+                <div class="gallery-grid__item gallery-grid__item--wide">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <span>Opening ceremony — replace with photo</span>
+                    </div>
+                </div>
+                <div class="gallery-grid__item gallery-grid__item--tall">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <span>Keynote speaker — replace with photo</span>
+                    </div>
+                </div>
+                <div class="gallery-grid__item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <span>Workshop session</span>
+                    </div>
+                </div>
+                <div class="gallery-grid__item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <span>Community conversations</span>
+                    </div>
+                </div>
+                <div class="gallery-grid__item gallery-grid__item--wide">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <span>First ever group photo — replace with photo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-animate>
+                <span style="display:inline-block;background:var(--color-accent-lt);color:var(--color-accent-dk);padding:.35rem 1rem;border-radius:var(--radius-pill);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">Voices</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">What Participants Said</h2>
+            </div>
+            <div class="grid grid--3" style="gap:var(--space-4);">
+                <div style="background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--color-border);padding:var(--space-5);position:relative;" data-animate>
+                    <div style="position:absolute;top:var(--space-3);left:var(--space-4);font-size:4rem;line-height:1;color:var(--color-accent-lt);font-family:Georgia,serif;">&ldquo;</div>
+                    <div style="padding-top:var(--space-3);">
+                        <p style="font-size:1rem;line-height:1.8;color:var(--color-text);margin-bottom:var(--space-4);position:relative;z-index:1;">
+                            "I never imagined something like this could happen in Kono. It showed me that big things
+                            are possible right here at home. I left that day feeling unstoppable."
+                            <!-- REPLACE with actual testimonial -->
+                        </p>
+                        <div style="display:flex;align-items:center;gap:var(--space-3);">
+                            <div style="width:44px;height:44px;border-radius:50%;background:var(--color-accent-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-user" style="color:#d97706;"></i>
+                            </div>
+                            <div>
+                                <strong style="display:block;font-size:.9rem;">Participant Name</strong>
+                                <span style="font-size:.8rem;color:var(--color-text-muted);">Age · Location — REPLACE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--color-border);padding:var(--space-5);position:relative;" data-animate data-animate-delay="2">
+                    <div style="position:absolute;top:var(--space-3);left:var(--space-4);font-size:4rem;line-height:1;color:var(--color-accent-lt);font-family:Georgia,serif;">&ldquo;</div>
+                    <div style="padding-top:var(--space-3);">
+                        <p style="font-size:1rem;line-height:1.8;color:var(--color-text);margin-bottom:var(--space-4);position:relative;z-index:1;">
+                            "This was the first time I sat in a room with 150 young people all committed to making
+                            a difference. The energy was electric. I'll never forget it."
+                            <!-- REPLACE with actual testimonial -->
+                        </p>
+                        <div style="display:flex;align-items:center;gap:var(--space-3);">
+                            <div style="width:44px;height:44px;border-radius:50%;background:var(--color-primary-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-user" style="color:var(--color-primary);"></i>
+                            </div>
+                            <div>
+                                <strong style="display:block;font-size:.9rem;">Participant Name</strong>
+                                <span style="font-size:.8rem;color:var(--color-text-muted);">Age · Location — REPLACE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--color-border);padding:var(--space-5);position:relative;" data-animate data-animate-delay="3">
+                    <div style="position:absolute;top:var(--space-3);left:var(--space-4);font-size:4rem;line-height:1;color:var(--color-accent-lt);font-family:Georgia,serif;">&ldquo;</div>
+                    <div style="padding-top:var(--space-3);">
+                        <p style="font-size:1rem;line-height:1.8;color:var(--color-text);margin-bottom:var(--space-4);position:relative;z-index:1;">
+                            "YAH had the courage to start something new. As a speaker, I could see in every face
+                            that these young people had been waiting for exactly this kind of space."
+                            <!-- REPLACE with actual testimonial -->
+                        </p>
+                        <div style="display:flex;align-items:center;gap:var(--space-3);">
+                            <div style="width:44px;height:44px;border-radius:50%;background:var(--color-secondary-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-user" style="color:var(--color-secondary-dk);"></i>
+                            </div>
+                            <div>
+                                <strong style="display:block;font-size:.9rem;">Speaker Name</strong>
+                                <span style="font-size:.8rem;color:var(--color-text-muted);">Title · Organisation — REPLACE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="background:linear-gradient(135deg,#b45309,#d97706);padding:var(--space-8) 0;text-align:center;">
+        <div class="container" data-animate style="max-width:640px;">
+            <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;padding:.35rem 1rem;border-radius:var(--radius-pill);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-4);">The Journey Continues</span>
+            <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#fff;letter-spacing:-0.02em;margin-bottom:var(--space-3);">See How Far We've Come</h2>
+            <p style="font-size:1.1rem;color:rgba(255,255,255,.85);margin-bottom:var(--space-5);">
+                From 150 attendees in 2023 to a growing movement. Join us for Summit 2025.
+            </p>
+            <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;">
+                <a href="summit.html" class="btn btn--lg" style="background:#fff;color:#b45309;font-weight:700;">
+                    <i class="fas fa-calendar"></i> Summit 2025
+                </a>
+                <a href="summits.html" class="btn btn--lg" style="background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6);">
+                    <i class="fas fa-archive"></i> All Summits
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Leading change through local action.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="summits.html">Summit Archive</a></li>
+                        <li><a href="summit.html">Summit 2025</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2025 Young Access Hub. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <button type="button" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="js/utils.js"></script>
+</body>
+</html>

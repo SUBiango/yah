@@ -3,94 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn more about Young Access Hub's mission, vision, values, and team dedicated to empowering youth transformation">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Learn about Young Access Hub's mission, vision, values, and team dedicated to empowering youth in Sierra Leone.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>About Us | Young Access Hub</title>
 </head>
 <body>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="Young Access Hub" height="40" class="d-inline-block align-text-top">
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="42">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="news.html">News</a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link nav__link--active" href="about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                    <a class="nav__link" href="projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                    <ul class="nav__dropdown">
+                        <li><a href="projects/kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                        <li><a href="projects/summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                    </ul>
+                </li>
+                    <li><a class="nav__link" href="news.html">News</a></li>
+                    <li><a class="nav__link" href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Page Header -->
-    <section class="hero-section py-5">
+    <header class="page-header text-center">
         <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-4 fw-bold text-white mb-4">About Young Access Hub</h1>
-                    <p class="lead text-white-50 mb-4">
-                        Mission. Vision. Values.
-                    </p>
-                </div>
-            </div>
+            <span class="badge badge--light mb-3">Our Organisation</span>
+            <h1 class="page-header__title" style="margin-top:var(--space-3);">About Young Access Hub</h1>
+            <p class="page-header__subtitle">Mission. Vision. Values. Story.</p>
         </div>
-    </section>
+    </header>
 
-    <!-- Mission, Vision, Values -->
-    <section class="py-5 bg-light">
+    <!-- Mission / Vision / Values -->
+    <section class="section">
         <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-bullseye fa-4x text-primary"></i>
+            <div class="grid grid--3" style="gap:var(--space-4);">
+                <div class="card card--elevated text-center" data-animate>
+                    <div class="card__body">
+                        <div class="card__icon" style="background:var(--color-primary-lt);">
+                            <i class="fas fa-bullseye" style="color:var(--color-primary);font-size:1.6rem;"></i>
                         </div>
-                        <h3 class="mb-3">Our Mission</h3>
-                        <p class="lead">
-                            Our mission is to hand young people the tools, the skills, and the fire to change their own lives and the communities around them.
+                        <h3 class="card__title">Our Mission</h3>
+                        <p class="card__text">
+                            To hand young people the tools, the skills, and the fire to change their own lives and
+                            the communities around them.
                         </p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-eye fa-4x text-primary"></i>
+                <div class="card card--elevated text-center" data-animate data-animate-delay="2">
+                    <div class="card__body">
+                        <div class="card__icon" style="background:var(--color-secondary-lt);">
+                            <i class="fas fa-eye" style="color:var(--color-secondary);font-size:1.6rem;"></i>
                         </div>
-                        <h3 class="mb-3">Our Vision</h3>
-                        <p class="lead">
-                            A Sierra Leone where every young person has equitable access to opportunities for growth regardless of their background.
+                        <h3 class="card__title">Our Vision</h3>
+                        <p class="card__text">
+                            A Sierra Leone where every young person has equitable access to opportunities for growth
+                            regardless of their background.
                         </p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-heart fa-4x text-primary"></i>
+                <div class="card card--elevated text-center" data-animate data-animate-delay="3">
+                    <div class="card__body">
+                        <div class="card__icon" style="background:var(--color-accent-lt);">
+                            <i class="fas fa-heart" style="color:var(--color-accent-dk);font-size:1.6rem;"></i>
                         </div>
-                        <h3 class="mb-3">Our Values</h3>
-                        <ul class="list-unstyled lead">
-                            <li><i class="fas fa-check text-success me-2"></i>Empowerment</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Innovation</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Collaboration</li>
+                        <h3 class="card__title">Our Values</h3>
+                        <ul class="list--check" style="text-align:left;">
+                            <li>Empowerment</li>
+                            <li>Innovation</li>
+                            <li>Collaboration</li>
+                            <li>Integrity</li>
                         </ul>
                     </div>
                 </div>
@@ -99,95 +93,80 @@
     </section>
 
     <!-- Our Story -->
-    <section class="py-5">
+    <section class="section bg--subtle">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-5 fw-bold text-center mb-5">Our Story</h2>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="p-4">
-                                <h4 class="mb-3">How It Started</h4>
-                                <p>
-                                    Young Access Hub was born from the recognition that many young people face barriers 
-                                    in accessing the resources, skills, and networks they need to thrive. Founded in 2020, 
-                                    we began with a simple but powerful belief: every young person deserves the opportunity 
-                                    to transform their life and contribute meaningfully to their community.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-4">
-                                <h4 class="mb-3">Where We Are Today</h4>
-                                <p>
-                                    Today, YAH is working on the 3rd youth empowerment summit in Kono District. We have planned 
-                                    and executed a number training programs for young people in the district. We were also able 
-                                    to launch an ICT training center to equip young people with essential digital skills. Due 
-                                    to human and other resource constraints, we have decided to design, build and launch a 
-                                    mobile e-learning app for young people to access in-demand skills from the comfort of their homes.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="text-center mb-5" data-animate>
+                <span class="badge badge--secondary mb-3">Our Journey</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Our Story</h2>
+            </div>
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-7);">
+                <div data-animate>
+                    <h4 class="heading--sm mb-3" style="color:var(--color-primary);">How It Started</h4>
+                    <p class="text--lead mb-4" style="color:var(--color-text-muted);">
+                        Young Access Hub was born from a recognition that many young people in Kono District face
+                        barriers in accessing the resources, skills, and networks they need to thrive.
+                    </p>
+                    <p style="color:var(--color-text-muted);line-height:1.8;">
+                        Founded in 2020 with a simple but powerful belief: every young person deserves the
+                        opportunity to transform their life and contribute meaningfully to their community.
+                        We started with small workshops and a WhatsApp group — and have since grown into
+                        a recognised social enterprise.
+                    </p>
+                </div>
+                <div data-animate data-animate-delay="2">
+                    <h4 class="heading--sm mb-3" style="color:var(--color-secondary);">Where We Are Today</h4>
+                    <p class="text--lead mb-4" style="color:var(--color-text-muted);">
+                        YAH is now working on the 4th Youth Empowerment Summit in Kono District and building
+                        a mobile e-learning platform.
+                    </p>
+                    <p style="color:var(--color-text-muted);line-height:1.8;">
+                        We've delivered training programmes for hundreds of young people, launched an ICT
+                        training centre, and built partnerships with local organisations. Our focus is now
+                        on scaling impact through technology — giving youth access to in-demand skills
+                        from the comfort of their homes.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Team Section -->
-    <section class="py-5 bg-light">
+    <section class="section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Our Team</h2>
-                    <p class="lead text-muted">
-                        Meet the passionate individuals driving our mission forward.
-                    </p>
-                </div>
+            <div class="text-center mb-5" data-animate>
+                <span class="badge badge--primary mb-3">The People</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Meet Our Team</h2>
+                <p class="text--lead text--muted" style="max-width:500px;margin-inline:auto;margin-top:var(--space-3);">
+                    Passionate individuals driving our mission forward every day.
+                </p>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <img src="assets/photos/umaru_profile_photo.JPG" alt="Umaru S. Biango" class="rounded mx-auto d-block img-fluid team-photo">
-                            </div>
-                            <h5 class="card-title">Umaru S. Biango</h5>
-                            <p class="text-muted mb-0">Executive Director</p>
-                        </div>
+            <div class="grid grid--4">
+                <div class="card card--flat text-center" data-animate>
+                    <div class="card__body">
+                        <img src="assets/photos/umaru_profile_photo.JPG" alt="Umaru S. Biango" class="team-photo mx-auto mb-3">
+                        <h5 style="font-family:var(--font-display);font-size:1.05rem;">Umaru S. Biango</h5>
+                        <p class="text--muted" style="font-size:.85rem;margin-top:var(--space-1);">Executive Director</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <img src="assets/photos/fredson_profile_photo.jpeg" alt="Alusine Fredson Lansana" class="rounded mx-auto d-block img-fluid team-photo">
-                            </div>
-                            <h5 class="card-title">Alusine Fredson Lansana</h5>
-                            <p class="text-muted mb-0">Programme Manager</p>
-                        </div>
+                <div class="card card--flat text-center" data-animate data-animate-delay="2">
+                    <div class="card__body">
+                        <img src="assets/photos/fredson_profile_photo.jpeg" alt="Alusine Fredson Lansana" class="team-photo mx-auto mb-3">
+                        <h5 style="font-family:var(--font-display);font-size:1.05rem;">Alusine Fredson Lansana</h5>
+                        <p class="text--muted" style="font-size:.85rem;margin-top:var(--space-1);">Programme Manager</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <img src="assets/photos/mariama_bah_profile_photo.JPG" alt="Mariama S. Bah" class="rounded mx-auto d-block img-fluid team-photo">
-                            </div>
-                            <h5 class="card-title">Mariama S. Bah</h5>
-                            <p class="text-muted mb-0">Finance Officer</p>
-                        </div>
+                <div class="card card--flat text-center" data-animate data-animate-delay="3">
+                    <div class="card__body">
+                        <img src="assets/photos/mariama_bah_profile_photo.JPG" alt="Mariama S. Bah" class="team-photo mx-auto mb-3">
+                        <h5 style="font-family:var(--font-display);font-size:1.05rem;">Mariama S. Bah</h5>
+                        <p class="text--muted" style="font-size:.85rem;margin-top:var(--space-1);">Finance Officer</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <img src="assets/photos/binta_bah_profile_photo.jpeg" alt="Binta Bah" class="rounded mx-auto d-block img-fluid team-photo">
-                            </div>
-                            <h5 class="card-title">Binta Bah</h5>
-                            <p class="text-muted mb-0">Admin Coordinator</p>
-                        </div>
+                <div class="card card--flat text-center" data-animate data-animate-delay="4">
+                    <div class="card__body">
+                        <img src="assets/photos/binta_bah_profile_photo.jpeg" alt="Binta Bah" class="team-photo mx-auto mb-3">
+                        <h5 style="font-family:var(--font-display);font-size:1.05rem;">Binta Bah</h5>
+                        <p class="text--muted" style="font-size:.85rem;margin-top:var(--space-1);">Admin Coordinator</p>
                     </div>
                 </div>
             </div>
@@ -195,101 +174,94 @@
     </section>
 
     <!-- Impact Numbers -->
-    <section class="py-5 bg-primary text-white">
+    <section class="section bg--primary">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-4">Our Impact in Numbers</h2>
-                    <p class="lead">
-                        Here's how we're making a difference in young lives across our communities.
-                    </p>
-                </div>
+            <div class="text-center mb-5" data-animate>
+                <span class="badge badge--light mb-3">By The Numbers</span>
+                <h2 class="heading--lg text--white" style="margin-top:var(--space-3);">Our Impact in Numbers</h2>
             </div>
-            <div class="row g-4 text-center">
-                <div class="col-md-3">
-                    <div class="impact-stat">
-                        <h3 class="display-4 fw-bold text-warning">500+</h3>
-                        <p class="lead">Youth Served</p>
-                        <small>Across all our programs</small>
-                    </div>
+            <div class="grid grid--4 text-center">
+                <div class="impact-stat" data-animate>
+                    <span class="impact-stat__number" data-count-to="500" data-suffix="+">500+</span>
+                    <span class="impact-stat__label">Youth Served</span>
+                    <small>Across all programmes</small>
                 </div>
-                <div class="col-md-3">
-                    <div class="impact-stat">
-                        <h3 class="display-4 fw-bold text-warning">4+</h3>
-                        <p class="lead">Workshops Delivered</p>
-                        <small>Skills and development sessions</small>
-                    </div>
+                <div class="impact-stat" data-animate data-animate-delay="2">
+                    <span class="impact-stat__number" data-count-to="4" data-suffix="+">4+</span>
+                    <span class="impact-stat__label">Workshops Delivered</span>
+                    <small>Skills &amp; development sessions</small>
                 </div>
-                <div class="col-md-3">
-                    <div class="impact-stat">
-                        <h3 class="display-4 fw-bold text-warning">5+</h3>
-                        <p class="lead">Partner Organizations</p>
-                        <small>Community collaborations</small>
-                    </div>
+                <div class="impact-stat" data-animate data-animate-delay="3">
+                    <span class="impact-stat__number" data-count-to="5" data-suffix="+">5+</span>
+                    <span class="impact-stat__label">Partner Organisations</span>
+                    <small>Community collaborations</small>
                 </div>
-                <div class="col-md-3">
-                    <div class="impact-stat">
-                        <h3 class="display-4 fw-bold text-warning">85%</h3>
-                        <p class="lead">Success Rate</p>
-                        <small>Program completion rate</small>
-                    </div>
+                <div class="impact-stat" data-animate data-animate-delay="4">
+                    <span class="impact-stat__number" data-count-to="4" data-suffix="">4</span>
+                    <span class="impact-stat__label">Years Active</span>
+                    <small>Growing every year</small>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h2 class="display-5 fw-bold mb-4">Join Our Mission</h2>
-                    <p class="lead text-muted mb-4">
-                        Whether you're a young person looking to grow, a mentor wanting to give back, 
-                        or an organization seeking to partner with us, there's a place for you at YAH.
-                    </p>
-                    <div class="d-flex flex-wrap justify-content-center gap-3">
-                        <a href="projects.html" class="btn btn-primary btn-lg">
-                            <i class="fas fa-rocket me-2"></i>Explore Our Programs
-                        </a>
-                        <a href="contact.html" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-envelope me-2"></i>Get Involved
-                        </a>
-                    </div>
-                </div>
+    <!-- CTA -->
+    <section class="section text-center">
+        <div class="container" style="max-width:680px;">
+            <span class="badge badge--secondary mb-3">Join Us</span>
+            <h2 class="heading--lg mb-3" style="margin-top:var(--space-3);">Join Our Mission</h2>
+            <p class="text--lead text--muted mb-4">
+                Whether you're a young person looking to grow, a mentor wanting to give back,
+                or an organisation seeking to partner — there's a place for you at YAH.
+            </p>
+            <div class="flex flex-wrap gap-3" style="justify-content:center;">
+                <a href="projects.html" class="btn btn--primary btn--lg">
+                    <i class="fas fa-rocket"></i> Explore Our Programmes
+                </a>
+                <a href="contact.html" class="btn btn--outline btn--lg">
+                    <i class="fas fa-envelope"></i> Get Involved
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white py-4">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Empowering young people for self-transformation.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="quick-links">
-                        <a href="index.html" class="text-white me-3">Home</a>
-                        <a href="about.html" class="text-white me-3">About</a>
-                        <a href="projects.html" class="text-white me-3">Projects</a>
-                        <a href="contact.html" class="text-white">Contact</a>
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Empowering young people for self-transformation.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
-                    <p class="mt-2 mb-0">
-                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
-                    </p>
                 </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2025 Young Access Hub. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button type="button" class="btn btn-warning position-fixed bottom-0 end-0 m-3 rounded-circle back-to-top" style="display: none;">
+    <button type="button" class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
-    
-    <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/main.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/about.js" defer></script>
 </body>
 </html>

@@ -62,8 +62,39 @@ class AdminDashboard {
         this.checkAuthState();
         this.bindEvents();
         this.setupEventListeners();
+        this.setupModalControls();
         // Add CORS connectivity test
         this.testCORSConnectivity();
+    }
+
+    // Vanilla modal helpers
+    openModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'flex';
+    }
+
+    closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    }
+
+    setupModalControls() {
+        // Close buttons with [data-modal-close]
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-modal-close]');
+            if (btn) this.closeModal(btn.dataset.modalClose);
+
+            // Click outside modal box closes it
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+        });
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+            }
+        });
     }
 
     checkAuthState() {
@@ -778,62 +809,36 @@ class AdminDashboard {
         }
         
         modalBody.innerHTML = `
-            <div class="row g-4">
-                <div class="col-md-8">
-                    <h6 class="text-muted mb-3">Personal Information</h6>
-                    <div class="row g-2">
-                        <div class="col-6"><strong>Full Name:</strong></div>
-                        <div class="col-6">${participant.firstName} ${participant.lastName}</div>
-                        
-                        <div class="col-6"><strong>Email:</strong></div>
-                        <div class="col-6">${participant.email}</div>
-                        
-                        <div class="col-6"><strong>Phone:</strong></div>
-                        <div class="col-6">${participant.phone || 'N/A'}</div>
-                        
-                        <div class="col-6"><strong>Age:</strong></div>
-                        <div class="col-6">${participant.age || 'N/A'} years</div>
-                        
-                        <div class="col-6"><strong>Gender:</strong></div>
-                        <div class="col-6">${participant.gender ? participant.gender.charAt(0).toUpperCase() + participant.gender.slice(1) : 'N/A'}</div>
-                        
-                        <div class="col-6"><strong>District:</strong></div>
-                        <div class="col-6">${participant.district || participant.location || 'N/A'}</div>
-                        
-                        <div class="col-6"><strong>Occupation:</strong></div>
-                        <div class="col-6">${participant.occupation || 'N/A'}</div>
-                        
-                        <div class="col-6"><strong>Interest Area:</strong></div>
-                        <div class="col-6">${participant.interest || 'N/A'}</div>
+            <div style="display:grid;grid-template-columns:1fr auto;gap:2rem;">
+                <div>
+                    <h6 class="text-muted" style="margin-bottom:0.75rem;">Personal Information</h6>
+                    <div class="participant-info" style="margin-bottom:1.5rem;">
+                        ${[
+                            ['Full Name', `${participant.firstName} ${participant.lastName}`],
+                            ['Email', participant.email],
+                            ['Phone', participant.phone || 'N/A'],
+                            ['Age', `${participant.age || 'N/A'} years`],
+                            ['Gender', participant.gender ? participant.gender.charAt(0).toUpperCase() + participant.gender.slice(1) : 'N/A'],
+                            ['District', participant.district || participant.location || 'N/A'],
+                            ['Occupation', participant.occupation || 'N/A'],
+                            ['Interest Area', participant.interest || 'N/A'],
+                        ].map(([l,v]) => `<div class="info-row"><span class="info-label">${l}:</span><span class="info-value">${v}</span></div>`).join('')}
                     </div>
-                    
-                    <h6 class="text-muted mb-3 mt-4">Registration Details</h6>
-                    <div class="row g-2">
-                        <div class="col-6"><strong>Participant ID:</strong></div>
-                        <div class="col-6"><code>${displayId}</code></div>
-                        
-                        <div class="col-6"><strong>Access Code:</strong></div>
-                        <div class="col-6"><code>${registration.accessCode}</code></div>
-                        
-                        <div class="col-6"><strong>Status:</strong></div>
-                        <div class="col-6">${this.getStatusBadge(registration.status)}</div>
-                        
-                        <div class="col-6"><strong>Registration Date:</strong></div>
-                        <div class="col-6">${new Date(registration.registrationDate || registration.createdAt).toLocaleString()}</div>
+                    <h6 class="text-muted" style="margin-bottom:0.75rem;">Registration Details</h6>
+                    <div class="participant-info">
+                        ${[
+                            ['Participant ID', `<code>${displayId}</code>`],
+                            ['Access Code', `<code>${registration.accessCode}</code>`],
+                            ['Status', this.getStatusBadge(registration.status)],
+                            ['Registration Date', new Date(registration.registrationDate || registration.createdAt).toLocaleString()],
+                        ].map(([l,v]) => `<div class="info-row"><span class="info-label">${l}:</span><span class="info-value">${v}</span></div>`).join('')}
                     </div>
                 </div>
-                
-                <div class="col-md-4">
-                    <h6 class="text-muted mb-3">QR Code</h6>
-                    <div class="text-center">
-                        <img src="${qrCodeUrl}" alt="QR Code" class="img-fluid border rounded" style="max-width: 150px;">
-                        <div class="mt-2">
-                            <small class="text-muted">Scan for event check-in</small>
-                        </div>
-                        <div class="mt-2">
-                            <small class="text-muted d-block">Participant: ${displayId}</small>
-                        </div>
-                    </div>
+                <div style="min-width:160px;text-align:center;">
+                    <h6 class="text-muted" style="margin-bottom:0.75rem;">QR Code</h6>
+                    <img src="${qrCodeUrl}" alt="QR Code" style="max-width:150px;width:100%;border-radius:8px;border:1px solid #dee2e6;">
+                    <p class="text-muted" style="font-size:0.8rem;margin-top:0.5rem;">Scan for event check-in</p>
+                    <p class="text-muted" style="font-size:0.8rem;">Participant: ${displayId}</p>
                 </div>
             </div>
         `;
@@ -841,9 +846,8 @@ class AdminDashboard {
         // Store participant ID for QR download - use the display ID
         document.getElementById('downloadParticipantQR').dataset.participantId = displayId;
         
-        // Show modal
-        const modal = new bootstrap.Modal(document.getElementById('participantModal'));
-        modal.show();
+        // Show modal (vanilla)
+        this.openModal('participantModal');
     }
 
     async downloadParticipantQR(participantId) {
@@ -1045,8 +1049,7 @@ class AdminDashboard {
 
     // Code Generation Methods
     showGenerateCodesModal() {
-        const modal = new bootstrap.Modal(document.getElementById('generateCodesModal'));
-        modal.show();
+        this.openModal('generateCodesModal');
     }
 
     async handleGenerateCodes(e) {
@@ -1085,8 +1088,7 @@ class AdminDashboard {
                 this.showAlert(`Successfully generated ${data.data.generated} access codes!`, 'success');
                 
                 // Close modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('generateCodesModal'));
-                modal.hide();
+                this.closeModal('generateCodesModal');
                 
                 // Refresh statistics
                 this.loadStatistics();
@@ -1402,43 +1404,27 @@ class AdminDashboard {
     }
 
     showAlert(message, type = 'info', duration = 5000) {
-        const alertClass = type === 'success' ? 'alert-success' : 
-                         type === 'error' ? 'alert-danger' : 
-                         type === 'warning' ? 'alert-warning' : 'alert-info';
-        
-        const alert = document.createElement('div');
-        alert.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-        alert.style.cssText = 'top: 100px; right: 20px; z-index: 10000; min-width: 300px;';
-        alert.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        document.body.appendChild(alert);
-        
-        setTimeout(() => {
-            if (alert.parentNode) {
-                alert.remove();
-            }
-        }, duration);
+        if (typeof YAH !== 'undefined' && YAH.showAlert) {
+            YAH.showAlert(message, type, duration);
+            return;
+        }
+        // Fallback vanilla alert
+        const mod = type === 'error' ? 'danger' : type;
+        const el = document.createElement('div');
+        el.className = `alert alert--${mod}`;
+        el.style.cssText = 'position:fixed;top:100px;right:20px;z-index:10000;min-width:300px;';
+        el.textContent = message;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), duration);
     }
 
     showPasscodeAlert(message, type = 'info') {
         const alertArea = document.getElementById('passcodeAlert');
         if (!alertArea) return;
-
-        const alertClass = `alert-${type}`;
-        alertArea.innerHTML = `
-            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `;
-
+        const mod = type === 'error' || type === 'danger' ? 'danger' : type;
+        alertArea.innerHTML = `<div class="alert alert--${mod}" style="margin-bottom:1rem;">${message}</div>`;
         if (type === 'success') {
-            setTimeout(() => {
-                alertArea.innerHTML = '';
-            }, 3000);
+            setTimeout(() => { alertArea.innerHTML = ''; }, 3000);
         }
     }
 

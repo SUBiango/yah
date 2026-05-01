@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kantan E-Learning App — a comprehensive digital learning platform bringing accessible, high-quality education and skill development to young people in Sierra Leone.">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Kantan E-Learning App | Young Access Hub</title>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="../index.html">
+                <img src="../assets/logo.png" alt="Young Access Hub" height="42">
+            </a>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="../index.html">Home</a></li>
+                    <li><a class="nav__link" href="../about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                        <a class="nav__link nav__link--active" href="../projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                        <ul class="nav__dropdown">
+                            <li><a href="kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                            <li><a href="summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="nav__link" href="../news.html">News</a></li>
+                    <li><a class="nav__link" href="../contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header style="background:linear-gradient(135deg,var(--color-primary) 0%,var(--color-primary-dk) 40%,var(--color-secondary) 100%);padding:calc(var(--nav-height) + var(--space-7)) 0 var(--space-7);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;"></div>
+        <div class="container" style="position:relative;z-index:1;">
+            <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-4);font-size:.85rem;">
+                <a href="../projects.html" style="color:rgba(255,255,255,.7);text-decoration:none;transition:color .2s;">
+                    <i class="fas fa-chevron-left" style="margin-right:4px;"></i> All Projects
+                </a>
+            </div>
+            <span class="badge badge--light mb-3" style="font-size:.75rem;">Digital Learning</span>
+            <h1 style="font-size:clamp(2.2rem,5vw,4rem);font-weight:800;color:#fff;line-height:1.1;margin:var(--space-3) 0 var(--space-3);letter-spacing:-0.02em;">
+                Kantan E-Learning App
+            </h1>
+            <p style="font-size:1.2rem;font-weight:500;color:rgba(255,255,255,.85);max-width:600px;margin:0 0 var(--space-5);">
+                A comprehensive digital learning ecosystem bringing accessible, high-quality education and skill development to young people — anywhere, anytime.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);">
+                <a href="../contact.html" class="btn btn--accent btn--lg">
+                    <i class="fas fa-user-plus"></i> Join Beta Waitlist
+                </a>
+                <a href="../contact.html" class="btn btn--outline-light btn--lg">
+                    <i class="fas fa-handshake"></i> Partner With Us
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Status Bar -->
+    <section class="section--sm" style="background:var(--color-gray-100);border-bottom:2px solid var(--color-border);">
+        <div class="container">
+            <div class="grid grid--4 text-center" style="gap:0;">
+                <div style="padding:var(--space-5);border-right:1px solid var(--color-border);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:var(--color-primary);line-height:1;">35%</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Development Progress</span>
+                </div>
+                <div style="padding:var(--space-5);border-right:1px solid var(--color-border);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:var(--color-primary);line-height:1;">10+</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Planned Courses</span>
+                </div>
+                <div style="padding:var(--space-5);border-right:1px solid var(--color-border);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:var(--color-primary);line-height:1;">6</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Core Features</span>
+                </div>
+                <div style="padding:var(--space-5);">
+                    <span style="display:block;font-size:2.2rem;font-weight:800;color:var(--color-primary);line-height:1;">SL</span>
+                    <span style="font-size:.8rem;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.07em;">Sierra Leone Focus</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About the App -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid--2 grid--align-center" style="gap:var(--space-7);">
+                <div data-animate>
+                    <span class="badge badge--primary mb-3">About the App</span>
+                    <h2 class="heading--lg mb-3" style="margin-top:var(--space-3);">Learning Without Limits</h2>
+                    <p class="text--lead text--muted mb-3">
+                        Kantan is designed for young people in Sierra Leone who face barriers to quality education —
+                        whether due to geography, cost, or limited local resources. The app brings world-class
+                        learning directly to their mobile devices.
+                    </p>
+                    <p style="color:var(--color-text-muted);line-height:1.8;margin-bottom:var(--space-4);">
+                        With an offline-first design, Kantan ensures learners can access content even with
+                        limited internet connectivity — a key challenge in rural areas like Kono District.
+                        Courses are developed in partnership with local educators and focus on practical,
+                        employable skills.
+                    </p>
+                    <div style="margin-bottom:var(--space-4);">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);">
+                            <small style="font-weight:700;color:var(--color-text-muted);">Development Progress</small>
+                            <small style="font-weight:700;color:var(--color-primary);">35%</small>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width:35%;"></div>
+                        </div>
+                        <small style="color:var(--color-text-muted);margin-top:var(--space-1);display:block;">Pre-launch development phase — Beta coming soon</small>
+                    </div>
+                </div>
+                <div data-animate data-animate-delay="2">
+                    <div class="card card--elevated" style="background:linear-gradient(160deg,var(--color-primary),var(--color-secondary));padding:var(--space-6);text-align:center;min-height:420px;display:flex;flex-direction:column;justify-content:center;gap:var(--space-4);">
+                        <i class="fas fa-graduation-cap" style="font-size:4rem;color:rgba(255,255,255,.9);"></i>
+                        <h4 style="color:#fff;font-family:var(--font-display);">Interactive Learning Dashboard</h4>
+                        <div class="feature-box" style="background:rgba(255,255,255,.15);text-align:left;">
+                            <i class="fas fa-book-open" style="color:#fff;"></i>
+                            <div>
+                                <strong style="color:#fff;">Course Library</strong>
+                                <p style="margin:0;color:rgba(255,255,255,.75);font-size:.85rem;">50+ Skill Development Courses</p>
+                            </div>
+                        </div>
+                        <div class="feature-box" style="background:rgba(255,255,255,.15);text-align:left;">
+                            <i class="fas fa-trophy" style="color:var(--color-accent);"></i>
+                            <div>
+                                <strong style="color:#fff;">Achievement System</strong>
+                                <p style="margin:0;color:rgba(255,255,255,.75);font-size:.85rem;">Badges &amp; Certifications</p>
+                            </div>
+                        </div>
+                        <div class="feature-box" style="background:rgba(255,255,255,.15);text-align:left;margin-bottom:0;">
+                            <i class="fas fa-comments" style="color:#fff;"></i>
+                            <div>
+                                <strong style="color:#fff;">Community Forum</strong>
+                                <p style="margin:0;color:rgba(255,255,255,.75);font-size:.85rem;">Peer Support &amp; Mentorship</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section bg--subtle">
+        <div class="container">
+            <div class="text-center mb-5" data-animate>
+                <span class="badge badge--secondary mb-3">Features</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Built for Young Sierra Leoneans</h2>
+                <p class="text--muted" style="margin-top:var(--space-3);">Every feature is designed around the real needs and constraints of our learners.</p>
+            </div>
+            <div class="grid grid--3" style="gap:var(--space-4);">
+                <div class="card card--flat" data-animate>
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-primary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-play-circle" style="color:var(--color-primary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Video Lessons</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">Engaging, bite-sized video content taught by local and international experts, designed for mobile viewing.</p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="2">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-secondary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-tasks" style="color:var(--color-secondary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Skill Assessments</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">Quizzes and practical assessments that test comprehension and reinforce learning after each module.</p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="3">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-accent-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-chart-line" style="color:var(--color-accent-dk);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Progress Tracking</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">A personal dashboard showing completed courses, scores, streaks, and growth over time.</p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate>
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-success-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-users" style="color:var(--color-success);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Peer Learning Groups</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">Cohort-based learning communities where students collaborate, discuss, and motivate each other.</p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="2">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-primary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-certificate" style="color:var(--color-primary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Digital Certificates</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">Verifiable certificates upon course completion that learners can share with employers and institutions.</p>
+                    </div>
+                </div>
+                <div class="card card--flat" data-animate data-animate-delay="3">
+                    <div class="card__body">
+                        <div style="width:48px;height:48px;background:var(--color-secondary-lt);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-3);">
+                            <i class="fas fa-mobile-alt" style="color:var(--color-secondary);font-size:1.2rem;"></i>
+                        </div>
+                        <h5 style="font-weight:700;margin-bottom:var(--space-2);">Mobile &amp; Offline</h5>
+                        <p style="color:var(--color-text-muted);font-size:.9rem;line-height:1.7;">Fully functional without a constant internet connection — download lessons and learn on the go.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Involved -->
+    <section class="section bg--primary text-center">
+        <div class="container" data-animate style="max-width:640px;">
+            <span class="badge badge--light mb-3">Get Involved</span>
+            <h2 class="heading--lg text--white mb-3" style="margin-top:var(--space-3);">Be Among the First to Use Kantan</h2>
+            <p class="text--white-muted text--lead mb-4">
+                We're building this for you. Join the beta waitlist, partner with us, or help fund the development of this platform.
+            </p>
+            <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap;">
+                <a href="../contact.html" class="btn btn--accent btn--lg">
+                    <i class="fas fa-user-plus"></i> Join Beta Waitlist
+                </a>
+                <a href="../contact.html" class="btn btn--outline-light btn--lg">
+                    <i class="fas fa-handshake"></i> Partner With Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="../assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Leading change through local action.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../about.html">About Us</a></li>
+                        <li><a href="../projects.html">Projects</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2026 Young Access Hub. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <button type="button" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="../js/utils.js"></script>
+</body>
+</html>

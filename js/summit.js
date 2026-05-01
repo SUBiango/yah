@@ -136,17 +136,12 @@ class SummitRegistration {
     updateButtonStates() {
         // Reset all buttons
         document.querySelectorAll('.pricing-card button').forEach(btn => {
-            btn.classList.remove('btn-success');
-            btn.innerHTML = btn.innerHTML.replace('<i class="fas fa-check me-2"></i>', '');
-            if (btn.textContent.includes('Selected')) {
-                btn.innerHTML = 'Select Plan';
-            }
+            btn.textContent = 'Select Plan';
         });
         
-        // Update selected button
+        // Mark selected button
         if (event && event.target) {
-            event.target.classList.add('btn-success');
-            event.target.innerHTML = '<i class="fas fa-check me-2"></i>Selected';
+            event.target.innerHTML = '<i class="fas fa-check"></i> Selected';
         }
     }
     
@@ -197,31 +192,22 @@ class SummitRegistration {
     }
     
     showFieldValidation(field, isValid, errorMessage) {
-        const errorElement = field.parentNode.querySelector('.field-error');
-        
-        if (isValid) {
-            field.classList.remove('is-invalid');
-            field.classList.add('is-valid');
-            if (errorElement) errorElement.remove();
-        } else {
-            field.classList.remove('is-valid');
-            field.classList.add('is-invalid');
-            
-            if (!errorElement) {
-                const error = document.createElement('div');
-                error.className = 'field-error text-danger small mt-1';
-                error.textContent = errorMessage;
-                field.parentNode.appendChild(error);
+        if (window.YAH) {
+            if (isValid) {
+                YAH.setFieldValid(field);
             } else {
-                errorElement.textContent = errorMessage;
+                YAH.setFieldError(field, errorMessage);
             }
         }
     }
-    
+
     clearFieldError(field) {
-        field.classList.remove('is-invalid', 'is-valid');
-        const errorElement = field.parentNode.querySelector('.field-error');
-        if (errorElement) errorElement.remove();
+        if (window.YAH) {
+            // Remove validation state from a single field
+            field.classList.remove('field--invalid', 'field--valid');
+            const msg = field.parentNode.querySelector('.field-error-msg');
+            if (msg) msg.remove();
+        }
     }
     
     // Enhanced form submission
@@ -376,10 +362,8 @@ class SummitRegistration {
     }
     
     showSuccessModal() {
-        const modal = new bootstrap.Modal(document.getElementById('successModal'));
-        modal.show();
-        
-        // Add confetti effect
+        // Show inline success message (modal removed — no Bootstrap)
+        YAH.showAlert('Registration successful! Check your email for confirmation.', 'success');
         this.createConfettiEffect();
     }
     
@@ -435,7 +419,6 @@ class SummitRegistration {
     resetFormAndUI(form, submitBtn, originalText) {
         // Reset form
         form.reset();
-        form.classList.remove('was-validated');
         
         // Reset button
         submitBtn.innerHTML = originalText;
@@ -451,16 +434,11 @@ class SummitRegistration {
         
         // Reset ticket buttons
         document.querySelectorAll('.pricing-card button').forEach(btn => {
-            btn.classList.remove('btn-success');
-            btn.innerHTML = btn.innerHTML.replace('<i class="fas fa-check me-2"></i>', '');
-            btn.innerHTML = 'Select Plan';
+            btn.textContent = 'Select Plan';
         });
         
-        // Clear validation states
-        form.querySelectorAll('.is-valid, .is-invalid').forEach(field => {
-            field.classList.remove('is-valid', 'is-invalid');
-        });
-        form.querySelectorAll('.field-error').forEach(error => error.remove());
+        // Clear validation UI
+        if (window.YAH) YAH.clearFormValidation(form);
     }
     
     // Utility methods
@@ -476,20 +454,10 @@ class SummitRegistration {
     }
     
     showAlert(message, type = 'info') {
-        // Create toast notification
-        const toast = document.createElement('div');
-        toast.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed`;
-        toast.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 300px;';
-        toast.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            if (toast.parentNode) toast.remove();
-        }, 5000);
+        // Delegate to shared YAH utility
+        if (window.YAH && YAH.showAlert) {
+            YAH.showAlert(message, type);
+        }
     }
     
     // Analytics tracking methods

@@ -8,9 +8,11 @@ class RegistrationForm {
         this.maxSteps = 3;
         this.accessCodeVerified = false;
         this.registrationData = {};
-        this.apiBaseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
-            ? 'http://localhost:3000/api'  // Development
-            : 'https://yah-backend.onrender.com/api'; // Production (yahsl.org) // Backend API URL
+        this.apiBaseUrl = (window.YAH && YAH.getApiBaseUrl)
+            ? YAH.getApiBaseUrl()
+            : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:3000/api'
+                : 'https://yah-backend.onrender.com/api');
         
         this.init();
     }
@@ -523,28 +525,29 @@ class RegistrationForm {
         const alertArea = document.getElementById('alertArea');
         if (!alertArea) return;
 
-        const alertClass = `alert-${type}`;
-        const iconClass = type === 'success' ? 'fa-check-circle' : 
-                         type === 'danger' ? 'fa-exclamation-triangle' : 
-                         type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+        // Map type names to BEM modifier classes
+        const typeMap = { danger: 'danger', error: 'danger', success: 'success', warning: 'warning', info: 'info' };
+        const mod = typeMap[type] || 'info';
+        const iconMap = { success: 'fa-check-circle', danger: 'fa-exclamation-triangle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+        const iconClass = iconMap[mod] || 'fa-info-circle';
 
-        alertArea.innerHTML = `
-            <div class="alert ${alertClass} alert-custom alert-dismissible fade show" role="alert">
-                <i class="fas ${iconClass} me-2"></i>
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `;
+        const div = document.createElement('div');
+        div.className = `alert alert--${mod}`;
+        div.setAttribute('role', 'alert');
+        div.innerHTML = `<i class="fas ${iconClass}"></i> ${message}
+            <button type="button" class="alert__close" aria-label="Close">&times;</button>`;
 
-        // Auto-dismiss after 5 seconds for success messages
-        if (type === 'success') {
-            setTimeout(() => {
-                const alert = alertArea.querySelector('.alert');
-                if (alert) {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }
-            }, 5000);
+        alertArea.innerHTML = '';
+        alertArea.appendChild(div);
+
+        // Close button
+        div.querySelector('.alert__close').addEventListener('click', function () {
+            div.remove();
+        });
+
+        // Auto-dismiss success after 5 s
+        if (mod === 'success') {
+            setTimeout(function () { if (div.parentNode) div.remove(); }, 5000);
         }
     }
 

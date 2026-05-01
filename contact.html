@@ -1,294 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">              
-<head>              
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contact Young Access Hub - Get in touch for partnerships, volunteering, programs, or general inquiries">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Contact Young Access Hub — Get in touch for partnerships, volunteering, programmes, or general inquiries.">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Contact Us | Young Access Hub</title>
 </head>
 <body>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="Young Access Hub" height="40" class="d-inline-block align-text-top">
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="Young Access Hub" height="42">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="news.html">News</a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link active" href="contact.html">Contact</a>
-                    </li>
+            <div class="nav__menu">
+                <ul class="nav__links ml-auto">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link" href="about.html">About</a></li>
+                    <li class="nav__item--has-dropdown">
+                    <a class="nav__link" href="projects.html">Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+                    <ul class="nav__dropdown">
+                        <li><a href="projects/kantan.html"><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+                        <li><a href="projects/summit.html"><i class="fas fa-users"></i> Youth Summit</a></li>
+                    </ul>
+                </li>
+                    <li><a class="nav__link" href="news.html">News</a></li>
+                    <li><a class="nav__link nav__link--active" href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Page Header -->
-    <section class="hero-section py-5">
+    <header class="page-header text-center">
         <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-4 fw-bold text-white mb-4">Get In Touch</h1>
-                    <p class="lead text-white-50 mb-4">
-                        Ready to join our mission? Have questions? We'd love to hear from you and explore how we can work together.
-                    </p>
-                </div>
-            </div>
+            <span class="badge badge--light mb-3">Reach Out</span>
+            <h1 class="page-header__title" style="margin-top:var(--space-3);">Get In Touch</h1>
+            <p class="page-header__subtitle">
+                Ready to join our mission? Have questions? We'd love to hear from you.
+            </p>
         </div>
-    </section>
+    </header>
 
-    <!-- Contact Information -->
-    <section class="py-5 bg-light">
+    <!-- Contact Cards -->
+    <section class="section">
         <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="contact-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="contact-icon mb-3">
-                                <i class="fas fa-envelope fa-3x text-primary"></i>
-                            </div>
-                            <h5 class="card-title">Email Us</h5>
-                            <p class="card-text text-muted">Send us a message and we'll respond within 24 hours</p>
-                            <div class="contact-details">
-                                <a href="mailto:info@youngaccesshub.org" class="text-primary fw-semibold">info@yahsl.org</a>
-                            </div>
+            <div class="grid grid--3" style="gap:var(--space-4);" data-animate>
+                <div class="card card--elevated text-center">
+                    <div class="card__body">
+                        <div class="card__icon">
+                            <i class="fas fa-envelope" style="font-size:1.5rem;color:var(--color-primary);"></i>
                         </div>
+                        <h5 class="card__title">Email Us</h5>
+                        <p class="card__text">We respond within 24 hours on business days.</p>
+                        <a href="mailto:info@yahsl.org" class="font-semibold" style="color:var(--color-primary);">info@yahsl.org</a>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="contact-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="contact-icon mb-3">
-                                <i class="fas fa-phone fa-3x text-primary"></i>
-                            </div>
-                            <h5 class="card-title">Call Us</h5>
-                            <p class="card-text text-muted">Available Monday to Friday, 9 AM - 5 PM</p>
-                            <div class="contact-details">
-                                <a href="tel:+15551234567" class="text-primary fw-semibold">+232 77 971717 / +232 78 050 308</a>
-                            </div>
+                <div class="card card--elevated text-center">
+                    <div class="card__body">
+                        <div class="card__icon" style="background:var(--color-secondary-lt);">
+                            <i class="fas fa-phone" style="font-size:1.5rem;color:var(--color-secondary);"></i>
                         </div>
+                        <h5 class="card__title">Call Us</h5>
+                        <p class="card__text">Monday – Friday, 9 AM – 5 PM.</p>
+                        <a href="tel:+23277971717" class="font-semibold" style="color:var(--color-primary);">+232 77 971717</a><br>
+                        <a href="tel:+23278050308" class="font-semibold" style="color:var(--color-primary);">+232 78 050 308</a>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="contact-card card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="contact-icon mb-3">
-                                <i class="fas fa-map-marker-alt fa-3x text-primary"></i>
-                            </div>
-                            <h5 class="card-title">Visit Us</h5>
-                            <p class="card-text text-muted">Come by our office during business hours</p>
-                            <div class="contact-details">
-                                <address class="text-primary fw-semibold mb-0">
-                                    36 Council Road<br>
-                                    Koidu City, Kono District<br>
-                                </address>
-                            </div>
+                <div class="card card--elevated text-center">
+                    <div class="card__body">
+                        <div class="card__icon" style="background:var(--color-accent-lt);">
+                            <i class="fas fa-map-marker-alt" style="font-size:1.5rem;color:var(--color-accent-dk);"></i>
                         </div>
+                        <h5 class="card__title">Visit Us</h5>
+                        <p class="card__text">Come by during business hours.</p>
+                        <address style="font-style:normal;font-weight:600;color:var(--color-primary);">
+                            36 Council Road<br>
+                            Koidu City, Kono District
+                        </address>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Form Section -->
-    <section class="py-5">
+    <!-- Contact Form -->
+    <section class="section bg--subtle">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="text-center mb-5">
-                        <h2 class="display-5 fw-bold mb-4">Send Us a Message</h2>
-                        <p class="lead text-muted">
-                            Fill out the form below and we'll get back to you as soon as possible.
-                        </p>
-                    </div>
-                    
-                    <div class="card border-0 shadow">
-                        <div class="card-body p-5">
-                            <form name="contact" method="POST" class="contact-form-page" data-netlify="true">
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" id="firstName" name="firstName" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-lg" id="lastName" name="lastName" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control form-control-lg" id="email" name="email" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Phone Number</label>
-                                        <input type="tel" class="form-control form-control-lg" id="phone" name="phone">
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="organization" class="form-label">Organization/School (if applicable)</label>
-                                        <input type="text" class="form-control form-control-lg" id="organization" name="organization">
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="subject" class="form-label">How can we help you? <span class="text-danger">*</span></label>
-                                        <select class="form-select form-select-lg" id="subject" name="subject" required>
-                                            <option value="">Select a topic</option>
-                                            <option value="volunteer">I want to volunteer</option>
-                                            <option value="partnership">Partnership opportunities</option>
-                                            <option value="sponsorship">Sponsorship inquiries</option>
-                                            <option value="summit">Youth Summit information</option>
-                                            <option value="elearning">Khantan E-learning App</option>
-                                            <option value="media">Media and press inquiries</option>
-                                            <option value="general">General inquiry</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
-                                        <textarea class="form-control" id="message" name="message" rows="6" placeholder="Tell us more about your inquiry..." required></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter" value="yes">
-                                            <label class="form-check-label" for="newsletter">
-                                                I'd like to receive updates about YAH programs and events
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary btn-lg w-100">
-                                            <i class="fas fa-paper-plane me-2"></i>Send Message
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+            <div class="text-center mb-5" data-animate>
+                <span class="badge badge--primary mb-3">Message Us</span>
+                <h2 class="heading--lg" style="margin-top:var(--space-3);">Send Us a Message</h2>
+                <p class="text--muted" style="margin-top:var(--space-3);">Fill in the form and we'll get back to you as soon as possible.</p>
+            </div>
+            <div class="form-card" data-animate>
+                <form name="contact" method="POST" class="contact-form-page" data-netlify="true">
+                    <div class="grid grid--2">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name <span style="color:var(--color-danger);">*</span></label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="e.g. Aminata" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name <span style="color:var(--color-danger);">*</span></label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="e.g. Koroma" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address <span style="color:var(--color-danger);">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="+232 ...">
                         </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="organization" class="form-label">Organisation / School</label>
+                        <input type="text" class="form-control" id="organization" name="organization" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject" class="form-label">How can we help? <span style="color:var(--color-danger);">*</span></label>
+                        <select class="form-control" id="subject" name="subject" required>
+                            <option value="">Select a topic…</option>
+                            <option value="volunteer">I want to volunteer</option>
+                            <option value="partnership">Partnership opportunities</option>
+                            <option value="sponsorship">Sponsorship inquiries</option>
+                            <option value="summit">Youth Summit information</option>
+                            <option value="elearning">Khantan E-learning App</option>
+                            <option value="media">Media and press inquiries</option>
+                            <option value="general">General inquiry</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message <span style="color:var(--color-danger);">*</span></label>
+                        <textarea class="form-control" id="message" name="message" rows="6" placeholder="Tell us more about your inquiry…" required></textarea>
+                    </div>
+                    <div class="form-check mb-4">
+                        <input type="checkbox" id="newsletter" name="newsletter" value="yes">
+                        <label for="newsletter">I'd like to receive updates about YAH programmes and events</label>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--lg btn--block" id="contactSubmitBtn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
             </div>
         </div>
     </section>
 
-    
     <!-- Footer -->
-    <footer class="bg-primary text-white py-4">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Empowering young people for self-transformation.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="quick-links">
-                        <a href="index.html" class="text-white me-3">Home</a>
-                        <a href="about.html" class="text-white me-3">About</a>
-                        <a href="projects.html" class="text-white me-3">Projects</a>
-                        <a href="contact.html" class="text-white">Contact</a>
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <h5>Young Access Hub</h5>
+                    <p>Empowering young people for self-transformation.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
-                    <p class="mt-2 mb-0">
-                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
-                    </p>
                 </div>
+                <div class="site-footer__col">
+                    <h6>Quick Links</h6>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="site-footer__bottom">
+                &copy; 2025 Young Access Hub. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button type="button" class="btn btn-warning position-fixed bottom-0 end-0 m-3 rounded-circle back-to-top" style="display: none;">
+    <button type="button" class="back-to-top" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
-    
-    <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-        // Enhanced contact form handling
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactForm = document.querySelector('.contact-form-page');
-            
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    // Get form data for validation
-                    const formData = {
-                        firstName: document.getElementById('firstName').value,
-                        lastName: document.getElementById('lastName').value,
-                        email: document.getElementById('email').value,
-                        phone: document.getElementById('phone').value,
-                        organization: document.getElementById('organization').value,
-                        subject: document.getElementById('subject').value,
-                        message: document.getElementById('message').value,
-                        newsletter: document.getElementById('newsletter').checked
-                    };
-                    
-                    // Basic validation
-                    if (!formData.firstName || !formData.lastName || !formData.email || !formData.subject || !formData.message) {
-                        e.preventDefault();
-                        showAlert('Please fill in all required fields.', 'error');
-                        return;
-                    }
-                    
-                    if (!isValidEmail(formData.email)) {
-                        e.preventDefault();
-                        showAlert('Please enter a valid email address.', 'error');
-                        return;
-                    }
-                    
-                    // Show loading state
-                    const submitBtn = document.querySelector('.contact-form-page button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending Message...';
-                    submitBtn.disabled = true;
-                    
-                    // Let Netlify handle the form submission
-                    // The form will now submit naturally to Netlify
-                });
-            }
-        });
-        
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-        
-        function showAlert(message, type = 'info') {
-            // Remove existing alerts
-            const existingAlert = document.querySelector('.custom-alert');
-            if (existingAlert) {
-                existingAlert.remove();
-            }
-            
-            // Create alert element
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show custom-alert position-fixed`;
-            alert.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 300px;';
-            alert.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
-            // Add to page
-            document.body.appendChild(alert);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                if (alert && alert.parentNode) {
-                    alert.remove();
-                }
-            }, 5000);
-        }
-    </script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/contact.js" defer></script>
 </body>
 </html>

@@ -6,305 +6,50 @@
     <title>Event Registration - Young Access Hub</title>
     
     <!-- Bootstrap CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="css/style.css" rel="stylesheet">
     
-    <style>
-        .registration-hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #e67e22 100%);
-            color: white;
-            padding: 6rem 0 4rem;
-        }
-        
-        .registration-form {
-            background: #fff;
-            border-radius: 15px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-top: -2rem;
-            position: relative;
-            z-index: 10;
-        }
-        
-        /* Responsive padding for mobile devices */
-        @media (max-width: 768px) {
-            .registration-form {
-                padding: 1.5rem;
-                border-radius: 10px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .registration-form {
-                padding: 1rem;
-                border-radius: 8px;
-                margin-top: -1rem;
-            }
-        }
-        
-        .access-code-section {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 10px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid #e67e22;
-        }
-        
-        /* Responsive padding for access code section */
-        @media (max-width: 768px) {
-            .access-code-section {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .access-code-section {
-                padding: 1rem;
-                margin-bottom: 1rem;
-                border-radius: 8px;
-            }
-        }
-        
-        .step-indicator {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 3rem;
-        }
-        
-        /* Responsive margins for step indicator */
-        @media (max-width: 768px) {
-            .step-indicator {
-                margin-bottom: 2rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .step-indicator {
-                margin-bottom: 1.5rem;
-            }
-        }
-        
-        .step {
-            flex: 1;
-            text-align: center;
-            position: relative;
-        }
-        
-        .step::after {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 60%;
-            width: 40%;
-            height: 2px;
-            background: #dee2e6;
-            z-index: 1;
-        }
-        
-        .step:last-child::after {
-            display: none;
-        }
-        
-        .step.active .step-circle {
-            background: #e67e22;
-            color: white;
-        }
-        
-        .step.completed .step-circle {
-            background: #28a745;
-            color: white;
-        }
-        
-        .step.active::after,
-        .step.completed::after {
-            background: #e67e22;
-        }
-        
-        .step-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #dee2e6;
-            color: #6c757d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.5rem;
-            font-weight: bold;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .step-label {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        
-        .step.active .step-label,
-        .step.completed .step-label {
-            color: #495057;
-            font-weight: 600;
-        }
-        
-        .form-section {
-            display: none;
-        }
-        
-        .form-section.active {
-            display: block;
-        }
-        
-        .field-error {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-        
-        .is-valid {
-            border-color: #28a745 !important;
-        }
-        
-        .is-invalid {
-            border-color: #dc3545 !important;
-        }
-        
-        .access-code-input {
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-align: center;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-        
-        .btn-next {
-            background: #e67e22;
-            border-color: #e67e22;
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
-        }
-        
-        .btn-next:hover {
-            background: #d35400;
-            border-color: #d35400;
-            color: white;
-        }
-        
-        .btn-back {
-            background: transparent;
-            border: 2px solid #6c757d;
-            color: #6c757d;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
-        }
-        
-        .btn-back:hover {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .loading-spinner {
-            display: none;
-        }
-        
-        .alert-custom {
-            border-radius: 8px;
-            border: none;
-            padding: 1rem 1.5rem;
-        }
-        
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        /* Placeholder text styling - darker grey for better readability */
-        .form-control::placeholder,
-        .form-select::placeholder,
-        .access-code-input::placeholder {
-            color: #6c757d !important;
-            opacity: 0.8;
-        }
-        
-        /* Specific styling for access code input placeholder */
-        .access-code-input::placeholder {
-            font-family: 'Courier New', monospace;
-            font-weight: normal;
-            letter-spacing: 0.05em;
-        }
-    </style>
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="YAH Logo" height="40" class="me-2">
+    <nav class="nav nav--light">
+        <div class="nav__inner">
+            <a class="nav__brand" href="index.html">
+                <img src="assets/logo.png" alt="YAH Logo" height="40">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="nav__toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="summit.html">Summit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="registration.html">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+            <div class="nav__menu">
+                <ul class="nav__links">
+                    <li><a class="nav__link" href="index.html">Home</a></li>
+                    <li><a class="nav__link" href="about.html">About</a></li>
+                    <li><a class="nav__link" href="summit.html">Summit</a></li>
+                    <li><a class="nav__link nav__link--active" href="registration.html">Register</a></li>
+                    <li><a class="nav__link" href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="registration-hero">
+    <header class="hero hero--dark" style="min-height: 240px; padding-top: calc(var(--nav-height) + 3rem); padding-bottom: 3rem;">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-4 fw-bold mb-4">
-                        <i class="fas fa-calendar-plus me-3"></i>
-                        Summit Registration
-                    </h1>
-                    <p class="lead mb-0">
-                        Complete your registration for the YAH Summit 2025.
-                    </p>
-                </div>
+            <div class="hero__content">
+                <h1 class="hero__title" style="font-size: clamp(2rem, 5vw, 3rem);" data-animate>
+                    <i class="fas fa-calendar-plus"></i> Summit Registration
+                </h1>
+                <p class="hero__subtitle" data-animate>Complete your registration for the YAH Summit 2025.</p>
             </div>
         </div>
-    </section>
+    </header>
 
     <!-- Registration Form Section -->
-    <section class="py-5">
+    <section class="section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="registration-form">
+            <div class="registration-form form-card">
                         <!-- Step Indicator -->
                         <div class="step-indicator">
                             <div class="step active" id="step1">
@@ -337,8 +82,8 @@
                                         </p>
                                     </div>
                                     
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6">
+                                    <div class="flex justify-content-center">
+                                        <div style="max-width: 420px; width: 100%;">
                                             <label for="accessCode" class="form-label">Access Code <span class="text-danger">*</span></label>
                                             <input 
                                                 type="text" 
@@ -356,7 +101,7 @@
                                 </div>
                                 
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-next" id="verifyAccessCode">
+                                <button type="button" class="btn btn--accent" id="verifyAccessCode">
                                         <span class="btn-text">Verify Access Code</span>
                                         <span class="loading-spinner">
                                             <i class="fas fa-spinner fa-spin me-2"></i>Verifying...
@@ -374,46 +119,39 @@
                                     </p>
                                 </div>
 
-                                <div class="row g-3">
-                                    <!-- Personal Details -->
-                                    <div class="col-md-6">
+                                <div class="form-grid">
+                                    <div class="form-group">
                                         <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="firstName" name="firstName" required>
                                         <div class="field-error" id="firstNameError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <div class="form-group"> <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="lastName" name="lastName" required>
                                         <div class="field-error" id="lastNameError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <div class="form-group"> <span class="text-danger">*</span></label>
                                         <input type="email" class="form-control" id="email" name="email" required>
                                         <div class="field-error" id="emailError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <div class="form-group"> <span class="text-danger">*</span></label>
                                         <input type="tel" class="form-control" id="phone" name="phone" placeholder="e.g., 078988491" required>
                                         <div class="field-error" id="phoneError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="dateOfBirth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                    <div class="form-group"> of Birth <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
                                         <div class="field-error" id="dateOfBirthError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="occupation" class="form-label">Occupation <span class="text-danger">*</span></label>
+                                    <div class="form-group"> <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="occupation" name="occupation" placeholder="e.g., Student, Teacher, Entrepreneur" required>
                                         <div class="field-error" id="occupationError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                                    <div class="form-group"> <span class="text-danger">*</span></label>
                                         <select class="form-select" id="gender" name="gender" required>
                                             <option value="">Select Gender</option>
                                             <option value="male">Male</option>
@@ -422,8 +160,7 @@
                                         <div class="field-error" id="genderError"></div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <label for="district" class="form-label">Which district are you from? <span class="text-danger">*</span></label>
+                                    <div class="form-group"> are you from? <span class="text-danger">*</span></label>
                                         <select class="form-select" id="district" name="district" required>
                                             <option value="">Select District</option>
                                             <option value="Kono">Kono</option>
@@ -446,8 +183,7 @@
                                         <div class="field-error" id="districtError"></div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <label for="interest" class="form-label">What are you most interested in? <span class="text-danger">*</span></label>
+                                    <div class="form-group"> interested in? <span class="text-danger">*</span></label>
                                         <select class="form-select" id="interest" name="interest" required>
                                             <option value="">Select Interest</option>
                                             <option value="Innovation & Entrepreneurship">Innovation & Entrepreneurship</option>
@@ -457,22 +193,22 @@
                                         <div class="field-error" id="interestError"></div>
                                     </div>
                                     
-                                    <div class="col-12">
+                                    <div class="form-group form-group--full">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="termsAgreement" name="termsAgreement" required>
                                             <label class="form-check-label" for="termsAgreement">
-                                                I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
+                                                I agree to the <a href="terms.html" target="_blank">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
                                             </label>
                                             <div class="field-error" id="termsAgreementError"></div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="d-flex justify-content-between mt-4">
-                                    <button type="button" class="btn btn-back" id="backToStep1">
-                                        <i class="fas fa-arrow-left me-2"></i>Back
+                                <div class="flex justify-between mt-4">
+                                    <button type="button" class="btn btn--outline" id="backToStep1">
+                                        <i class="fas fa-arrow-left"></i> Back
                                     </button>
-                                    <button type="submit" class="btn btn-next" id="submitRegistration">
+                                    <button type="submit" class="btn btn--accent" id="submitRegistration">
                                         <span class="btn-text">Register</span>
                                         <span class="loading-spinner">
                                             <i class="fas fa-spinner fa-spin me-2"></i>Processing...
@@ -483,40 +219,38 @@
 
                             <!-- Step 3: Confirmation (handled by redirect to confirmation.html) -->
                         </form>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-primary text-white py-4">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Young Access Hub</h5>
-                    <p class="mb-0">Empowering young people for self-transformation.</p>
+            <div class="site-footer__grid">
+                <div class="site-footer__brand">
+                    <img src="assets/logo.png" alt="Young Access Hub" height="40">
+                    <p>Empowering young people for self-transformation.</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="quick-links">
-                        <a href="index.html" class="text-white me-3">Home</a>
-                        <a href="about.html" class="text-white me-3">About</a>
-                        <a href="projects.html" class="text-white me-3">Projects</a>
-                        <a href="contact.html" class="text-white">Contact</a>
-                    </div>
-                    <p class="mt-2 mb-0">
-                        <small>&copy; 2025 Young Access Hub. All rights reserved.</small>
-                    </p>
+                <div class="site-footer__col">
+                    <h5>Quick Links</h5>
+                    <ul class="site-footer__links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
                 </div>
+            </div>
+            <div class="site-footer__bottom">
+                <p>&copy; 2025 Young Access Hub. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="js/bootstrap.bundle.js"></script>
-    <!-- Main JS -->
-    <script src="js/main.js?v=20250926-3"></script>
-    <!-- Registration JS -->
-    <script src="js/registration.js?v=20250927-4"></script>
+    <button class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="js/utils.js"></script>
+    <script src="js/registration.js" defer></script>
 </body>
 </html>

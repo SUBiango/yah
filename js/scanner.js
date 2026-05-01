@@ -798,43 +798,26 @@ class EventScanner {
     }
 
     showAlert(message, type = 'info', duration = 5000) {
-        const alertClass = type === 'success' ? 'alert-success' : 
-                         type === 'error' ? 'alert-danger' : 
-                         type === 'warning' ? 'alert-warning' : 'alert-info';
-        
-        const alert = document.createElement('div');
-        alert.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-        alert.style.cssText = 'top: 20px; right: 20px; z-index: 10000; min-width: 300px;';
-        alert.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        document.body.appendChild(alert);
-        
-        setTimeout(() => {
-            if (alert.parentNode) {
-                alert.remove();
-            }
-        }, duration);
+        if (typeof YAH !== 'undefined' && YAH.showAlert) {
+            YAH.showAlert(message, type, duration);
+            return;
+        }
+        const mod = type === 'error' ? 'danger' : type;
+        const el = document.createElement('div');
+        el.className = `alert alert--${mod}`;
+        el.style.cssText = 'position:fixed;top:20px;right:20px;z-index:10000;min-width:300px;';
+        el.textContent = message;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), duration);
     }
 
     showAuthAlert(message, type = 'info') {
         const alertArea = document.getElementById('authAlert');
         if (!alertArea) return;
-
-        const alertClass = `alert-${type}`;
-        alertArea.innerHTML = `
-            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `;
-
+        const mod = type === 'error' || type === 'danger' ? 'danger' : type;
+        alertArea.innerHTML = `<div class="alert alert--${mod}" style="margin-top:0.5rem;">${message}</div>`;
         if (type === 'success') {
-            setTimeout(() => {
-                alertArea.innerHTML = '';
-            }, 3000);
+            setTimeout(() => { alertArea.innerHTML = ''; }, 3000);
         }
     }
 
