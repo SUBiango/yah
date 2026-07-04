@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { resolveSlug } from '../lib/posts';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  priority?: boolean;
+}
+const { post, priority = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const href = `${base}${resolveSlug(post)}/`;
+const date = post.data.publishDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<article class="post-card">
+  <a class="post-card__media" href={href}>
+    <Image
+      src={post.data.featuredImage}
+      alt={post.data.title}
+      widths={[400, 800]}
+      sizes="(max-width: 700px) 100vw, 400px"
+      format="webp"
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+    />
+  </a>
+  <div class="post-card__body">
+    <h2 class="post-card__title"><a href={href}>{post.data.title}</a></h2>
+    <p class="post-card__excerpt">{post.data.excerpt}</p>
+    <p class="post-card__meta">
+      <span>{post.data.author}</span> · <time datetime={post.data.publishDate.toISOString()}>{date}</time>
+    </p>
+  </div>
+</article>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .post-card:hover {
+    box-shadow: 0 12px 28px rgba(10, 22, 40, 0.12);
+    transform: translateY(-2px);
+  }
+  .post-card__media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .post-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .post-card__body {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .post-card__title {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+  }
+  .post-card__title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .post-card__title a:hover {
+    color: var(--color-link);
+  }
+  .post-card__excerpt {
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+  }
+  .post-card__meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+</style>

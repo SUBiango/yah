@@ -1,0 +1,13 @@
+# MAIN SITE Netlify config.
+# The ONLY change to the existing site for the blog feature: a proxy that serves
+# the separate blog Netlify site under /blog on the main domain. No [build]
+# section here, so the main site's existing build/publish settings are unchanged.
+#
+# ⚠️ Replace <BLOG-SITE> below with the blog Netlify site's subdomain after you
+# create it (e.g. yah-blog.netlify.app). The blog is built with base "/blog", so
+# its output already lives under /blog — keep the "/blog" prefix in `to`.
+[[redirects]]
+  from = "/blog/*"
+  to = "https://<BLOG-SITE>.netlify.app/blog/:splat"
+  status = 200
+  force = true

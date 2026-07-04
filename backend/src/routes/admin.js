@@ -4,8 +4,44 @@ const Joi = require('joi');
 const AccessCode = require('../models/AccessCode');
 const Registration = require('../models/Registration');
 const { emailService } = require('../utils/email');
+const { requireAdminAuth } = require('../middleware/adminAuth');
+const { createToken, safeEqual } = require('../utils/adminToken');
+const { config } = require('../utils/config');
 
 const router = express.Router();
+
+// Stricter limiter for the login endpoint to slow passcode brute-forcing.
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: {
+    success: false,
+    error: 'Too many login attempts, please try again later.',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+/**
+ * @route POST /api/admin/login
+ * @desc  Exchange the admin passcode for a short-lived session token.
+ * @access Public (rate-limited)
+ */
+router.post('/login', loginLimiter, (req, res) => {
+  const passcode = (req.body && req.body.passcode) || '';
+
+  if (!config.admin.apiKey || !config.admin.passcode) {
+    console.error('[ADMIN LOGIN] ADMIN_API_KEY / ADMIN_PASSCODE not configured');
+    return res.status(503).json({ success: false, error: 'Admin login is not configured' });
+  }
+
+  if (!passcode || !safeEqual(passcode, config.admin.passcode)) {
+    return res.status(401).json({ success: false, error: 'Invalid passcode' });
+  }
+
+  const token = createToken();
+  return res.status(200).json({ success: true, token });
+});
 
 // Health check endpoint specifically for admin routes (no rate limiting)
 router.get('/health', (req, res) => {
@@ -36,24 +72,9 @@ router.get('/health', (req, res) => {
   }
 });
 
-// Debug middleware for admin routes
-router.use((req, res, next) => {
-  console.log(`[ADMIN DEBUG] ${req.method} ${req.originalUrl}`);
-  console.log(`[ADMIN DEBUG] Origin: ${req.headers.origin}`);
-  console.log(`[ADMIN DEBUG] Headers:`, JSON.stringify(req.headers, null, 2));
-  
-  // Ensure CORS headers are always set for admin routes
-  const origin = req.headers.origin;
-  if (origin) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override');
-    console.log(`[ADMIN DEBUG] Set CORS headers for origin: ${origin}`);
-  }
-  
-  next();
-});
+// Require a valid admin API key for every endpoint below this line.
+// (The /health check above stays public for uptime monitoring.)
+router.use(requireAdminAuth);
 
 // Rate limiting for admin endpoints
 const adminLimiter = rateLimit({

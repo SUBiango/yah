@@ -11,6 +11,8 @@ Auto-generated from all feature plans. Last updated: 2025-09-26
 
 ## Active Technologies
 - JavaScript (Node.js 18+), HTML5, CSS3, ES6+ + Express.js, MongoDB driver, Nodemailer, qrcode npm package (002-youth-event-registration)
+- JavaScript/TypeScript, Astro 4+, Node.js 18+ (repo toolchain: Node 23) + `astro`, `@astrojs/rss`, `@astrojs/sitemap`, `sharp` (via built-in `astro:assets`), Decap CMS (`decap-cms-app` in admin), `decap-server` (local CMS dev) (003-blog-system)
+- Markdown files in `blog/src/content/blog/`; media in `blog/src/assets/uploads/`; **no database, no backend server** (003-blog-system)
 
 ## Project Structure
 ```
@@ -38,6 +40,7 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 JavaScript (Node.js 18+), HTML5, CSS3, ES6+: Follow standard conventions
 
 ## Recent Changes
+- 003-blog-system: Added JavaScript/TypeScript, Astro 4+, Node.js 18+ (repo toolchain: Node 23) + `astro`, `@astrojs/rss`, `@astrojs/sitemap`, `sharp` (via built-in `astro:assets`), Decap CMS (`decap-cms-app` in admin), `decap-server` (local CMS dev)
 - 002-youth-event-registration: Added JavaScript (Node.js 18+), HTML5, CSS3, ES6+ + Express.js, MongoDB driver, Nodemailer, qrcode npm package
 
 <!-- MANUAL ADDITIONS START -->

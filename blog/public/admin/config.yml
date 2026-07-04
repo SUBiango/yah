@@ -1,0 +1,52 @@
+# Decap CMS configuration for the YAH blog.
+# Writers authenticate via Netlify Identity + Git Gateway (no GitHub account
+# needed). Editorial workflow keeps drafts/reviews off the live site until
+# explicitly published. See specs/003-blog-system/.
+backend:
+  name: git-gateway
+  branch: main
+
+# Reachable at https://www.yahsl.org/blog/admin/ via the Netlify proxy.
+site_url: https://www.yahsl.org/blog
+display_url: https://www.yahsl.org/blog
+logo_url: https://www.yahsl.org/blog/assets/logo.png
+
+# draft -> in review -> ready/published, backed by branches/PRs.
+publish_mode: editorial_workflow
+
+# For local testing with `npm run cms` (decap-server) + `npm run dev`.
+local_backend: true
+
+# Uploaded media is stored alongside the blog's optimized assets so
+# astro:assets processes it at build time.
+media_folder: src/assets/uploads
+public_folder: /src/assets/uploads
+
+collections:
+  - name: blog
+    label: Blog Posts
+    label_singular: Blog Post
+    folder: src/content/blog
+    create: true
+    slug: '{{fields.slug | default(title)}}'
+    # Store media relative to each post so image() resolves the same paths
+    # the seed posts use (../../assets/uploads/...).
+    media_folder: ../../assets/uploads
+    public_folder: ../../assets/uploads
+    preview_path: '{{slug}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: slug
+        label: 'Slug (optional override)'
+        widget: string
+        required: false
+        hint: 'Leave blank to auto-generate from the title.'
+      - { name: author, label: Author, widget: string }
+      - { name: publishDate, label: Publish Date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { name: featuredImage, label: Featured Image, widget: image, hint: 'JPG/PNG/WEBP, max 2000px wide, under 1MB. Also used for social sharing.' }
+      - { name: ogImage, label: 'Social Share Image (optional)', widget: image, required: false }
+      - { name: excerpt, label: Excerpt, widget: text, hint: 'Shown on the listing and used as the default meta description.' }
+      - { name: metaDescription, label: 'Meta Description (optional override)', widget: string, required: false }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: draft, label: Draft (hide from public site), widget: boolean, default: false }
+      - { name: body, label: Body, widget: markdown }

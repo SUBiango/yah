@@ -4,9 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Young Access Hub — Bridging the gap between young people and the skills and tools for self-transformation in Sierra Leone.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0d3b66">
+    <link rel="canonical" href="https://www.yahsl.org/index.html">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+
+    <!-- Open Graph / social sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Young Access Hub">
+    <meta property="og:title" content="Young Access Hub | Empowering Youth for Transformation">
+    <meta property="og:description" content="We hand young people the tools, the skills, and the fire to change their own lives and the communities around them.">
+    <meta property="og:url" content="https://www.yahsl.org/index.html">
+    <meta property="og:image" content="https://www.yahsl.org/assets/photos/summit.JPG">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Young Access Hub | Empowering Youth for Transformation">
+    <meta name="twitter:description" content="We hand young people the tools, the skills, and the fire to change their own lives and the communities around them.">
+    <meta name="twitter:image" content="https://www.yahsl.org/assets/photos/summit.JPG">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <!-- Preload the LCP hero image (set via inline background-image, so it is otherwise discovered late) -->
+    <link rel="preload" as="image" href="assets/photos/summit.JPG" fetchpriority="high">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer">
     <title>Young Access Hub | Empowering Youth for Transformation</title>
+
+    <!-- Organization structured data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Young Access Hub",
+      "url": "https://www.yahsl.org",
+      "logo": "https://www.yahsl.org/assets/logo.png",
+      "description": "A social enterprise empowering young people in Kono District, Sierra Leone through skills development, training and mentorship.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "Kono District",
+        "addressCountry": "SL"
+      }
+    }
+    </script>
 </head>
 <body>
 
@@ -14,7 +54,7 @@
     <nav class="nav nav--light">
         <div class="nav__inner">
             <a class="nav__brand" href="index.html">
-                <img src="assets/logo.png" alt="Young Access Hub" height="42">
+                <img src="assets/logo.png" alt="Young Access Hub" width="42" height="42">
             </a>
             <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span></span><span></span><span></span>
@@ -87,7 +127,7 @@
                 </div>
                 <div data-animate data-animate-delay="2">
                     <div class="about-image">
-                        <img src="assets/photos/summit.JPG" alt="YAH Youth Summit in Kono District">
+                        <img src="assets/photos/summit.JPG" alt="YAH Youth Summit in Kono District" width="800" height="600" loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -214,7 +254,7 @@
         <div class="container">
             <div class="site-footer__grid">
                 <div class="site-footer__brand">
-                    <img src="assets/logo.png" alt="Young Access Hub">
+                    <img src="assets/logo.png" alt="Young Access Hub" width="120" height="120" loading="lazy" decoding="async">
                     <h5>Young Access Hub</h5>
                     <p>Leading change through local action. Empowering youth across Kono District, Sierra Leone.</p>
                     <div class="social-links">

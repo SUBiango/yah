@@ -1,0 +1,32 @@
+---
+// Ported from the main site's nav (index.html:54-78). Because the blog is
+// served under /blog, links to the main site are absolute URLs on the main
+// domain; the Blog link is marked active.
+const main = 'https://www.yahsl.org';
+const blogBase = import.meta.env.BASE_URL; // "/blog/"
+---
+<nav class="nav nav--light">
+  <div class="nav__inner">
+    <a class="nav__brand" href={main + '/index.html'}>
+      <img src={blogBase + 'assets/logo.png'} alt="Young Access Hub" width="42" height="42" />
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav__menu">
+      <ul class="nav__links ml-auto">
+        <li><a class="nav__link" href={main + '/index.html'}>Home</a></li>
+        <li><a class="nav__link" href={main + '/about.html'}>About</a></li>
+        <li class="nav__item--has-dropdown">
+          <a class="nav__link" href={main + '/projects.html'}>Projects <i class="fas fa-chevron-down" style="font-size:.6rem;margin-left:2px;opacity:.7;"></i></a>
+          <ul class="nav__dropdown">
+            <li><a href={main + '/projects/kantan.html'}><i class="fas fa-graduation-cap"></i> Kantan E-Learning</a></li>
+            <li><a href={main + '/projects/summit.html'}><i class="fas fa-users"></i> Youth Summit</a></li>
+          </ul>
+        </li>
+        <li><a class="nav__link nav__link--active" href={blogBase}>Blog</a></li>
+        <li><a class="nav__link" href={main + '/contact.html'}>Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
