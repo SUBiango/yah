@@ -1,0 +1,37 @@
+---
+// Ported from the main site's footer (index.html:253-282), with absolute
+// links to the main domain since the blog runs under /blog.
+const main = 'https://www.yahsl.org';
+const blogBase = import.meta.env.BASE_URL; // "/blog/"
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <img src={blogBase + 'assets/logo.png'} alt="Young Access Hub" width="120" height="120" loading="lazy" decoding="async" />
+        <h5>Young Access Hub</h5>
+        <p>Leading change through local action. Empowering youth across Kono District, Sierra Leone.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h6>Quick Links</h6>
+        <ul class="site-footer__links">
+          <li><a href={main + '/index.html'}>Home</a></li>
+          <li><a href={main + '/about.html'}>About Us</a></li>
+          <li><a href={main + '/projects.html'}>Projects</a></li>
+          <li><a href={blogBase}>Blog</a></li>
+          <li><a href={main + '/contact.html'}>Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      &copy; {year} Young Access Hub. All rights reserved.
+    </div>
+  </div>
+</footer>

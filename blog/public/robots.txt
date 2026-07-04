@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /blog/
+
+Sitemap: https://www.yahsl.org/blog/sitemap-index.xml

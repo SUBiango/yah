@@ -1,0 +1,26 @@
+{
+  "name": "yah-blog",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "node scripts/check-images.mjs && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "cms": "decap-server",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.11",
+    "@astrojs/sitemap": "^3.4.1",
+    "astro": "^5.13.0",
+    "sharp": "^0.34.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "decap-server": "^3.2.0",
+    "vitest": "^3.2.4"
+  }
+}

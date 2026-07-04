@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Manager · YAH Blog</title>
+    <!-- Netlify Identity widget: handles login for Git Gateway -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  </head>
+  <body>
+    <!-- Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
+    <script>
+      // If a writer opens the invite/recovery link from the main site, redirect
+      // them into the CMS on the same (main) domain so Identity callbacks resolve.
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user) => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/blog/admin/';
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

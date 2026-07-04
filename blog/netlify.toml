@@ -1,0 +1,11 @@
+# Netlify config for the BLOG site (its own Netlify site).
+# When creating the site, set Base directory = "blog"; Netlify then reads this file.
+[build]
+  command = "npm run build"
+  publish = "dist"
+  # Only rebuild when files under blog/ change (main-site-only commits skip a build).
+  # `git diff --quiet` exits 0 (→ cancel build) when there are no blog/ changes.
+  ignore = "git diff --quiet HEAD^ HEAD -- ."
+
+[build.environment]
+  NODE_VERSION = "18"
