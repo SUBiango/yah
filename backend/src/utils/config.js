@@ -22,6 +22,12 @@ const config = {
       rejectUnauthorized: process.env.EMAIL_TLS_REJECT_UNAUTHORIZED !== 'false',
     },
   },
+  admin: {
+    // Server secret used to sign/verify admin session tokens.
+    apiKey: process.env.ADMIN_API_KEY,
+    // Passcode the admin enters in the dashboard to obtain a session token.
+    passcode: process.env.ADMIN_PASSCODE,
+  },
   app: {
     name: 'YAH Youth Registration System',
     version: '1.0.0',
@@ -40,6 +46,7 @@ const config = {
 const requiredEnvVars = [
   'SMTP_USER',
   'SMTP_PASS',
+  'ADMIN_API_KEY',
 ];
 
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);

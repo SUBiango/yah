@@ -20,7 +20,8 @@ class AdminDashboard {
         this.apiBaseUrl = this.isDevEnvironment
             ? 'http://localhost:3000/api'  // Development
             : 'https://yah-backend.onrender.com/api'; // Production (yahsl.org)
-        this.adminPasscode = 'YAH@Admin2025'; // Default admin passcode
+        // The passcode is verified server-side via POST /api/admin/login,
+        // which returns a signed session token. No secret lives in this file.
         
         // Logging configuration
         // Log levels: 'debug' (all), 'info', 'warn', 'error' (critical only)
@@ -58,7 +59,42 @@ class AdminDashboard {
         console.error('[Admin Error]', ...args);
     }
 
+    // Session token helpers
+    getToken() {
+        return sessionStorage.getItem('yah_admin_token');
+    }
+
+    setToken(token) {
+        if (token) sessionStorage.setItem('yah_admin_token', token);
+    }
+
+    clearToken() {
+        sessionStorage.removeItem('yah_admin_token');
+    }
+
+    // Attach the admin session token to every request hitting the admin API,
+    // so no individual fetch call has to remember to send it.
+    installAuthFetch() {
+        if (this._authFetchInstalled) return;
+        this._authFetchInstalled = true;
+        const originalFetch = window.fetch.bind(window);
+        const base = this.apiBaseUrl;
+        window.fetch = (input, init = {}) => {
+            const url = typeof input === 'string' ? input : (input && input.url) || '';
+            if (url.startsWith(base) && !url.includes('/admin/login')) {
+                const token = this.getToken();
+                if (token) {
+                    const headers = new Headers((init && init.headers) || {});
+                    headers.set('Authorization', `Bearer ${token}`);
+                    init = { ...init, headers };
+                }
+            }
+            return originalFetch(input, init);
+        };
+    }
+
     init() {
+        this.installAuthFetch();
         this.checkAuthState();
         this.bindEvents();
         this.setupEventListeners();
@@ -100,7 +136,7 @@ class AdminDashboard {
     checkAuthState() {
         // Check if already authenticated (session storage)
         const authState = sessionStorage.getItem('yah_admin_auth');
-        if (authState === 'true') {
+        if (authState === 'true' && this.getToken()) {
             this.isAuthenticated = true;
             this.showDashboard();
             this.loadDashboardData();
@@ -226,31 +262,37 @@ class AdminDashboard {
         this.clearPasscodeAlert();
 
         try {
-            // Simulate API call for passcode verification
-            await this.simulateDelay(1500);
+            // Verify the passcode server-side and receive a session token.
+            const response = await fetch(`${this.apiBaseUrl}/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ passcode }),
+            });
+            const data = await response.json().catch(() => ({}));
 
-            if (passcode === this.adminPasscode) {
+            if (response.ok && data.success && data.token) {
                 // Authentication successful
                 this.isAuthenticated = true;
+                this.setToken(data.token);
                 sessionStorage.setItem('yah_admin_auth', 'true');
-                
+
                 this.showPasscodeAlert('Access granted! Loading dashboard...', 'success');
-                
+
                 setTimeout(() => {
                     this.showDashboard();
                     this.loadDashboardData();
-                }, 1000);
-                
+                }, 800);
+
             } else {
                 // Authentication failed
-                this.showPasscodeAlert('Invalid passcode. Please try again.', 'danger');
+                this.showPasscodeAlert(data.error || 'Invalid passcode. Please try again.', 'danger');
                 passcodeInput.focus();
                 passcodeInput.select();
             }
 
         } catch (error) {
             this.logError('Passcode verification error:', error);
-            this.showPasscodeAlert('Authentication failed. Please try again.', 'danger');
+            this.showPasscodeAlert('Could not reach the server. Please try again.', 'danger');
         } finally {
             this.setButtonLoading(submitButton, false);
         }
@@ -1363,6 +1405,7 @@ class AdminDashboard {
 
     logout() {
         sessionStorage.removeItem('yah_admin_auth');
+        this.clearToken();
         this.isAuthenticated = false;
         
         // Reset UI

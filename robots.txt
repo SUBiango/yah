@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Keep internal/admin tooling out of search results
+Disallow: /admin.html
+Disallow: /scanner.html
+Disallow: /confirmation.html
+Disallow: /test-
+Disallow: /note.html
+
+Sitemap: https://www.yahsl.org/sitemap.xml

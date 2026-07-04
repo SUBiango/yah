@@ -76,49 +76,53 @@ app.use(helmet({
   },
 }));
 
-// CORS configuration with enhanced debugging and preflight handling
+// Single source of truth for which origins may make credentialed requests.
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'https://www.yahsl.org',
+  'https://www.yahsl.org', // Production frontend
+  'https://yahsl.org', // Alternative without www
+  'https://subiaango.github.io', // GitHub Pages if using
+  'https://yah-frontend.onrender.com', // Render frontend if used
+  'http://localhost:3000', // Local development
+  'http://127.0.0.1:3000', // Local development alternative
+];
+
+// True if the origin is explicitly allow-listed or a genuine *.yahsl.org
+// subdomain. A hostname suffix check is used so lookalikes such as
+// "evil-yahsl.org.attacker.com" are rejected.
+function isAllowedOrigin(origin) {
+  if (!origin) {
+    return false;
+  }
+  if (allowedOrigins.includes(origin)) {
+    return true;
+  }
+  try {
+    const host = new URL(origin).hostname;
+    return host === 'yahsl.org' || host.endsWith('.yahsl.org');
+  } catch {
+    return false;
+  }
+}
+
+// CORS configuration with strict origin allow-listing.
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, or health checks)
     if (!origin) {
-      if (config.server.nodeEnv === 'development') {
-        console.log('[CORS] Request with no origin - allowing');
-      }
       return callback(null, true);
     }
-    
-    // In development, allow all origins
+
+    // In development, allow all origins for convenience
     if (config.server.nodeEnv === 'development') {
-      console.log('[CORS] Development mode - allowing all origins');
       return callback(null, true);
     }
-    
-    // In production, configure specific allowed origins
-    const allowedOrigins = [
-      process.env.FRONTEND_URL || 'https://www.yahsl.org',
-      'https://www.yahsl.org', // Production frontend
-      'https://yahsl.org', // Alternative without www
-      'https://subiaango.github.io', // GitHub Pages if using
-      'https://yah-frontend.onrender.com', // Render frontend if used
-      'http://localhost:3000', // Local development
-      'http://127.0.0.1:3000', // Local development alternative
-    ];
 
-    console.log(`[CORS] Request from origin: ${origin}`);
-    console.log(`[CORS] Environment: ${config.server.nodeEnv}`);
+    if (isAllowedOrigin(origin)) {
+      return callback(null, true);
+    }
 
-    if (allowedOrigins.includes(origin)) {
-      console.log(`[CORS] ✅ Origin ${origin} allowed`);
-      return callback(null, true);
-    }
-    
-    console.error(`[CORS] ❌ Origin ${origin} blocked - not in allowed origins:`, allowedOrigins);
-    // In production, be more permissive to avoid blocking legitimate requests
-    if (config.server.nodeEnv === 'production' && origin && origin.includes('yahsl.org')) {
-      console.log(`[CORS] ✅ Allowing yahsl.org subdomain: ${origin}`);
-      return callback(null, true);
-    }
-    
+    console.error(`[CORS] Origin ${origin} blocked - not in allow-list`);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
@@ -147,50 +151,42 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Explicit preflight handler for all routes with enhanced debugging
+// Explicit preflight handler for all routes. Only reflects allow-listed origins
+// so credentialed CORS is never granted to arbitrary sites.
 app.options('*', (req, res) => {
   const origin = req.headers.origin;
-  console.log(`[PREFLIGHT] OPTIONS request from origin: ${origin} for path: ${req.path}`);
-  console.log(`[PREFLIGHT] Request headers:`, JSON.stringify(req.headers, null, 2));
-  
-  // Set CORS headers explicitly for preflight requests
-  if (origin) {
+  const allowThisOrigin =
+    isAllowedOrigin(origin) || config.server.nodeEnv === 'development';
+
+  if (origin && allowThisOrigin) {
     res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
   }
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods');
-  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override');
   res.header('Access-Control-Max-Age', '86400');
   res.header('Vary', 'Origin');
-  
-  console.log(`[PREFLIGHT] Responding with CORS headers for origin: ${origin}`);
-  console.log(`[PREFLIGHT] Response headers:`, {
-    'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH',
-    'Access-Control-Allow-Credentials': 'true'
-  });
-  
-  res.status(200).end();
+
+  res.status(204).end();
 });
 
-// Additional CORS middleware for all requests with enhanced admin handling
+// Reflect CORS headers on actual requests, but only for allow-listed origins.
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  
-  if (origin) {
-    console.log(`[MIDDLEWARE] Setting CORS headers for ${req.method} request to ${req.path} from origin: ${origin}`);
+  const allowThisOrigin =
+    isAllowedOrigin(origin) || config.server.nodeEnv === 'development';
+
+  if (origin && allowThisOrigin) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Vary', 'Origin');
-    
-    // Special handling for admin routes
+
     if (req.path.startsWith('/api/admin')) {
-      console.log(`[ADMIN-CORS] Enhanced CORS for admin route: ${req.path}`);
       res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-HTTP-Method-Override');
     }
   }
-  
+
   next();
 });
 
@@ -298,7 +294,7 @@ app.get('/health', (req, res) => {
 
 // Add a simple ping endpoint for monitoring
 app.get('/ping', (req, res) => {
-  res.status(200).text('pong');
+  res.status(200).send('pong');
 });
 
 // Simple admin health check without middleware interference  
@@ -432,7 +428,7 @@ async function startServer() {
 � Environment: ${config.server.nodeEnv}
 🌐 Port: ${config.server.port}
 � CORS: Enabled for production domains
-📧 Email: ${emailService.isInitialized ? 'Ready' : 'Disabled'}
+📧 Email: ${emailService.initialized ? 'Ready' : 'Disabled'}
 🗄️  Database: Connected
 ⏰ Started: ${new Date().toISOString()}
       `);
