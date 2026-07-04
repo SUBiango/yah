@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { isPublished, resolveSlug, metaDescription, resolveOgImage, canonicalUrl } from '../lib/posts';
+import { isPublished, resolveSlug, metaDescription, resolveOgImage, canonicalUrl, readingMinutes } from '../lib/posts';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).filter(isPublished);
@@ -22,6 +22,7 @@ const { Content } = await render(post);
 const slug = resolveSlug(post);
 const canonical = canonicalUrl(slug);
 const og = resolveOgImage(post) as { src: string };
+const minutes = readingMinutes(post.body ?? '');
 const date = post.data.publishDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -40,7 +41,8 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
       <h1>{post.data.title}</h1>
       <p class="article__meta">
         <span>{post.data.author}</span> ·
-        <time datetime={post.data.publishDate.toISOString()}>{date}</time>
+        <time datetime={post.data.publishDate.toISOString()}>{date}</time> ·
+        <span>{minutes} min read</span>
       </p>
       {post.data.tags.length > 0 && (
         <ul class="article__tags">

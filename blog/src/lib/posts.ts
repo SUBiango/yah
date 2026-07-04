@@ -69,6 +69,12 @@ export function canonicalUrl(slug: string): string {
   return `${SITE}${BASE}/${slug}/`;
 }
 
+/** Estimated reading time in whole minutes (~200 words/min), at least 1. */
+export function readingMinutes(text: string, wpm = 200): number {
+  const words = (text || '').trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / wpm));
+}
+
 export interface RssItem {
   title: string;
   description: string;

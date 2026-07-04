@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { resolveSlug } from '../lib/posts';
+import { resolveSlug, readingMinutes } from '../lib/posts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -10,6 +10,7 @@ interface Props {
 const { post, priority = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const href = `${base}${resolveSlug(post)}/`;
+const minutes = readingMinutes(post.body ?? '');
 const date = post.data.publishDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -32,7 +33,7 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
     <h2 class="post-card__title"><a href={href}>{post.data.title}</a></h2>
     <p class="post-card__excerpt">{post.data.excerpt}</p>
     <p class="post-card__meta">
-      <span>{post.data.author}</span> · <time datetime={post.data.publishDate.toISOString()}>{date}</time>
+      <span>{post.data.author}</span> · <time datetime={post.data.publishDate.toISOString()}>{date}</time> · <span>{minutes} min read</span>
     </p>
   </div>
 </article>
