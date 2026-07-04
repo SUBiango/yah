@@ -22,6 +22,19 @@ const absoluteOg = ogImage
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d3b66" />
+
+    <!-- Netlify Identity: invite/recovery/confirmation emails link to the site
+         root with the token in the URL hash. Forward those to /blog/admin/, where
+         the Identity widget shows the set-password / recovery dialog. Runs first
+         so an invited writer never just lands on the public blog page. -->
+    <script is:inline>
+      (function () {
+        var h = window.location.hash;
+        if (/^#(invite_token|recovery_token|confirmation_token|email_change_token|error)=/.test(h)) {
+          window.location.replace('/blog/admin/' + h);
+        }
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
