@@ -58,24 +58,33 @@ const canonical = new URL(import.meta.env.BASE_URL, Astro.site).href;
     var cards = Array.prototype.slice.call(grid.querySelectorAll('.post-card'));
     var empty = document.getElementById('no-results');
 
-    filters.addEventListener('click', function (e) {
-      var btn = e.target.closest('.filter-btn');
-      if (!btn) return;
+    function apply(filter) {
+      var btn = filters.querySelector('.filter-btn[data-filter="' + filter + '"]')
+        || filters.querySelector('.filter-btn[data-filter="all"]');
       filters.querySelectorAll('.filter-btn').forEach(function (b) {
         b.classList.remove('filter-btn--active');
       });
       btn.classList.add('filter-btn--active');
 
-      var filter = btn.getAttribute('data-filter');
+      var f = btn.getAttribute('data-filter');
       var shown = 0;
       cards.forEach(function (card) {
         var tags = (card.getAttribute('data-tags') || '').split(' ');
-        var show = filter === 'all' || tags.indexOf(filter) !== -1;
+        var show = f === 'all' || tags.indexOf(f) !== -1;
         card.hidden = !show;
         if (show) shown++;
       });
       if (empty) empty.hidden = shown !== 0;
+    }
+
+    filters.addEventListener('click', function (e) {
+      var btn = e.target.closest('.filter-btn');
+      if (btn) apply(btn.getAttribute('data-filter'));
     });
+
+    // Deep-link support: /blog/?tag=events (from article tag chips).
+    var tag = new URLSearchParams(window.location.search).get('tag');
+    if (tag && /^[a-z0-9-]+$/.test(tag)) apply(tag);
   })();
 </script>
 
