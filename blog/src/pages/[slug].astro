@@ -70,7 +70,8 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
 <style>
   .article {
     max-width: 48rem;
-    padding-block: 3rem 4rem;
+    /* Clear the fixed nav (--nav-height) so the title isn't covered. */
+    padding-block: calc(var(--nav-height) + var(--space-6)) var(--space-8);
   }
   .article__header {
     text-align: center;
