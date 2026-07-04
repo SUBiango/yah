@@ -8,6 +8,7 @@ import {
   resolveOgImage,
   canonicalUrl,
   readingMinutes,
+  uniqueTags,
 } from '../src/lib/posts';
 
 // Minimal stand-ins for Astro's CollectionEntry shape (only `.data` is used here).
@@ -39,6 +40,18 @@ describe('publishedSorted (FR-005, FR-007)', () => {
     const result = publishedSorted(posts).map((p) => p.id);
     expect(result).toEqual(['new', 'mid', 'old']);
     expect(result).not.toContain('hidden');
+  });
+});
+
+describe('uniqueTags', () => {
+  it('returns sorted, de-duplicated tags across posts', () => {
+    const tagged = [
+      post('a', { tags: ['events', 'summit'] }),
+      post('b', { tags: ['announcement', 'events'] }),
+      post('c', { tags: [] }),
+      post('d', {}),
+    ];
+    expect(uniqueTags(tagged)).toEqual(['announcement', 'events', 'summit']);
   });
 });
 

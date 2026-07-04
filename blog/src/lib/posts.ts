@@ -69,6 +69,13 @@ export function canonicalUrl(slug: string): string {
   return `${SITE}${BASE}/${slug}/`;
 }
 
+/** Sorted, de-duplicated list of tags across the given posts. */
+export function uniqueTags(posts: PostLike[]): string[] {
+  const set = new Set<string>();
+  for (const p of posts) for (const t of p.data.tags ?? []) set.add(t);
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
+}
+
 /** Estimated reading time in whole minutes (~200 words/min), at least 1. */
 export function readingMinutes(text: string, wpm = 200): number {
   const words = (text || '').trim().split(/\s+/).filter(Boolean).length;

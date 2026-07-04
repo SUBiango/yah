@@ -2,9 +2,10 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { publishedSorted } from '../lib/posts';
+import { publishedSorted, uniqueTags, slugify } from '../lib/posts';
 
 const posts = publishedSorted(await getCollection('blog'));
+const tags = uniqueTags(posts);
 const canonical = new URL(import.meta.env.BASE_URL, Astro.site).href;
 ---
 <BaseLayout
@@ -22,18 +23,61 @@ const canonical = new URL(import.meta.env.BASE_URL, Astro.site).href;
     </div>
   </header>
 
+  {tags.length > 0 && (
+    <section class="section--sm" style="border-bottom:2px solid var(--color-border);">
+      <div class="container">
+        <div class="flex flex-wrap gap-2" style="justify-content:center;" id="tag-filters">
+          <button class="btn btn--outline btn--sm filter-btn filter-btn--active" data-filter="all">All Posts</button>
+          {tags.map((tag) => (
+            <button class="btn btn--outline btn--sm filter-btn" data-filter={slugify(tag)}>{tag}</button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <section class="section">
     <div class="container">
       {posts.length === 0 ? (
         <p class="blog-empty">No articles published yet — check back soon.</p>
       ) : (
-        <div class="blog-grid">
+        <div class="blog-grid" id="blog-grid">
           {posts.map((post, i) => <PostCard post={post} priority={i === 0} />)}
         </div>
       )}
+      <p class="blog-empty" id="no-results" hidden>No posts match that tag.</p>
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    var filters = document.getElementById('tag-filters');
+    var grid = document.getElementById('blog-grid');
+    if (!filters || !grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.post-card'));
+    var empty = document.getElementById('no-results');
+
+    filters.addEventListener('click', function (e) {
+      var btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filters.querySelectorAll('.filter-btn').forEach(function (b) {
+        b.classList.remove('filter-btn--active');
+      });
+      btn.classList.add('filter-btn--active');
+
+      var filter = btn.getAttribute('data-filter');
+      var shown = 0;
+      cards.forEach(function (card) {
+        var tags = (card.getAttribute('data-tags') || '').split(' ');
+        var show = filter === 'all' || tags.indexOf(filter) !== -1;
+        card.hidden = !show;
+        if (show) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
+  })();
+</script>
 
 <style>
   .blog-grid {
