@@ -23,6 +23,11 @@ const slug = resolveSlug(post);
 const canonical = canonicalUrl(slug);
 const og = resolveOgImage(post) as { src: string };
 const minutes = readingMinutes(post.body ?? '');
+const share = {
+  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonical)}`,
+  whatsapp: `https://wa.me/?text=${encodeURIComponent(`${post.data.title} ${canonical}`)}`,
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonical)}`,
+};
 const date = post.data.publishDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -63,6 +68,21 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
 
     <div class="article__body">
       <Content />
+    </div>
+
+    <div class="article__share">
+      <span class="article__share-label">Share this article</span>
+      <div class="share-buttons">
+        <a class="share-btn share-btn--facebook" href={share.facebook} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a class="share-btn share-btn--whatsapp" href={share.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        </a>
+        <a class="share-btn share-btn--linkedin" href={share.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn">
+          <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+        </a>
+      </div>
     </div>
 
     <p class="article__back"><a href={import.meta.env.BASE_URL}>&larr; Back to all articles</a></p>
@@ -121,7 +141,43 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
     border-radius: 10px;
     margin: 1.5rem 0;
   }
-  .article__back {
+  .article__share {
     margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .article__share-label {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  .share-buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.05rem;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .share-btn:hover {
+    transform: translateY(-3px);
+    opacity: 0.92;
+  }
+  .share-btn--facebook { background: #1877f2; }
+  .share-btn--whatsapp { background: #25d366; }
+  .share-btn--linkedin { background: #0a66c2; }
+  .article__back {
+    margin-top: 2.5rem;
   }
 </style>

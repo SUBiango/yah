@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { resolveSlug, readingMinutes } from '../lib/posts';
+import { resolveSlug, readingMinutes, slugify } from '../lib/posts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -11,13 +11,14 @@ const { post, priority = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const href = `${base}${resolveSlug(post)}/`;
 const minutes = readingMinutes(post.body ?? '');
+const tagSlugs = post.data.tags.map(slugify).join(' ');
 const date = post.data.publishDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 ---
-<article class="post-card">
+<article class="post-card" data-tags={tagSlugs}>
   <a class="post-card__media" href={href}>
     <Image
       src={post.data.featuredImage}
