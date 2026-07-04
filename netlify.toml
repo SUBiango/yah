@@ -3,11 +3,12 @@
 # the separate blog Netlify site under /blog on the main domain. No [build]
 # section here, so the main site's existing build/publish settings are unchanged.
 #
-# ⚠️ Replace <BLOG-SITE> below with the blog Netlify site's subdomain after you
-# create it (e.g. yah-blog.netlify.app). The blog is built with base "/blog", so
-# its output already lives under /blog — keep the "/blog" prefix in `to`.
+# Astro's `base: '/blog'` rewrites link/asset URLs to /blog/... but does NOT nest
+# the physical output under dist/blog/ — the blog site serves its files at the
+# root (/index.html, /_astro/..., /rss.xml). So the proxy strips the /blog prefix:
+# www.yahsl.org/blog/rss.xml  ->  yah-blog.netlify.app/rss.xml.
 [[redirects]]
   from = "/blog/*"
-  to = "https://<BLOG-SITE>.netlify.app/blog/:splat"
+  to = "https://yah-blog.netlify.app/:splat"
   status = 200
   force = true

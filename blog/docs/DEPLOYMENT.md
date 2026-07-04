@@ -103,12 +103,15 @@ placeholder with the real blog-site subdomain.
    ```toml
    [[redirects]]
      from = "/blog/*"
-     to = "https://<BLOG-SITE>.netlify.app/blog/:splat"   # ← replace <BLOG-SITE>
+     to = "https://<BLOG-SITE>.netlify.app/:splat"   # ← replace <BLOG-SITE>
      status = 200
      force = true
    ```
-   Replace `<BLOG-SITE>` with the Step 1 subdomain (e.g. `yah-blog-xyz`). Keep the
-   `/blog` prefix in `to` — the blog output is under `/blog` because of `base`.
+   Replace `<BLOG-SITE>` with the Step 1 subdomain (e.g. `yah-blog`). The proxy
+   **strips** the `/blog` prefix: Astro's `base: '/blog'` rewrites link/asset URLs
+   to `/blog/...` but does **not** nest the physical output under `dist/blog/` —
+   the blog site serves its files at the root (`/index.html`, `/_astro/...`,
+   `/rss.xml`). So `www.yahsl.org/blog/rss.xml` → `yah-blog.netlify.app/rss.xml`.
 2. Commit and push to `main`. The **main** Netlify site redeploys and picks up the proxy.
 
 ---
@@ -130,8 +133,10 @@ the main-site `netlify.toml` and redeploy:
 
 | Symptom | Try `to =` |
 |---|---|
-| Paths 404, or double `/blog/blog/` appears | `https://<BLOG-SITE>.netlify.app/:splat` |
-| Root `/blog/` works but assets 404 | confirm Astro `base: '/blog'` and `to = .../blog/:splat` (current default) |
+| Everything 404s through the proxy | `https://<BLOG-SITE>.netlify.app/:splat` (current default — strips `/blog`) |
+| Double `/blog/blog/` appears, or assets 404 | your blog deploy nests output under `dist/blog/`; then use `.../blog/:splat` |
+
+> Verify the blog site's own structure first: `curl -o /dev/null -w '%{http_code}' https://<BLOG-SITE>.netlify.app/rss.xml`. If that returns 200 (files at root), use the stripping mapping (the default above).
 
 ---
 
