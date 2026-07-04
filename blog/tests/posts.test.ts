@@ -7,6 +7,7 @@ import {
   metaDescription,
   resolveOgImage,
   canonicalUrl,
+  readingMinutes,
 } from '../src/lib/posts';
 
 // Minimal stand-ins for Astro's CollectionEntry shape (only `.data` is used here).
@@ -38,6 +39,18 @@ describe('publishedSorted (FR-005, FR-007)', () => {
     const result = publishedSorted(posts).map((p) => p.id);
     expect(result).toEqual(['new', 'mid', 'old']);
     expect(result).not.toContain('hidden');
+  });
+});
+
+describe('readingMinutes', () => {
+  it('estimates minutes at ~200 wpm, rounded, minimum 1', () => {
+    expect(readingMinutes('')).toBe(1);
+    expect(readingMinutes('word '.repeat(50))).toBe(1); // 50 words -> <1 -> 1
+    expect(readingMinutes('word '.repeat(200))).toBe(1); // 200 words -> 1
+    expect(readingMinutes('word '.repeat(500))).toBe(3); // 500/200 = 2.5 -> 3
+  });
+  it('ignores extra whitespace and markdown noise gracefully', () => {
+    expect(readingMinutes('  hello   world  ')).toBe(1);
   });
 });
 
