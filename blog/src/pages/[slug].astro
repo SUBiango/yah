@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { isPublished, resolveSlug, metaDescription, resolveOgImage, canonicalUrl, readingMinutes } from '../lib/posts';
+import { isPublished, resolveSlug, metaDescription, resolveOgImage, canonicalUrl, readingMinutes, slugify } from '../lib/posts';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).filter(isPublished);
@@ -25,6 +25,7 @@ const og = resolveOgImage(post) as { src: string };
 const minutes = readingMinutes(post.body ?? '');
 const share = {
   facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonical)}`,
+  x: `https://twitter.com/intent/tweet?url=${encodeURIComponent(canonical)}&text=${encodeURIComponent(post.data.title)}`,
   whatsapp: `https://wa.me/?text=${encodeURIComponent(`${post.data.title} ${canonical}`)}`,
   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonical)}`,
 };
@@ -51,7 +52,9 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
       </p>
       {post.data.tags.length > 0 && (
         <ul class="article__tags">
-          {post.data.tags.map((tag) => <li>{tag}</li>)}
+          {post.data.tags.map((tag) => (
+            <li><a href={`${import.meta.env.BASE_URL}?tag=${slugify(tag)}`}>{tag}</a></li>
+          ))}
         </ul>
       )}
     </header>
@@ -76,17 +79,51 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
         <a class="share-btn share-btn--facebook" href={share.facebook} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook">
           <i class="fab fa-facebook-f" aria-hidden="true"></i>
         </a>
+        <a class="share-btn share-btn--x" href={share.x} target="_blank" rel="noopener noreferrer" aria-label="Share on X">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+        </a>
         <a class="share-btn share-btn--whatsapp" href={share.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp">
           <i class="fab fa-whatsapp" aria-hidden="true"></i>
         </a>
         <a class="share-btn share-btn--linkedin" href={share.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn">
           <i class="fab fa-linkedin-in" aria-hidden="true"></i>
         </a>
+        <button type="button" class="share-btn share-btn--copy" data-url={canonical} aria-label="Copy link">
+          <i class="fas fa-link" aria-hidden="true"></i>
+        </button>
+        <span class="share-copied" role="status" aria-live="polite" hidden>Link copied!</span>
       </div>
     </div>
 
     <p class="article__back"><a href={import.meta.env.BASE_URL}>&larr; Back to all articles</a></p>
   </article>
+
+  <script is:inline>
+    (function () {
+      var btn = document.querySelector('.share-btn--copy');
+      var toast = document.querySelector('.share-copied');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var url = btn.getAttribute('data-url');
+        var done = function () {
+          if (toast) {
+            toast.hidden = false;
+            setTimeout(function () { toast.hidden = true; }, 1800);
+          }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done).catch(done);
+        } else {
+          var t = document.createElement('textarea');
+          t.value = url; document.body.appendChild(t); t.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(t); done();
+        }
+      });
+    })();
+  </script>
 </BaseLayout>
 
 <style>
@@ -115,12 +152,19 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
     padding: 0;
     margin: 1rem 0 0;
   }
-  .article__tags li {
+  .article__tags li a {
+    display: inline-block;
     background: var(--color-primary-lt);
     color: var(--color-primary-dk);
     border-radius: 999px;
     padding: 0.15rem 0.75rem;
     font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .article__tags li a:hover {
+    background: var(--color-primary);
+    color: #fff;
   }
   .article__hero {
     width: 100%;
@@ -175,8 +219,16 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
     opacity: 0.92;
   }
   .share-btn--facebook { background: #1877f2; }
+  .share-btn--x        { background: #000; }
   .share-btn--whatsapp { background: #25d366; }
   .share-btn--linkedin { background: #0a66c2; }
+  .share-btn--copy     { background: #475569; border: none; cursor: pointer; }
+  .share-copied {
+    align-self: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-success, #1a9e6e);
+    font-weight: 600;
+  }
   .article__back {
     margin-top: 2.5rem;
   }
