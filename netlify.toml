@@ -12,3 +12,11 @@
   to = "https://yah-blog.netlify.app/:splat"
   status = 200
   force = true
+
+# The local Kantan page was removed; Kantan now lives at its own site.
+# 301 the old URL so existing links/bookmarks/search results don't 404.
+[[redirects]]
+  from = "/projects/kantan.html"
+  to = "https://getkantan.netlify.app/"
+  status = 301
+  force = true
