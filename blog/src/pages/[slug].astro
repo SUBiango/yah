@@ -113,13 +113,16 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
             setTimeout(function () { toast.hidden = true; }, 1800);
           }
         };
+        var fail = function () { /* copy failed: don't show the success toast */ };
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(done).catch(done);
+          navigator.clipboard.writeText(url).then(done).catch(fail);
         } else {
           var t = document.createElement('textarea');
           t.value = url; document.body.appendChild(t); t.select();
-          try { document.execCommand('copy'); } catch (e) {}
-          document.body.removeChild(t); done();
+          var ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          document.body.removeChild(t);
+          if (ok) { done(); } else { fail(); }
         }
       });
     })();
