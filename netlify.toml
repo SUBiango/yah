@@ -13,6 +13,16 @@
   status = 200
   force = true
 
+# Decap CMS (served under /blog/admin) calls Netlify Identity via relative
+# paths (/.netlify/identity/...), which resolve against this site's origin,
+# not the blog site's. Identity/Git Gateway are only enabled on yah-blog, so
+# without this proxy those calls 404 here instead of reaching the blog site.
+[[redirects]]
+  from = "/.netlify/identity/*"
+  to = "https://yah-blog.netlify.app/.netlify/identity/:splat"
+  status = 200
+  force = true
+
 # The local Kantan page was removed; Kantan now lives at its own site.
 # 301 the old URL so existing links/bookmarks/search results don't 404.
 [[redirects]]
