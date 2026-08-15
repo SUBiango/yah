@@ -1,13 +1,12 @@
 ---
-title: Upcoming Programs (Draft)
+title: Upcoming Programs
 author: YAH Team
 publishDate: 2026-04-01
 featuredImage: ../../assets/uploads/summit.jpg
-excerpt: A preview of the programs we're planning for the next quarter — still
-  being finalized.
+excerpt: A look ahead at what Young Access Hub is planning next.
 tags:
   - programs
 draft: false
 ---
-This post is still a work in progress and should **not** appear on the public
-blog until it is published. It exists to verify draft exclusion.
+We're planning new initiatives to build on the momentum from our recent
+summits and the Kantan Learning App. More details will be shared here soon.
