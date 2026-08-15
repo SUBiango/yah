@@ -1,5 +1,6 @@
 ---
 title: Upcoming Programs
+slug: upcoming-programs
 author: YAH Team
 publishDate: 2026-04-01
 featuredImage: ../../assets/uploads/summit.jpg
