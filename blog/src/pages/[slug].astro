@@ -46,8 +46,8 @@ const date = post.data.publishDate.toLocaleDateString('en-US', {
     <header class="article__header">
       <h1>{post.data.title}</h1>
       <p class="article__meta">
-        <span>{post.data.author}</span> ·
-        <time datetime={post.data.publishDate.toISOString()}>{date}</time> ·
+        <span>{post.data.author}</span> ·{' '}
+        <time datetime={post.data.publishDate.toISOString()}>{date}</time> ·{' '}
         <span>{minutes} min read</span>
       </p>
       {post.data.tags.length > 0 && (

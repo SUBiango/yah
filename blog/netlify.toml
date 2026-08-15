@@ -8,7 +8,8 @@
   ignore = "git diff --quiet HEAD^ HEAD -- ."
 
 [build.environment]
-  NODE_VERSION = "18"
+  # Astro 7 requires Node >=22.12.0 (engines field). Keep in sync with .nvmrc.
+  NODE_VERSION = "22.12.0"
 
 # The blog is built with Astro `base: '/blog'`, so pages reference assets at
 # /blog/... but the files are published at the site root. In production this is
