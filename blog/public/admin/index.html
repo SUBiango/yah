@@ -11,6 +11,19 @@
     <link href="/blog/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <!-- Netlify Identity widget: handles login for Git Gateway -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+      // Identity + Git Gateway are enabled on the yah-blog Netlify site, not
+      // this main site that /blog is proxied from. The widget defaults to
+      // calling /.netlify/identity on the page's own origin (www.yahsl.org),
+      // which 404s since that site has no Identity service — Netlify also
+      // won't let a redirect proxy anything under the reserved /.netlify/*
+      // path, so this explicit APIUrl is the only way to point it correctly.
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.init({
+          APIUrl: 'https://yah-blog.netlify.app/.netlify/identity',
+        });
+      }
+    </script>
   </head>
   <body>
     <!-- Decap CMS -->
