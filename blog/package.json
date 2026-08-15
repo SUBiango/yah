@@ -13,9 +13,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/rss": "^4.0.11",
-    "@astrojs/sitemap": "^3.4.1",
-    "astro": "^5.13.0",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.0",
     "sharp": "^0.34.2",
     "zod": "^3.25.76"
   },

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager · YAH Blog</title>
+    <!-- Absolute config path: without this, Decap fetches config.yml relative
+         to the current URL, which resolves to the wrong path (/blog/config.yml)
+         when this page is loaded without a trailing slash (/blog/admin). -->
+    <link href="/blog/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <!-- Netlify Identity widget: handles login for Git Gateway -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
