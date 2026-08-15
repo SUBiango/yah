@@ -5,6 +5,12 @@
 backend:
   name: git-gateway
   branch: main
+  # Identity/Git Gateway are enabled on yah-blog.netlify.app, not this main
+  # site that /blog/admin is proxied from. The git-gateway backend uses its
+  # own internal client for these (ignores the widget's init options), so
+  # the cross-domain endpoint has to be set here directly.
+  identity_url: https://yah-blog.netlify.app/.netlify/identity
+  gateway_url: https://yah-blog.netlify.app/.netlify/git
 
 # Reachable at https://www.yahsl.org/blog/admin/ via the Netlify proxy.
 site_url: https://www.yahsl.org/blog
