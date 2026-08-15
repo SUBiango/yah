@@ -11,24 +11,27 @@
     <link href="/blog/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <!-- Netlify Identity widget: handles login for Git Gateway -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-      // Identity + Git Gateway are enabled on the yah-blog Netlify site, not
-      // this main site that /blog is proxied from. The widget defaults to
-      // calling /.netlify/identity on the page's own origin (www.yahsl.org),
-      // which 404s since that site has no Identity service — Netlify also
-      // won't let a redirect proxy anything under the reserved /.netlify/*
-      // path, so this explicit APIUrl is the only way to point it correctly.
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.init({
-          APIUrl: 'https://yah-blog.netlify.app/.netlify/identity',
-        });
-      }
-    </script>
   </head>
   <body>
     <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
     <script>
+      // Identity + Git Gateway are enabled on the yah-blog Netlify site, not
+      // this main site that /blog is proxied from. The widget script itself
+      // unconditionally auto-calls init() with NO arguments (same-origin) on
+      // DOMContentLoaded, regardless of any init() call made earlier — so a
+      // custom-APIUrl init() in <head>, or before this script tag, just gets
+      // silently overwritten. Registering our own DOMContentLoaded listener
+      // here (after the widget's script tag, so ours runs after its built-in
+      // listener) makes our call the final, authoritative one.
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.init({
+            APIUrl: 'https://yah-blog.netlify.app/.netlify/identity',
+          });
+        }
+      });
+
       // If a writer opens the invite/recovery link from the main site, redirect
       // them into the CMS on the same (main) domain so Identity callbacks resolve.
       if (window.netlifyIdentity) {
