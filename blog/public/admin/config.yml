@@ -19,14 +19,17 @@ local_backend: true
 
 # Uploaded media is stored alongside the blog's optimized assets so
 # astro:assets processes it at build time.
-media_folder: src/assets/uploads
-public_folder: /src/assets/uploads
+# Paths are relative to the repo root (git-gateway commits to the whole
+# monorepo, not just blog/), so they must be prefixed with blog/ or content
+# lands outside the Astro project and is silently invisible to the build.
+media_folder: blog/src/assets/uploads
+public_folder: /blog/src/assets/uploads
 
 collections:
   - name: blog
     label: Blog Posts
     label_singular: Blog Post
-    folder: src/content/blog
+    folder: blog/src/content/blog
     create: true
     slug: '{{fields.slug | default(title)}}'
     # Store media relative to each post so image() resolves the same paths
