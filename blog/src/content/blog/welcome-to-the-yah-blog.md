@@ -5,7 +5,8 @@ publishDate: 2026-08-16
 featuredImage: ../../assets/uploads/young-access-hub-logo.png
 excerpt: We're launching a space to share stories, updates, and lessons from our
   work with young people across Kono District.
-metaDescription: ""
+metaDescription: We're launching a space to share stories, updates, and lessons
+  from our work with young people across Kono District.
 tags:
   - announcement
 draft: false
